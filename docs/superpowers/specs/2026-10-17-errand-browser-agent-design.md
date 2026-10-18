@@ -1,21 +1,50 @@
-# Errand: AI browser agent extension (v1 design)
+# Errand: free AI browser agent (design)
 
-Date: 2026-10-17. Status: approved in brainstorming, awaiting written-spec review.
+Date: 2026-10-17, revised 2026-10-18. Status: revision 2 approved in brainstorming.
 
-Errand is a Chrome extension that takes a task in plain words, operates the open web pages for you (click, type, navigate, paginate), and returns a finished result as text or a table. It is a functional rebuild of the core of rtrvr.ai's Chrome extension, with its own name, look and code.
+Errand is a free alternative to rtrvr.ai. It takes a task in plain words, gathers or acts on web pages, and returns a finished result as text or a table. It has its own name, look and code.
+
+**Revision 2 (2026-10-18) changes the plan in three ways:**
+- **$0, always.** No paid AI services, no paid cloud, no paid proxies. The default AI runs on the user's own GPU.
+- **Phase 1 is a bulk engine** (sections 13–15): a local Python program where 53 AI "brains" think at the same time.
+- **Phase 2 is the Chrome extension** (sections 3–10). It keeps its design, but its model layer now uses the phase 1 brain server (section 7).
 
 ## 1. Goal, scope and what "done" means
 
-**Goal:** the core loop rtrvr's extension provides: ask, the agent acts on pages in your own signed-in browser, and you get back a structured result.
+**Goal:** match what rtrvr does, for free and on the user's own laptop:
+- one prompt over a list of up to 1,000 sites, returning a table
+- 53 brains thinking at the same time
+- later, an agent that acts inside the user's own signed-in Chrome
 
-**In v1:** side panel UI, the agent loop, a page snapshot builder that handles frames and open shadow DOM, 11 tools, a confirm gate for irreversible actions, run resume, results table with CSV export, run history, a Claude adapter and an OpenAI-compatible adapter. The model key is your own (bring-your-own-key, BYOK); there is no backend.
+**Phase 1, the bulk engine (sections 13–15):**
+- a local brain server with 53 parallel slots
+- a polite fetch ladder that uses Scrapling's stealth browser on public pages behind bot checks
+- extraction that needs no AI where possible: built-in page data first, then reusable recipes
+- 53 brains with distinct jobs
+- a live 53-tile screen
+- CSV output
 
-**Out of v1** (later phases, in rough priority order): replaying recorded runs without model calls, network-API discovery, Google Sheets output, a `chrome.debugger` input fallback for sites that ignore synthetic events, schedules and background runs (these need an offscreen document), a local MCP bridge, a cloud runner, an embeddable widget, and code-as-plan execution.
+**Phase 2, the extension (sections 3–10):** side panel UI, the agent loop, a page snapshot builder that handles frames and open shadow DOM, 11 tools, a confirm gate for irreversible actions, run resume, a results table with CSV export, and run history. Its brains come from the phase 1 server.
 
-**Done when:**
+**Out of both phases, later work in rough priority order:**
+- replaying recorded runs without model calls
+- network-API discovery
+- Google Sheets output
+- a `chrome.debugger` input fallback
+- schedules and background runs
+- a local MCP bridge
+- an embeddable widget
+- code-as-plan execution
+
+**Phase 1 is done when:**
+1. The benchmark (section 15) has run, and its numbers replace every estimate in sections 13–14.
+2. One prompt over 105 pages returns a CSV, and at least 80% of the hand-labelled fields are correct.
+3. 53 slots run at the same time with no memory spill (section 15 explains the check).
+
+**Phase 2 is done when:**
 1. Unit and end-to-end tests pass.
 2. The extension loads unpacked in current Chrome with no console errors in any context.
-3. At least 15 of the 20 parity tasks (section 9) pass in a live run with a real key.
+3. At least 15 of the 20 parity tasks (section 9) pass, using the local brain server.
 
 ## 2. Evidence this design rests on
 
@@ -30,7 +59,12 @@ Gathered on 2026-10-17 with REA and public pages. What follows describes observe
   - **Tools:** roughly 30, in four groups: element actions, tab and navigation, perception (screenshot, image description, search, network data), and control (`answer`, `ask user`, where a run pauses waiting for the user).
   - **Action results:** each reports success, the method used, details, and whether the action is safe to replay.
   - **Also present:** a secret redactor that runs before page data leaves the browser.
-- **Consequence:** a 1:1 replica is impossible because the planner and its prompts live server-side. Parity is therefore defined by tasks (section 9), not by matching components.
+- **Parallelism, from the shipped bundle:**
+  - The in-browser cap is a `maxParallelTabs` setting of 1–20, clamped to 12 or 4 on some paths.
+  - Fan-out happens in model-written code that maps over items with a concurrency limit and opens one tab per item.
+  - 1,000-site jobs go to rtrvr's cloud in batches: 10 URLs per batch, 4 batches at once.
+- **The "53 agents" demo:** one extraction prompt over 105 Product Hunt URLs, run on 53 rtrvr cloud browsers in 184 s. rtrvr's Google Cloud page says Gemini Flash does the reasoning. (Research report "53 simultaneous free AI agents".)
+- **Consequence:** a 1:1 replica is impossible because the planner and its prompts live server-side. Parity is therefore defined by tasks (sections 9 and 15), not by matching components.
 
 ## 3. Architecture
 
@@ -45,10 +79,10 @@ Gathered on 2026-10-17 with REA and public pages. What follows describes observe
 ┌──── Content script (isolated world, every frame) ────┐
 │ snapshot builder · action executor · element map     │
 └───────────────────────────────────────────────────────┘
-┌──── Service worker ────┐   ┌──── Model API ────────┐
-│ open panel on action    │   │ api.anthropic.com or  │
-│ click / Alt+R           │   │ an OpenAI-compatible  │
-└─────────────────────────┘   │ base URL              │
+┌──── Service worker ────┐   ┌──── Brain server ─────┐
+│ open panel on action    │   │ local llama-server    │
+│ click / Alt+R           │   │ 127.0.0.1 (default),  │
+└─────────────────────────┘   │ or opt-in free keys   │
                               └───────────────────────┘
 ```
 
@@ -128,26 +162,20 @@ Choosing Skip returns `{success:false, method:"none", details:"user declined"}`.
 
 ## 7. Model layer
 
-**Claude adapter (built first):**
-- **Client:** the official `@anthropic-ai/sdk`, created in the side panel with `dangerouslyAllowBrowser: true` and your key.
-- **Request:** `client.beta.messages.stream(...)` then `finalMessage()`, with:
-  - `model: "claude-opus-5-5"` (Settings also offers `claude-sonnet-5-5` and `claude-haiku-5-5`)
-  - `max_tokens: 64000`
-  - `thinking: { type: "adaptive" }`
-  - `output_config: { effort: "medium" }` (configurable)
-  - `tool_choice: { type: "auto", disable_parallel_tool_use: true }`
-  - prompt caching through top-level `cache_control: { type: "ephemeral" }`
-  - `eager_input_streaming` stays off: tool inputs are small, and the server's strict-schema check is wanted.
-- **Betas:**
-  - `server-side-fallback-2026-07-01` with `fallbacks: "default"`, so refusals are rerouted (Settings can turn this off). It is sent for Opus 5.5 and Sonnet 5.5 only; Haiku 5.5 has no server-side fallback.
-  - `context-management-2025-06-27` with `context_management: { edits: [{ type: "clear_tool_uses_20250919" }] }`, so the API clears old snapshot results.
-- **Append-only history:** editing earlier turns invalidates thinking blocks on current models, so the panel never rewrites history. It appends `response.content` unchanged every turn.
-- **Validation:** every tool input is checked against a zod schema before it runs. A failed check returns an `is_error` tool result. Before any tool runs, the loop checks `stop_reason`: `refusal` and `max_tokens` end the step without running tools.
-- **Errors:** the SDK retries (2) cover 408, 409, 429, 5xx and connection errors. Anything left over pauses the run with a **Retry** button. Errors are matched by the SDK's typed classes, never by message text.
+Revision 2 removed the paid Claude adapter. Everything goes through one OpenAI-compatible adapter.
 
-**OpenAI-compatible adapter (second):**
-- **Request:** `POST {baseUrl}/chat/completions` with `tools` in function format, `tool_choice: "auto"` and `parallel_tool_calls: false`, using plain `fetch` with no extra dependency.
-- **Presets:** OpenAI, OpenRouter, DeepSeek, Gemini's OpenAI-compatible endpoint, or a custom base URL. It shares the tool definitions and the zod validation.
+**Default, free and private: the local brain server** (section 13) at `http://127.0.0.1:8080/v1`.
+- **Request:** `POST /chat/completions` with `tools` in function format, `tool_choice: "auto"` and `parallel_tool_calls: false`, using plain `fetch`.
+- **Requirement:** the server must allow the extension's origin.
+- **Phase 2 agent slots:** the extension needs fewer, longer contexts (about 4 slots of 16k tokens) than the 53 extraction slots, because multi-step clicking needs more context than single-page extraction. One `llama-server` can't run two slot sizes at once, and the 6 GB GPU can't hold two servers. So the engine starts the server in one of two modes: **bulk** (`-np 53`, 4k per slot) or **agent** (`-np 4`, 16k per slot). Switching modes restarts the server and waits for running jobs to finish first.
+
+**Optional, opt-in only: free hosted keys.** These are Gemini (OpenAI-compatible endpoint), Groq, Mistral, NVIDIA, Cloudflare and OpenRouter `:free`.
+- **Off by default.** Settings warns that free tiers can log prompts, and that Google's lets human reviewers read them.
+- **Public pages only.** They are never used on pages where the user is signed in.
+
+**Shared rules for every provider:**
+- Every tool input is checked against a zod schema before it runs. A failed check returns an error tool result.
+- Rate limits (429) and server errors (5xx) retry twice with backoff, then pause the run with a **Retry** button.
 
 **Adapter interface:** `next(messages, tools, signal) → { toolCall?, text?, usage }`. The loop never sees provider formats.
 
@@ -157,7 +185,13 @@ Choosing Skip returns `{success:false, method:"none", details:"user declined"}`.
 - **Run:** task box, Run button, live step feed (tool, target and result, details collapsed), confirm card, reply box for `ask_user`, Stop button, Resume banner.
 - **Results:** table, Copy (as tab-separated values), Download CSV (RFC 4180 quoting, built as a Blob download).
 - **History:** last 20 runs (task, status, row count); open one to see its results.
-- **Settings:** provider, API key (password field plus a **Test key** button that lists models: `client.models.list()` for Claude, `GET {baseUrl}/models` otherwise; this costs no tokens), model, effort, max steps, confirm gate, refusal fallback.
+- **Settings:**
+  - provider: the local brain server by default, or an opt-in free key
+  - base URL
+  - optional key, as a password field
+  - a **Test** button that calls `GET {baseUrl}/models`
+  - max steps
+  - confirm gate
 - **Behavior:** the theme follows the system. There are no accounts, no sign-in and no telemetry.
 
 **Storage (`chrome.storage.local`):**
@@ -192,7 +226,7 @@ Choosing Skip returns `{success:false, method:"none", details:"user declined"}`.
 - The injection fixture: the fake model faithfully copies a navigation that the page's text asks for, and the test asserts that the confirm gate blocks the off-site submit.
 
 **Live parity suite** (`parity/tasks.json`):
-- **Who runs it:** you, with your key, because it costs money.
+- **Who runs it:** you, on the local brain server, at no cost. It still sends real traffic to the sites listed.
 - **What it records per task:** final rows or answer, final URL, steps used, pass or fail from the task's check.
 - **Step 0:** run the same 20 tasks on Nanobrowser before building, and on rtrvr if you want a direct comparison.
 - **Expected values:** the values in the Check column were written from memory. Confirm each one against the live page when `parity/tasks.json` is written, and correct the table where they differ.
@@ -233,7 +267,7 @@ build.mjs   package.json   tsconfig.json
 
 - **Build:** `build.mjs` uses esbuild to bundle `src/sw.ts`, `src/content/index.ts` (IIFE) and `src/panel/main.ts` into `dist/`, then copies `manifest.json` and `index.html`.
 - **Dependencies:**
-  - Runtime: `@anthropic-ai/sdk`, `zod`.
+  - Runtime: `zod`. The model call is a plain `fetch` to an OpenAI-compatible endpoint.
   - Development: `esbuild`, `typescript`, `vitest`, `happy-dom`, `@playwright/test`.
 - **No UI framework:** plain TypeScript and DOM.
 
@@ -247,5 +281,105 @@ build.mjs   package.json   tsconfig.json
 
 - **Synthetic events:** some sites ignore script-dispatched events (`isTrusted=false`). These are measured by the parity suite and fixed by the later `chrome.debugger` phase.
 - **Snapshot size:** very large pages may lose context within 60k characters, signaled by `cut>0`. The limit gets tuned with the parity results.
-- **Your API key:** it sits in `chrome.storage.local`, which only extension pages can read; page scripts and content scripts never receive it. Anyone with access to your Chrome profile can still read it.
-- **Closing the panel stops the run:** resume restores the run, but nothing runs in the background in v1.
+- **Optional free keys:** they sit in `chrome.storage.local`, which only extension pages can read; page scripts and content scripts never receive them. Anyone with access to your Chrome profile can still read them.
+- **Small models are weaker than rtrvr's cloud model** at multi-step clicking. Phase 2 gives agent slots longer context and fewer slots, and keeps the confirm gate on.
+- **Bot-checked sites can still block the user's home connection.** That block also affects their normal browsing. The per-site pauses in section 14 exist for this reason.
+- **Closing the panel stops the run:** resume restores the run, but nothing runs in the background in phase 2.
+- **53 brains are not 53 times faster.** All slots share one GPU, so the estimated total throughput is 1.5–2.5 times one slot. Speed comes from built-in page data and recipes. The user-facing text must say this plainly.
+
+## 13. Phase 1: brain server and the 53 brains
+
+**Server:**
+- Binary: llama.cpp `llama-server`, Windows CUDA build.
+- Model: one model, loaded once.
+- Address: listens on `127.0.0.1:8080` only, never on all network interfaces.
+- Flags:
+  - `-np 53`: 53 parallel slots, with continuous batching (on by default).
+  - `-c 217088`: 53 × 4,096 tokens.
+  - `-kvu` with a per-slot cap.
+  - `-ctk q8_0 -ctv q8_0`: compressed conversation memory. Use `q4_0` if slots need more than 4k tokens.
+  - Flash attention on.
+  - `-ctxcp 2` and `-cram 2048`: keep checkpoints and the prompt cache from filling the 16 GB of RAM.
+
+**Model choice:**
+- **Default:** Qwen3.5-2B as a GGUF file. It's a hybrid design, so most layers keep a small fixed state, and 53 × 4k contexts fit in an estimated ~4.3 GB. Its licence is checked on its model card at download time.
+- **Second model:** added for diversity only if measured memory allows.
+- **LFM2:** excluded until its licence (which has a commercial revenue limit) is reviewed.
+
+**Memory rule:** dedicated GPU memory must hold everything. If `nvidia-smi` shows shared memory in use (Windows' "Sysmem Fallback"), the run counts as failed, and the per-slot context gets smaller.
+
+**Roles.** A plain-code orchestrator hands each free slot the next job by priority, so there is no fixed split:
+1. **Extractor:** one page in, a fixed form of fields out.
+2. **Checker:** an extractor's answer plus the page in, "correct" or "wrong" per field out. It uses a different prompt from the extractor, to reduce correlated mistakes.
+3. **Recipe writer:** 2–3 sample pages of a new layout in, a **declarative recipe** out: field name → CSS or XPath selector string. A recipe is never code.
+4. **Fixer:** pages where a recipe's output failed validation.
+5. **Voting:** only when an extractor and a checker disagree. It runs one more extraction with a third prompt, and 2 of 3 wins.
+
+**Prompting:**
+- The page text goes last in each prompt, so the shared start of the prompt is reused from the server's cache.
+- The model reasons in at most a few sentences, then writes one JSON object. Strict JSON from the first token is avoided, because it hurts small-model accuracy.
+- The last JSON object in the reply is parsed and checked against the field schema. One retry on failure.
+- Output is capped at 300 tokens.
+
+**From prompt to fields:** one brain call turns the user's plain request into a field list ("name, price, rating…"), and the user confirms it. There is no AI planner beyond this in phase 1.
+
+**Live screen:**
+- The engine serves a local page at `127.0.0.1:8765`.
+- It shows 53 tiles, each streaming its slot's current job and output (server-sent events from `llama-server`), plus progress counters and the results table.
+
+**Storage:**
+- SQLite `errand.db` with tables `urls`, `fetches`, `results` and `recipes`.
+- A raw HTML cache on disk, one file per URL.
+- CSV export in UTF-8.
+
+**Runtime:** Python 3.11 with `scrapling[fetchers]` 0.4.x already installed. Any new dependency needs a reason.
+
+## 14. Phase 1: fetch ladder
+
+Steps for each URL, in order, stopping at the first that works:
+
+0. **Guard and rules.**
+   - Only `http`/`https` URLs; no `localhost` or private IP addresses.
+   - `robots.txt` is fetched once per domain and cached for 24 h. A disallowed path gets the status `disallowed` and is not fetched.
+   - An official API, sitemap or `products.json` is preferred when one exists for the source.
+1. **Plain download:** Scrapling `Fetcher`, 30 s timeout.
+   - At most 2 requests to the same domain at once, with 1–3 s pauses.
+   - At most 32 requests at once overall.
+2. **Stealth browser.** Used when step 1 is blocked: HTTP 403, 429 or 503, a known challenge-page marker, or under 2 KB of visible text.
+   - One shared Scrapling `StealthySession` with `max_pages=6`, `disable_resources=True`, `hide_canvas=True`, `block_webrtc=True` and **`solve_cloudflare=False`**.
+   - One page per domain at a time, with 3–5 s pauses.
+3. **JavaScript browser:** Scrapling `DynamicFetcher`, waiting for network idle. Used when the page loads but has no built-in data, no matching recipe result, and little visible text.
+4. **Stop.** If there is still a challenge, a CAPTCHA, a login wall or a paywall, the status becomes `blocked: <reason>`. There is no further escalation, and the reason shows in the results.
+
+**Never:** CAPTCHA solving, logging in, bypassing paywalls, proxies, or using several accounts.
+
+**Back-off:** on a 429 or repeated challenges, that domain pauses for 60 s, then 120 s, then 240 s, and is then marked `blocked`.
+
+**After a page is fetched, extraction goes in this order:**
+1. Built-in data: JSON-LD, microdata or `__NEXT_DATA__`.
+2. A matching recipe: Scrapling selectors with `adaptive=True`, so small redesigns don't break it.
+3. The brains.
+
+**Validation:** every row is checked against the field schema. Missing required fields become a fixer job. The engine prints each page's status as it goes, so a selector that silently returns nothing is visible.
+
+## 15. Phase 1 benchmark (the first task)
+
+**Purpose:** replace the estimates in sections 13–14 with measurements before the engine is built.
+
+**Inputs:**
+- **Set A, throughput:** 105 product pages from books.toscrape.com, a site made for scraping practice.
+- **Set B, bot checks:** 105 Product Hunt product pages, if Product Hunt's `robots.txt` and terms allow it. If not, a different public, bot-checked set that the user approves.
+- **Caching:** each page is fetched once and cached. The brain tests read from the cache, so they measure thinking, not the network.
+
+**Measurements:**
+1. **Fetch:** the share of pages handled by plain download, by the stealth browser, and blocked, plus the time per page.
+2. **Brains:** runs with `-np 1`, `8` and `53` on cached pages. Recorded per run:
+   - total time for 105 pages and time per step
+   - tokens per second
+   - dedicated and shared GPU memory from `nvidia-smi`. Any shared-memory spill fails the run.
+3. **Recipe path:** total time for 105 pages using one recipe, with zero brain calls.
+4. **Accuracy:** 20 pages labelled by hand, and the share of fields correct on the brains-only path and on the recipe path.
+
+**Comparison:** rtrvr's demo took 184 s for 105 pages.
+
+**Output:** `bench/results.md`, with every number and the exact commands used.
