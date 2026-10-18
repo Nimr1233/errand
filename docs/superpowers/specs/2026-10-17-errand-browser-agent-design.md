@@ -285,7 +285,8 @@ build.mjs   package.json   tsconfig.json
 - **Small models are weaker than rtrvr's cloud model** at multi-step clicking. Phase 2 gives agent slots longer context and fewer slots, and keeps the confirm gate on.
 - **Bot-checked sites can still block the user's home connection.** That block also affects their normal browsing. The per-site pauses in section 14 exist for this reason.
 - **Closing the panel stops the run:** resume restores the run, but nothing runs in the background in phase 2.
-- **53 brains are not 53 times faster.** All slots share one GPU, so the estimated total throughput is 1.5–2.5 times one slot. Speed comes from built-in page data and recipes. The user-facing text must say this plainly.
+- **53 brains are not 53 times faster.** All slots share one GPU. Measured on 2026-10-18 (`bench/results.md`), 53 slots give 2.25 times the total throughput of 1 slot, and each answer takes 18.3 s instead of 0.84 s. Speed comes from built-in page data and recipes. The user-facing text must say this plainly.
+- **Cloudflare Turnstile pages stay blocked.** In the benchmark the stealth browser, with CAPTCHA solving off, got past 0 of 20 attempts on the two Cloudflare practice pages. The engine reports these pages as `blocked: challenge`.
 
 ## 13. Phase 1: brain server and the 53 brains
 
@@ -302,7 +303,7 @@ build.mjs   package.json   tsconfig.json
   - `-ctxcp 2` and `-cram 2048`: keep checkpoints and the prompt cache from filling the 16 GB of RAM.
 
 **Model choice:**
-- **Default:** Qwen3.5-2B as a GGUF file. It's a hybrid design, so most layers keep a small fixed state, and 53 × 4k contexts fit in an estimated ~4.3 GB. Its licence is checked on its model card at download time.
+- **Default:** Qwen3.5-2B as a GGUF file. It's a hybrid design, so most layers keep a small fixed state. 53 × 4k contexts were measured at 4,426 MiB of VRAM, with no spill (`bench/results.md`). Its licence is checked on its model card at download time.
 - **Second model:** added for diversity only if measured memory allows.
 - **LFM2:** excluded until its licence (which has a commercial revenue limit) is reviewed.
 

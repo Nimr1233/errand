@@ -1,0 +1,27 @@
+{
+  "summary": {
+    "recipe": {
+      "title": "h1",
+      "price": "p.price_color",
+      "availability": "p.instock",
+      "upc": "td.UPC",
+      "rating": "i.icon-star"
+    },
+    "write_seconds": 0.83,
+    "replay_seconds_105_pages": 0.422,
+    "ai_calls": 1,
+    "field_accuracy": 0.6,
+    "per_field": {
+      "title": 1.0,
+      "price": 1.0,
+      "availability": 1.0,
+      "upc": 0.0,
+      "rating": 0.0
+    },
+    "np": 1,
+    "server_cmd": "C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\llama\\llama-server.exe -m C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\dl\\Qwen3.5-2B-Q4_K_M.gguf -np 1 -c 4096 -ngl 99 -fa on -ctk q8_0 -ctv q8_0 -ctxcp 2 -cram 2048 --reasoning-budget 0 --host 127.0.0.1 --port 8080",
+    "max_vram_mib": 1702,
+    "shared_gpu_mib_delta": 98
+  },
+  "rows": []
+}

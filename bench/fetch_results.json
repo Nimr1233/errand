@@ -1,0 +1,965 @@
+{
+  "set_a": {
+    "wall_seconds": 102.2,
+    "ok": 105,
+    "rows": [
+      {
+        "i": 0,
+        "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+        "status": 200,
+        "seconds": 0.687,
+        "bytes": 9275
+      },
+      {
+        "i": 1,
+        "url": "https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html",
+        "status": 200,
+        "seconds": 0.686,
+        "bytes": 10913
+      },
+      {
+        "i": 2,
+        "url": "https://books.toscrape.com/catalogue/soumission_998/index.html",
+        "status": 200,
+        "seconds": 0.672,
+        "bytes": 12339
+      },
+      {
+        "i": 3,
+        "url": "https://books.toscrape.com/catalogue/sharp-objects_997/index.html",
+        "status": 200,
+        "seconds": 0.692,
+        "bytes": 14816
+      },
+      {
+        "i": 4,
+        "url": "https://books.toscrape.com/catalogue/sapiens-a-brief-history-of-humankind_996/index.html",
+        "status": 200,
+        "seconds": 0.681,
+        "bytes": 16970
+      },
+      {
+        "i": 5,
+        "url": "https://books.toscrape.com/catalogue/the-requiem-red_995/index.html",
+        "status": 200,
+        "seconds": 0.666,
+        "bytes": 16451
+      },
+      {
+        "i": 6,
+        "url": "https://books.toscrape.com/catalogue/the-dirty-little-secrets-of-getting-your-dream-job_994/index.html",
+        "status": 200,
+        "seconds": 0.694,
+        "bytes": 19780
+      },
+      {
+        "i": 7,
+        "url": "https://books.toscrape.com/catalogue/the-coming-woman-a-novel-based-on-the-life-of-the-infamous-feminist-victoria-woodhull_993/index.html",
+        "status": 200,
+        "seconds": 0.937,
+        "bytes": 23365
+      },
+      {
+        "i": 8,
+        "url": "https://books.toscrape.com/catalogue/the-boys-in-the-boat-nine-americans-and-their-epic-quest-for-gold-at-the-1936-berlin-olympics_992/index.html",
+        "status": 200,
+        "seconds": 0.945,
+        "bytes": 20832
+      },
+      {
+        "i": 9,
+        "url": "https://books.toscrape.com/catalogue/the-black-maria_991/index.html",
+        "status": 200,
+        "seconds": 0.919,
+        "bytes": 22636
+      },
+      {
+        "i": 10,
+        "url": "https://books.toscrape.com/catalogue/starving-hearts-triangular-trade-trilogy-1_990/index.html",
+        "status": 200,
+        "seconds": 2.108,
+        "bytes": 19206
+      },
+      {
+        "i": 11,
+        "url": "https://books.toscrape.com/catalogue/shakespeares-sonnets_989/index.html",
+        "status": 200,
+        "seconds": 0.911,
+        "bytes": 18431
+      },
+      {
+        "i": 12,
+        "url": "https://books.toscrape.com/catalogue/set-me-free_988/index.html",
+        "status": 200,
+        "seconds": 1.916,
+        "bytes": 18236
+      },
+      {
+        "i": 13,
+        "url": "https://books.toscrape.com/catalogue/scott-pilgrims-precious-little-life-scott-pilgrim-1_987/index.html",
+        "status": 200,
+        "seconds": 0.923,
+        "bytes": 18750
+      },
+      {
+        "i": 14,
+        "url": "https://books.toscrape.com/catalogue/rip-it-up-and-start-again_986/index.html",
+        "status": 200,
+        "seconds": 1.11,
+        "bytes": 18350
+      },
+      {
+        "i": 15,
+        "url": "https://books.toscrape.com/catalogue/our-band-could-be-your-life-scenes-from-the-american-indie-underground-1981-1991_985/index.html",
+        "status": 200,
+        "seconds": 0.811,
+        "bytes": 18781
+      },
+      {
+        "i": 16,
+        "url": "https://books.toscrape.com/catalogue/olio_984/index.html",
+        "status": 200,
+        "seconds": 0.787,
+        "bytes": 19509
+      },
+      {
+        "i": 17,
+        "url": "https://books.toscrape.com/catalogue/mesaerion-the-best-science-fiction-stories-1800-1849_983/index.html",
+        "status": 200,
+        "seconds": 1.088,
+        "bytes": 19944
+      },
+      {
+        "i": 18,
+        "url": "https://books.toscrape.com/catalogue/libertarianism-for-beginners_982/index.html",
+        "status": 200,
+        "seconds": 1.231,
+        "bytes": 18946
+      },
+      {
+        "i": 19,
+        "url": "https://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html",
+        "status": 200,
+        "seconds": 1.5,
+        "bytes": 19320
+      },
+      {
+        "i": 20,
+        "url": "https://books.toscrape.com/catalogue/in-her-wake_980/index.html",
+        "status": 200,
+        "seconds": 0.723,
+        "bytes": 18669
+      },
+      {
+        "i": 21,
+        "url": "https://books.toscrape.com/catalogue/how-music-works_979/index.html",
+        "status": 200,
+        "seconds": 1.031,
+        "bytes": 19609
+      },
+      {
+        "i": 22,
+        "url": "https://books.toscrape.com/catalogue/foolproof-preserving-a-guide-to-small-batch-jams-jellies-pickles-condiments-and-more-a-foolproof-guide-to-making-small-batch-jams-jellies-pickles-condiments-and-more_978/index.html",
+        "status": 200,
+        "seconds": 0.814,
+        "bytes": 19591
+      },
+      {
+        "i": 23,
+        "url": "https://books.toscrape.com/catalogue/chase-me-paris-nights-2_977/index.html",
+        "status": 200,
+        "seconds": 1.316,
+        "bytes": 19060
+      },
+      {
+        "i": 24,
+        "url": "https://books.toscrape.com/catalogue/black-dust_976/index.html",
+        "status": 200,
+        "seconds": 1.214,
+        "bytes": 18503
+      },
+      {
+        "i": 25,
+        "url": "https://books.toscrape.com/catalogue/birdsong-a-story-in-pictures_975/index.html",
+        "status": 200,
+        "seconds": 0.703,
+        "bytes": 18374
+      },
+      {
+        "i": 26,
+        "url": "https://books.toscrape.com/catalogue/americas-cradle-of-quarterbacks-western-pennsylvanias-football-factory-from-johnny-unitas-to-joe-montana_974/index.html",
+        "status": 200,
+        "seconds": 0.931,
+        "bytes": 20306
+      },
+      {
+        "i": 27,
+        "url": "https://books.toscrape.com/catalogue/aladdin-and-his-wonderful-lamp_973/index.html",
+        "status": 200,
+        "seconds": 0.939,
+        "bytes": 21081
+      },
+      {
+        "i": 28,
+        "url": "https://books.toscrape.com/catalogue/worlds-elsewhere-journeys-around-shakespeares-globe_972/index.html",
+        "status": 200,
+        "seconds": 0.964,
+        "bytes": 21715
+      },
+      {
+        "i": 29,
+        "url": "https://books.toscrape.com/catalogue/wall-and-piece_971/index.html",
+        "status": 200,
+        "seconds": 0.705,
+        "bytes": 18002
+      },
+      {
+        "i": 30,
+        "url": "https://books.toscrape.com/catalogue/the-four-agreements-a-practical-guide-to-personal-freedom_970/index.html",
+        "status": 200,
+        "seconds": 0.714,
+        "bytes": 18122
+      },
+      {
+        "i": 31,
+        "url": "https://books.toscrape.com/catalogue/the-five-love-languages-how-to-express-heartfelt-commitment-to-your-mate_969/index.html",
+        "status": 200,
+        "seconds": 0.677,
+        "bytes": 19275
+      },
+      {
+        "i": 32,
+        "url": "https://books.toscrape.com/catalogue/the-elephant-tree_968/index.html",
+        "status": 200,
+        "seconds": 0.702,
+        "bytes": 18801
+      },
+      {
+        "i": 33,
+        "url": "https://books.toscrape.com/catalogue/the-bear-and-the-piano_967/index.html",
+        "status": 200,
+        "seconds": 0.972,
+        "bytes": 17982
+      },
+      {
+        "i": 34,
+        "url": "https://books.toscrape.com/catalogue/sophies-world_966/index.html",
+        "status": 200,
+        "seconds": 0.713,
+        "bytes": 18582
+      },
+      {
+        "i": 35,
+        "url": "https://books.toscrape.com/catalogue/penny-maybe_965/index.html",
+        "status": 200,
+        "seconds": 0.965,
+        "bytes": 17000
+      },
+      {
+        "i": 36,
+        "url": "https://books.toscrape.com/catalogue/maude-1883-1993she-grew-up-with-the-country_964/index.html",
+        "status": 200,
+        "seconds": 1.161,
+        "bytes": 19198
+      },
+      {
+        "i": 37,
+        "url": "https://books.toscrape.com/catalogue/in-a-dark-dark-wood_963/index.html",
+        "status": 200,
+        "seconds": 1.252,
+        "bytes": 18076
+      },
+      {
+        "i": 38,
+        "url": "https://books.toscrape.com/catalogue/behind-closed-doors_962/index.html",
+        "status": 200,
+        "seconds": 1.009,
+        "bytes": 18737
+      },
+      {
+        "i": 39,
+        "url": "https://books.toscrape.com/catalogue/you-cant-bury-them-all-poems_961/index.html",
+        "status": 200,
+        "seconds": 1.035,
+        "bytes": 20773
+      },
+      {
+        "i": 40,
+        "url": "https://books.toscrape.com/catalogue/slow-states-of-collapse-poems_960/index.html",
+        "status": 200,
+        "seconds": 1.071,
+        "bytes": 19772
+      },
+      {
+        "i": 41,
+        "url": "https://books.toscrape.com/catalogue/reasons-to-stay-alive_959/index.html",
+        "status": 200,
+        "seconds": 0.932,
+        "bytes": 19172
+      },
+      {
+        "i": 42,
+        "url": "https://books.toscrape.com/catalogue/private-paris-private-10_958/index.html",
+        "status": 200,
+        "seconds": 0.727,
+        "bytes": 18671
+      },
+      {
+        "i": 43,
+        "url": "https://books.toscrape.com/catalogue/higherselfie-wake-up-your-life-free-your-soul-find-your-tribe_957/index.html",
+        "status": 200,
+        "seconds": 0.716,
+        "bytes": 19990
+      },
+      {
+        "i": 44,
+        "url": "https://books.toscrape.com/catalogue/without-borders-wanderlove-1_956/index.html",
+        "status": 200,
+        "seconds": 0.941,
+        "bytes": 19713
+      },
+      {
+        "i": 45,
+        "url": "https://books.toscrape.com/catalogue/when-we-collided_955/index.html",
+        "status": 200,
+        "seconds": 0.679,
+        "bytes": 17947
+      },
+      {
+        "i": 46,
+        "url": "https://books.toscrape.com/catalogue/we-love-you-charlie-freeman_954/index.html",
+        "status": 200,
+        "seconds": 0.736,
+        "bytes": 19300
+      },
+      {
+        "i": 47,
+        "url": "https://books.toscrape.com/catalogue/untitled-collection-sabbath-poems-2014_953/index.html",
+        "status": 200,
+        "seconds": 0.676,
+        "bytes": 19607
+      },
+      {
+        "i": 48,
+        "url": "https://books.toscrape.com/catalogue/unseen-city-the-majesty-of-pigeons-the-discreet-charm-of-snails-other-wonders-of-the-urban-wilderness_952/index.html",
+        "status": 200,
+        "seconds": 0.891,
+        "bytes": 20783
+      },
+      {
+        "i": 49,
+        "url": "https://books.toscrape.com/catalogue/unicorn-tracks_951/index.html",
+        "status": 200,
+        "seconds": 0.91,
+        "bytes": 18894
+      },
+      {
+        "i": 50,
+        "url": "https://books.toscrape.com/catalogue/unbound-how-eight-technologies-made-us-human-transformed-society-and-brought-our-world-to-the-brink_950/index.html",
+        "status": 200,
+        "seconds": 1.051,
+        "bytes": 20299
+      },
+      {
+        "i": 51,
+        "url": "https://books.toscrape.com/catalogue/tsubasa-world-chronicle-2-tsubasa-world-chronicle-2_949/index.html",
+        "status": 200,
+        "seconds": 1.279,
+        "bytes": 17956
+      },
+      {
+        "i": 52,
+        "url": "https://books.toscrape.com/catalogue/throwing-rocks-at-the-google-bus-how-growth-became-the-enemy-of-prosperity_948/index.html",
+        "status": 200,
+        "seconds": 1.431,
+        "bytes": 22278
+      },
+      {
+        "i": 53,
+        "url": "https://books.toscrape.com/catalogue/this-one-summer_947/index.html",
+        "status": 200,
+        "seconds": 1.013,
+        "bytes": 18538
+      },
+      {
+        "i": 54,
+        "url": "https://books.toscrape.com/catalogue/thirst_946/index.html",
+        "status": 200,
+        "seconds": 0.997,
+        "bytes": 19039
+      },
+      {
+        "i": 55,
+        "url": "https://books.toscrape.com/catalogue/the-torch-is-passed-a-harding-family-story_945/index.html",
+        "status": 200,
+        "seconds": 1.416,
+        "bytes": 25375
+      },
+      {
+        "i": 56,
+        "url": "https://books.toscrape.com/catalogue/the-secret-of-dreadwillow-carse_944/index.html",
+        "status": 200,
+        "seconds": 1.589,
+        "bytes": 19397
+      },
+      {
+        "i": 57,
+        "url": "https://books.toscrape.com/catalogue/the-pioneer-woman-cooks-dinnertime-comfort-classics-freezer-food-16-minute-meals-and-other-delicious-ways-to-solve-supper_943/index.html",
+        "status": 200,
+        "seconds": 1.477,
+        "bytes": 21968
+      },
+      {
+        "i": 58,
+        "url": "https://books.toscrape.com/catalogue/the-past-never-ends_942/index.html",
+        "status": 200,
+        "seconds": 0.69,
+        "bytes": 19096
+      },
+      {
+        "i": 59,
+        "url": "https://books.toscrape.com/catalogue/the-natural-history-of-us-the-fine-art-of-pretending-2_941/index.html",
+        "status": 200,
+        "seconds": 1.339,
+        "bytes": 19299
+      },
+      {
+        "i": 60,
+        "url": "https://books.toscrape.com/catalogue/the-nameless-city-the-nameless-city-1_940/index.html",
+        "status": 200,
+        "seconds": 1.061,
+        "bytes": 18411
+      },
+      {
+        "i": 61,
+        "url": "https://books.toscrape.com/catalogue/the-murder-that-never-was-forensic-instincts-5_939/index.html",
+        "status": 200,
+        "seconds": 1.502,
+        "bytes": 19971
+      },
+      {
+        "i": 62,
+        "url": "https://books.toscrape.com/catalogue/the-most-perfect-thing-inside-and-outside-a-birds-egg_938/index.html",
+        "status": 200,
+        "seconds": 1.573,
+        "bytes": 20165
+      },
+      {
+        "i": 63,
+        "url": "https://books.toscrape.com/catalogue/the-mindfulness-and-acceptance-workbook-for-anxiety-a-guide-to-breaking-free-from-anxiety-phobias-and-worry-using-acceptance-and-commitment-therapy_937/index.html",
+        "status": 200,
+        "seconds": 1.708,
+        "bytes": 22730
+      },
+      {
+        "i": 64,
+        "url": "https://books.toscrape.com/catalogue/the-life-changing-magic-of-tidying-up-the-japanese-art-of-decluttering-and-organizing_936/index.html",
+        "status": 200,
+        "seconds": 1.253,
+        "bytes": 20126
+      },
+      {
+        "i": 65,
+        "url": "https://books.toscrape.com/catalogue/the-inefficiency-assassin-time-management-tactics-for-working-smarter-not-longer_935/index.html",
+        "status": 200,
+        "seconds": 0.986,
+        "bytes": 19637
+      },
+      {
+        "i": 66,
+        "url": "https://books.toscrape.com/catalogue/the-gutsy-girl-escapades-for-your-life-of-epic-adventure_934/index.html",
+        "status": 200,
+        "seconds": 1.258,
+        "bytes": 20790
+      },
+      {
+        "i": 67,
+        "url": "https://books.toscrape.com/catalogue/the-electric-pencil-drawings-from-inside-state-hospital-no-3_933/index.html",
+        "status": 200,
+        "seconds": 0.919,
+        "bytes": 20459
+      },
+      {
+        "i": 68,
+        "url": "https://books.toscrape.com/catalogue/the-death-of-humanity-and-the-case-for-life_932/index.html",
+        "status": 200,
+        "seconds": 0.718,
+        "bytes": 17905
+      },
+      {
+        "i": 69,
+        "url": "https://books.toscrape.com/catalogue/the-bulletproof-diet-lose-up-to-a-pound-a-day-reclaim-energy-and-focus-upgrade-your-life_931/index.html",
+        "status": 200,
+        "seconds": 0.894,
+        "bytes": 20784
+      },
+      {
+        "i": 70,
+        "url": "https://books.toscrape.com/catalogue/the-art-forger_930/index.html",
+        "status": 200,
+        "seconds": 0.697,
+        "bytes": 19460
+      },
+      {
+        "i": 71,
+        "url": "https://books.toscrape.com/catalogue/the-age-of-genius-the-seventeenth-century-and-the-birth-of-the-modern-mind_929/index.html",
+        "status": 200,
+        "seconds": 0.929,
+        "bytes": 19738
+      },
+      {
+        "i": 72,
+        "url": "https://books.toscrape.com/catalogue/the-activists-tao-te-ching-ancient-advice-for-a-modern-revolution_928/index.html",
+        "status": 200,
+        "seconds": 0.712,
+        "bytes": 19331
+      },
+      {
+        "i": 73,
+        "url": "https://books.toscrape.com/catalogue/spark-joy-an-illustrated-master-class-on-the-art-of-organizing-and-tidying-up_927/index.html",
+        "status": 200,
+        "seconds": 0.676,
+        "bytes": 19718
+      },
+      {
+        "i": 74,
+        "url": "https://books.toscrape.com/catalogue/soul-reader_926/index.html",
+        "status": 200,
+        "seconds": 0.662,
+        "bytes": 17086
+      },
+      {
+        "i": 75,
+        "url": "https://books.toscrape.com/catalogue/security_925/index.html",
+        "status": 200,
+        "seconds": 0.874,
+        "bytes": 21989
+      },
+      {
+        "i": 76,
+        "url": "https://books.toscrape.com/catalogue/saga-volume-6-saga-collected-editions-6_924/index.html",
+        "status": 200,
+        "seconds": 0.683,
+        "bytes": 17056
+      },
+      {
+        "i": 77,
+        "url": "https://books.toscrape.com/catalogue/saga-volume-5-saga-collected-editions-5_923/index.html",
+        "status": 200,
+        "seconds": 0.661,
+        "bytes": 17068
+      },
+      {
+        "i": 78,
+        "url": "https://books.toscrape.com/catalogue/reskilling-america-learning-to-labor-in-the-twenty-first-century_922/index.html",
+        "status": 200,
+        "seconds": 0.876,
+        "bytes": 21637
+      },
+      {
+        "i": 79,
+        "url": "https://books.toscrape.com/catalogue/rat-queens-vol-3-demons-rat-queens-collected-editions-11-15_921/index.html",
+        "status": 200,
+        "seconds": 0.666,
+        "bytes": 17174
+      },
+      {
+        "i": 80,
+        "url": "https://books.toscrape.com/catalogue/princess-jellyfish-2-in-1-omnibus-vol-01-princess-jellyfish-2-in-1-omnibus-1_920/index.html",
+        "status": 200,
+        "seconds": 0.893,
+        "bytes": 19926
+      },
+      {
+        "i": 81,
+        "url": "https://books.toscrape.com/catalogue/princess-between-worlds-wide-awake-princess-5_919/index.html",
+        "status": 200,
+        "seconds": 0.732,
+        "bytes": 17045
+      },
+      {
+        "i": 82,
+        "url": "https://books.toscrape.com/catalogue/pop-gun-war-volume-1-gift_918/index.html",
+        "status": 200,
+        "seconds": 0.907,
+        "bytes": 21166
+      },
+      {
+        "i": 83,
+        "url": "https://books.toscrape.com/catalogue/political-suicide-missteps-peccadilloes-bad-calls-backroom-hijinx-sordid-pasts-rotten-breaks-and-just-plain-dumb-mistakes-in-the-annals-of-american-politics_917/index.html",
+        "status": 200,
+        "seconds": 0.703,
+        "bytes": 20082
+      },
+      {
+        "i": 84,
+        "url": "https://books.toscrape.com/catalogue/patience_916/index.html",
+        "status": 200,
+        "seconds": 0.976,
+        "bytes": 18158
+      },
+      {
+        "i": 85,
+        "url": "https://books.toscrape.com/catalogue/outcast-vol-1-a-darkness-surrounds-him-outcast-1_915/index.html",
+        "status": 200,
+        "seconds": 0.7,
+        "bytes": 17305
+      },
+      {
+        "i": 86,
+        "url": "https://books.toscrape.com/catalogue/orange-the-complete-collection-1-orange-the-complete-collection-1_914/index.html",
+        "status": 200,
+        "seconds": 0.672,
+        "bytes": 18848
+      },
+      {
+        "i": 87,
+        "url": "https://books.toscrape.com/catalogue/online-marketing-for-busy-authors-a-step-by-step-guide_913/index.html",
+        "status": 200,
+        "seconds": 0.711,
+        "bytes": 19840
+      },
+      {
+        "i": 88,
+        "url": "https://books.toscrape.com/catalogue/on-a-midnight-clear_912/index.html",
+        "status": 200,
+        "seconds": 0.709,
+        "bytes": 18702
+      },
+      {
+        "i": 89,
+        "url": "https://books.toscrape.com/catalogue/obsidian-lux-1_911/index.html",
+        "status": 200,
+        "seconds": 0.92,
+        "bytes": 18616
+      },
+      {
+        "i": 90,
+        "url": "https://books.toscrape.com/catalogue/my-paris-kitchen-recipes-and-stories_910/index.html",
+        "status": 200,
+        "seconds": 0.874,
+        "bytes": 21131
+      },
+      {
+        "i": 91,
+        "url": "https://books.toscrape.com/catalogue/masks-and-shadows_909/index.html",
+        "status": 200,
+        "seconds": 0.67,
+        "bytes": 18635
+      },
+      {
+        "i": 92,
+        "url": "https://books.toscrape.com/catalogue/mama-tried-traditional-italian-cooking-for-the-screwed-crude-vegan-and-tattooed_908/index.html",
+        "status": 200,
+        "seconds": 0.667,
+        "bytes": 19642
+      },
+      {
+        "i": 93,
+        "url": "https://books.toscrape.com/catalogue/lumberjanes-vol-2-friendship-to-the-max-lumberjanes-5-8_907/index.html",
+        "status": 200,
+        "seconds": 0.902,
+        "bytes": 19151
+      },
+      {
+        "i": 94,
+        "url": "https://books.toscrape.com/catalogue/lumberjanes-vol-1-beware-the-kitten-holy-lumberjanes-1-4_906/index.html",
+        "status": 200,
+        "seconds": 0.662,
+        "bytes": 18673
+      },
+      {
+        "i": 95,
+        "url": "https://books.toscrape.com/catalogue/lumberjanes-vol-3-a-terrible-plan-lumberjanes-9-12_905/index.html",
+        "status": 200,
+        "seconds": 0.865,
+        "bytes": 17337
+      },
+      {
+        "i": 96,
+        "url": "https://books.toscrape.com/catalogue/layered-baking-building-and-styling-spectacular-cakes_904/index.html",
+        "status": 200,
+        "seconds": 0.892,
+        "bytes": 19988
+      },
+      {
+        "i": 97,
+        "url": "https://books.toscrape.com/catalogue/judo-seven-steps-to-black-belt-an-introductory-guide-for-beginners_903/index.html",
+        "status": 200,
+        "seconds": 0.654,
+        "bytes": 19249
+      },
+      {
+        "i": 98,
+        "url": "https://books.toscrape.com/catalogue/join_902/index.html",
+        "status": 200,
+        "seconds": 0.659,
+        "bytes": 19957
+      },
+      {
+        "i": 99,
+        "url": "https://books.toscrape.com/catalogue/in-the-country-we-love-my-family-divided_901/index.html",
+        "status": 200,
+        "seconds": 0.87,
+        "bytes": 20524
+      },
+      {
+        "i": 100,
+        "url": "https://books.toscrape.com/catalogue/immunity-how-elie-metchnikoff-changed-the-course-of-modern-medicine_900/index.html",
+        "status": 200,
+        "seconds": 0.864,
+        "bytes": 20671
+      },
+      {
+        "i": 101,
+        "url": "https://books.toscrape.com/catalogue/i-hate-fairyland-vol-1-madly-ever-after-i-hate-fairyland-compilations-1-5_899/index.html",
+        "status": 200,
+        "seconds": 0.869,
+        "bytes": 20435
+      },
+      {
+        "i": 102,
+        "url": "https://books.toscrape.com/catalogue/i-am-a-hero-omnibus-volume-1_898/index.html",
+        "status": 200,
+        "seconds": 0.913,
+        "bytes": 19299
+      },
+      {
+        "i": 103,
+        "url": "https://books.toscrape.com/catalogue/how-to-be-miserable-40-strategies-you-already-use_897/index.html",
+        "status": 200,
+        "seconds": 0.874,
+        "bytes": 20180
+      },
+      {
+        "i": 104,
+        "url": "https://books.toscrape.com/catalogue/her-backup-boyfriend-the-sorensen-family-1_896/index.html",
+        "status": 200,
+        "seconds": 0.881,
+        "bytes": 18536
+      }
+    ]
+  },
+  "set_b": [
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 1,
+      "plain_status": 403,
+      "plain_seconds": 0.17,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.98,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 2,
+      "plain_status": 403,
+      "plain_seconds": 0.2,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 13.03,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 3,
+      "plain_status": 403,
+      "plain_seconds": 0.2,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.87,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 4,
+      "plain_status": 403,
+      "plain_seconds": 0.18,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.68,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 5,
+      "plain_status": 403,
+      "plain_seconds": 0.19,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 13.2,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 6,
+      "plain_status": 403,
+      "plain_seconds": 0.21,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 13.31,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 7,
+      "plain_status": 403,
+      "plain_seconds": 1.19,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.58,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 8,
+      "plain_status": 403,
+      "plain_seconds": 0.19,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.95,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 9,
+      "plain_status": 403,
+      "plain_seconds": 0.19,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.87,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/cloudflare-challenge",
+      "attempt": 10,
+      "plain_status": 403,
+      "plain_seconds": 0.21,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.53,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 1,
+      "plain_status": 403,
+      "plain_seconds": 0.2,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.57,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 2,
+      "plain_status": 403,
+      "plain_seconds": 0.18,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 13.05,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 3,
+      "plain_status": 403,
+      "plain_seconds": 0.17,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.74,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 4,
+      "plain_status": 403,
+      "plain_seconds": 0.18,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.63,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 5,
+      "plain_status": 403,
+      "plain_seconds": 0.17,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.85,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 6,
+      "plain_status": 403,
+      "plain_seconds": 0.18,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.61,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 7,
+      "plain_status": 403,
+      "plain_seconds": 0.17,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.29,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 8,
+      "plain_status": 403,
+      "plain_seconds": 0.15,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.35,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 9,
+      "plain_status": 403,
+      "plain_seconds": 0.17,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.33,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    },
+    {
+      "url": "https://www.scrapingcourse.com/antibot-challenge",
+      "attempt": 10,
+      "plain_status": 403,
+      "plain_seconds": 0.18,
+      "plain_passed": false,
+      "stealth_status": 403,
+      "stealth_seconds": 12.38,
+      "stealth_title": "Just a moment...",
+      "stealth_passed": false
+    }
+  ]
+}
