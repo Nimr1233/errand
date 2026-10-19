@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Errand mission control</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05080A;--ink:#5CE1E6;--dim:#6FA8AE;--line:#1F5F66;--panel:#0A1316;--red:#FF6B63}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Share Tech Mono',monospace}
+#room{position:fixed;inset:0;touch-action:none}
+#room canvas{display:block;cursor:grab}
+button{font:inherit;font-size:13px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+button.red{color:var(--red);border-color:#7A1C1C}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+#bar{position:fixed;left:10px;right:10px;bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;z-index:2;pointer-events:none}
+#bar button{pointer-events:auto}
+#sel{flex:1;min-width:180px;font-size:13px;color:var(--dim)}
+#dot{position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#CFF6F8;opacity:.8;display:none;pointer-events:none;z-index:2}
+#hint{position:fixed;left:50%;top:60%;transform:translateX(-50%);padding:6px 16px;border-radius:6px;background:rgba(10,19,22,.85);border:1px solid var(--line);font-size:16px;opacity:0;transition:opacity .4s;pointer-events:none;z-index:2}
+#toast{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);font-size:13px;padding:4px 14px;border-radius:6px;background:var(--panel);border:1px solid var(--line);opacity:0;transition:opacity .6s;pointer-events:none;z-index:3}
+#joy{position:fixed;left:22px;bottom:76px;width:120px;height:120px;border-radius:50%;border:1px solid var(--line);background:rgba(10,19,22,.5);display:none;touch-action:none;z-index:2}
+#knob{position:absolute;left:36px;top:36px;width:48px;height:48px;border-radius:50%;background:rgba(92,225,230,.35);pointer-events:none}
+#sitbtn{position:fixed;left:50%;top:60%;transform:translateX(-50%);font-size:16px;display:none;z-index:2}
+#dim{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .5s}
+#dim.open{opacity:1}
+#panel{width:min(1280px,94vw);height:min(780px,88vh);background:#020E11;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden}
+#panel header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 12px;border-bottom:1px solid #14424A;color:var(--dim);font-size:14px}
+#cols{flex:1;display:flex;min-height:0}
+#termbox{flex:7;position:relative;border-right:1px solid #14424A;min-width:0}
+#term{position:absolute;inset:0;width:100%;height:100%;border:0;background:#020E11}
+#termmsg{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--dim);font-size:15px;background:#020E11}
+#ups{flex:3;display:flex;flex-direction:column;min-width:0}
+#ups h2{font-size:13px;font-weight:normal;margin:0;padding:10px 12px;color:var(--dim);border-bottom:1px solid #14424A}
+#phonenote{display:none;margin:0;padding:8px 12px;color:var(--dim);font-size:13px;border-bottom:1px solid #14424A}
+#uplist{list-style:none;margin:0;padding:4px 12px;overflow-y:auto;flex:1}
+#uplist li{padding:6px 0;border-bottom:1px solid #0E2A2F;font-size:13px;line-height:1.4;color:#CFF6F8;animation:slide .4s ease-out}
+#uplist li.old{animation:none}
+#uplist li.problem{color:#FFB3AE}
+#uplist time{color:var(--dim);margin-right:6px}
+#uplist li button{display:block;margin-top:4px;font-size:12px;padding:3px 10px}
+@keyframes slide{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
+.phone #termbox{display:none}
+.phone #phonenote{display:block}
+#nogl{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;color:#CFF6F8;line-height:1.5}
+#nogl[hidden]{display:none}
+</style>
+</head>
+<body>
+<div id="room"></div>
+<div id="dot"></div>
+<div id="hint">Press E to sit</div>
+<button id="sitbtn">Sit</button>
+<div id="joy" aria-hidden="true"><div id="knob"></div></div>
+<div id="toast" role="status"></div>
+<div id="bar">
+  <div id="sel"></div>
+  <button id="approve" hidden>APPROVE AND CONTINUE</button>
+  <button id="skip" hidden>SKIP THIS PAGE</button>
+  <button id="next" class="red">GO TO PROBLEMS</button>
+  <button id="home">FACE THE TVS</button>
+</div>
+<div id="dim">
+  <div id="panel" role="dialog" aria-label="Chief's computer">
+    <header><span>CHIEF'S COMPUTER</span><button id="stand">Stand up</button></header>
+    <div id="cols">
+      <div id="termbox"><iframe id="term" title="Claude Code" allow="clipboard-read; clipboard-write"></iframe><div id="termmsg"></div></div>
+      <div id="ups"><h2>AGENT UPDATES</h2><p id="phonenote">Claude Code works on the laptop only.</p><ol id="uplist"></ol></div>
+    </div>
+  </div>
+</div>
+<div id="nogl" hidden>
+  <p>This device can't draw the 3D room (no WebGL).</p>
+  <p>The list view isn't built yet, so there is nothing else to show here for now.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+'use strict';
+(function(){
+const TOKEN='__TOKEN__';
+const $=id=>document.getElementById(id);
+const LOCAL=['127.0.0.1','localhost'].includes(location.hostname);
+const PHONE=matchMedia('(pointer: coarse)').matches;
+if(PHONE)document.body.classList.add('phone');
+const R=window.__room={webgl:false,tv:{},status:null};
+function glOk(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'))}catch(e){return false}}
+if(!window.THREE||!glOk()){$('nogl').hidden=false;$('bar').style.display='none';return}
+R.webgl=true;
+
+const selEl=$('sel'),toastEl=$('toast'),hintEl=$('hint'),dotEl=$('dot'),dimEl=$('dim'),termEl=$('term'),termMsgEl=$('termmsg'),upEl=$('uplist'),sitBtn=$('sitbtn'),okBtn=$('approve'),skipBtn=$('skip');
+const mono=s=>s+'px "Share Tech Mono", monospace',num=s=>'700 '+s+'px Orbitron, "Share Tech Mono", monospace';
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),wrapA=a=>Math.atan2(Math.sin(a),Math.cos(a));
+
+// ---- the room (layout as mockup v11) ----
+const A=5.2,Q=Math.PI/4,L=2*A*Math.tan(Q/2),FLOOR=-2.4,CEIL=2.8,MID=(CEIL+FLOOR)/2;
+const EYE=-0.15,SEAT_EYE=-0.8,PITCH=0.05,START={x:0,z:1.6},UPSPOT={x:0,z:0.65},SEAT={x:0,z:-0.3},CHAIR={x:0,z:-0.35};
+const SPEED=1.6,ACC=SPEED/0.3,WALL=A-0.6,MARGIN=0.35,SIT_DIST=1.2;
+const U=a=>new THREE.Vector3(Math.sin(a),0,-Math.cos(a)),T=a=>new THREE.Vector3(Math.cos(a),0,Math.sin(a));
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x05080A,6,15);
+const cam=new THREE.PerspectiveCamera(66,innerWidth/innerHeight,0.05,100);
+const ren=new THREE.WebGLRenderer({antialias:true});ren.setClearColor(0x05080A,1);ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+const cv=ren.domElement;$('room').appendChild(cv);
+const ANISO=ren.capabilities.getMaxAnisotropy();
+const B=c=>new THREE.MeshBasicMaterial({color:c}),M=t=>new THREE.MeshBasicMaterial({map:t,fog:false});
+function put(geo,mat,a,off,y,inset){const m=new THREE.Mesh(geo,mat);m.position.copy(U(a).multiplyScalar(A-inset).add(T(a).multiplyScalar(off))).setY(y);m.lookAt(m.position.clone().sub(U(a)));scene.add(m);return m}
+// anisotropic filtering keeps screens seen at an angle sharp
+function tex(w,h,fn){const c2=document.createElement('canvas');c2.width=w;c2.height=h;const c=c2.getContext('2d');if(fn)fn(c,w,h);const t=new THREE.CanvasTexture(c2);t.anisotropy=ANISO;return {c,t}}
+function dot(c,x,y,r,col){c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill()}
+function fit(c,text,maxW){if(c.measureText(text).width<=maxW)return text;while(text.length>1&&c.measureText(text+'…').width>maxW)text=text.slice(0,-1);return text+'…'}
+function fitFont(c,text,maxW,size,font){c.font=font(size);const w=c.measureText(text).width;if(w>maxW){size=Math.floor(size*maxW/w);c.font=font(size)}return size}
+function wrap(c,text,maxW){const lines=[];let cur='';for(const w of text.split(' ')){const t=cur?cur+' '+w:w;if(cur&&c.measureText(t).width>maxW){lines.push(cur);cur=w}else cur=t}if(cur)lines.push(cur);return lines}
+
+const wallT=tex(512,640,(c,w,h)=>{c.fillStyle='#0F1316';c.fillRect(0,0,w,h);c.lineWidth=2;for(let i=0;i<4;i++)for(let j=0;j<5;j++){c.fillStyle='#13181B';c.fillRect(i*128+7,j*128+7,114,114);c.strokeStyle='#1C2227';c.strokeRect(i*128+7,j*128+7,114,114)}}).t;
+for(let i=0;i<8;i++){const a=i*Q;
+put(new THREE.PlaneGeometry(L+0.04,CEIL-FLOOR),new THREE.MeshBasicMaterial({map:wallT}),a,0,MID,0);
+put(new THREE.BoxGeometry(L-0.3,0.03,0.03),B(0x9FE3E8),a,0,CEIL-0.06,0.06);
+const ca=a+Q/2,cr=A/Math.cos(Q/2)-0.06,p=new THREE.Mesh(new THREE.BoxGeometry(0.16,CEIL-FLOOR,0.16),B(0x0A0D0F));p.position.set(cr*Math.sin(ca),MID,-cr*Math.cos(ca));p.rotation.y=-ca;scene.add(p)}
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(14,14),B(0x080A0C));floor.rotation.x=-Math.PI/2;floor.position.y=FLOOR;scene.add(floor);
+const grid=new THREE.GridHelper(14,28,0x141A1E,0x101417);grid.position.y=FLOOR+0.005;scene.add(grid);
+// ceiling: stars, a faint galaxy band and ONE soft aurora ribbon at about a third of v11's brightness, drifting slowly
+const sky=new THREE.ShaderMaterial({uniforms:{t:{value:0}},
+vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+fragmentShader:`uniform float t;varying vec2 vUv;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(h(i),h(i+vec2(1.0,0.0)),f.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),f.x),f.y);}
+float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*n(p);p*=2.03;a*=0.5;}return v;}
+void main(){vec2 p=(vUv-0.5)*14.0;vec3 col=vec3(0.004,0.006,0.016);
+float d=p.x*0.6+p.y*0.8;col+=vec3(0.10,0.06,0.18)*exp(-d*d*0.08)*fbm(p*0.7+4.0)*1.4;
+vec2 g=floor(p*5.0),f=fract(p*5.0)-0.5;col+=vec3(0.75,0.85,1.0)*step(0.965,h(g))*smoothstep(0.12,0.0,length(f))*(0.5+0.5*h(g+3.1));
+float y=p.y+1.2*sin(p.x*0.32+t*0.22+2.1)+1.6*(fbm(vec2(p.x*0.25-t*0.06,5.0))-0.5);
+float rays=0.6+0.4*n(vec2(p.x*3.0+t*0.15,7.0));
+col+=vec3(0.335,0.65,0.775)*exp(-y*y*0.9)*rays*0.17;
+gl_FragColor=vec4(col,1.0);}`});
+const ceil=new THREE.Mesh(new THREE.PlaneGeometry(14,14),sky);ceil.rotation.x=Math.PI/2;ceil.position.y=CEIL;scene.add(ceil);
+// front wall: main screen and two button panels with steady amber lights
+const big=tex(1024,394);
+put(new THREE.PlaneGeometry(3.2,1.28),B(0x050607),0,0,0.4,0.03);
+put(new THREE.PlaneGeometry(3.1,1.19),M(big.t),0,0,0.4,0.045);
+const panT=tex(128,384,(c,w,h)=>{c.fillStyle='#0C1013';c.fillRect(0,0,w,h);c.strokeStyle='#20282D';c.lineWidth=3;c.strokeRect(2,2,w-4,h-4);dot(c,40,26,6,'#E39B2D');dot(c,88,26,6,'#E39B2D');
+for(let r=0;r<9;r++)for(let k=0;k<3;k++){const v=(r*3+k*5)%7;c.fillStyle=v===0?'#5CE1E6':v<3?'#1A626A':'#142427';c.fillRect(16+k*34,52+r*36,28,26)}}).t;
+[-1.8,1.8].forEach(x=>put(new THREE.PlaneGeometry(0.34,1.3),M(panT),0,x,0.4,0.04));
+// back wall: three server racks with steady lights
+const rackT=tex(128,384,(c,w,h)=>{c.fillStyle='#0A0D0F';c.fillRect(0,0,w,h);c.lineWidth=2;for(let u=0;u<14;u++){c.strokeStyle='#1A2024';c.strokeRect(6,6+u*27,w-12,23);for(let k=0;k<4;k++){const v=(u*7+k*3)%9;c.fillStyle=v===0?'#E39B2D':v<4?'#2FB5BE':'#15292C';c.fillRect(14+k*10,15+u*27,5,5)}}}).t;
+const rd=B(0x0B0E10);[-1.25,0,1.25].forEach(x=>put(new THREE.BoxGeometry(1.0,3.4,0.7),[rd,rd,rd,rd,M(rackT),rd],Math.PI,x,FLOOR+1.7,0.38));
+// the U-shaped console with keyboards and 5 desk monitors
+const keyT=tex(128,40,(c,w,h)=>{c.fillStyle='#14191D';c.fillRect(0,0,w,h);c.fillStyle='#252D33';for(let r=0;r<4;r++)for(let k=0;k<14;k++)c.fillRect(4+k*8.8,4+r*9,7,7)}).t;
+const deskMons=[];
+function desk(x,z,len,ry,mons){const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);
+const add=(geo,mat,px,py,pz,rx)=>{const m=new THREE.Mesh(geo,mat);m.position.set(px,py,pz);if(rx)m.rotation.x=rx;g.add(m);return m};
+add(new THREE.BoxGeometry(len,0.1,0.8),B(0x191E22),0,-1.55,0);
+add(new THREE.BoxGeometry(len,0.86,0.06),B(0x0D1114),0,-1.97,-0.37);
+add(new THREE.BoxGeometry(len-0.12,0.8,0.04),B(0x0F1316),0,-2.0,0.2);
+add(new THREE.BoxGeometry(len,0.012,0.014),B(0x2A8F98),0,-1.5,0.4);
+mons.forEach(mx=>{add(new THREE.BoxGeometry(0.06,0.24,0.04),B(0x101417),mx,-1.38,-0.22);
+add(new THREE.BoxGeometry(0.82,0.5,0.04),B(0x07090B),mx,-1.08,-0.2,-0.08);
+const d=tex(512,300);add(new THREE.PlaneGeometry(0.76,0.44),M(d.t),mx,-1.08,-0.175,-0.08);deskMons.push(d);
+add(new THREE.PlaneGeometry(0.5,0.16),new THREE.MeshBasicMaterial({map:keyT}),mx,-1.494,0.14,-Math.PI/2)})}
+desk(0,-1.85,3.3,0,[-1.05,0,1.05]);desk(-2.15,-1.1,1.75,0.967,[0]);desk(2.15,-1.1,1.75,-0.967,[0]);
+// the chair, facing the main screen
+const chair=new THREE.Group();chair.position.set(CHAIR.x,FLOOR,CHAIR.z);scene.add(chair);
+const cm=B(0x1A1F23),ce=new THREE.LineBasicMaterial({color:0x3A444B});
+[[0.75,0.82,0.42,0.97],[0.6,0.22,0.36,1.48]].forEach(([r,h,half,y])=>{const geo=new THREE.CylinderGeometry(r,r,h,16,1,true,-half,half*2),m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0x1A1F23,side:THREE.DoubleSide})),e=new THREE.LineSegments(new THREE.EdgesGeometry(geo,10),ce);m.position.set(0,y,0.33-r);e.position.copy(m.position);chair.add(m,e)});
+[[0.62,0.1,0.58,0,0.5,0],[0.07,0.42,0.07,0,0.25,0],[0.06,0.05,0.42,-0.34,0.74,0.02],[0.06,0.05,0.42,0.34,0.74,0.02],[0.04,0.22,0.04,-0.34,0.62,0.05],[0.04,0.22,0.04,0.34,0.62,0.05]].forEach(([w,h,d,x,y,z])=>{const geo=new THREE.BoxGeometry(w,h,d),m=new THREE.Mesh(geo,cm),e=new THREE.LineSegments(new THREE.EdgesGeometry(geo),ce);m.position.set(x,y,z);e.position.set(x,y,z);chair.add(m,e)});
+for(let k=0;k<5;k++){const a=k/5*Math.PI*2,leg=new THREE.Mesh(new THREE.BoxGeometry(0.05,0.04,0.38),cm);leg.position.set(0.19*Math.sin(a),0.04,0.19*Math.cos(a));leg.rotation.y=a;chair.add(leg)}
+// the chief's computer: a small screen on a swing arm from the chair's right armrest, facing the seat
+const COMP=new THREE.Vector3(0.3,SEAT_EYE,-1.1);
+[[0.035,0.58,0.035,0.34,-1.35,-0.33],[0.035,0.035,0.8,0.33,-1.06,-0.72],[0.03,0.08,0.03,0.3,-1.03,-1.1]].forEach(([w,h,d,x,y,z])=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),cm);m.position.set(x,y,z);scene.add(m)});
+const compG=new THREE.Group();compG.position.copy(COMP);compG.lookAt(SEAT.x,SEAT_EYE,SEAT.z);scene.add(compG);
+const cbody=new THREE.BoxGeometry(0.6,0.38,0.03);compG.add(new THREE.Mesh(cbody,B(0x0C0F12)),new THREE.LineSegments(new THREE.EdgesGeometry(cbody),new THREE.LineBasicMaterial({color:0x2A8F98})));
+const comp=tex(512,320),cscr=new THREE.Mesh(new THREE.PlaneGeometry(0.56,0.35),M(comp.t));cscr.position.z=0.017;compG.add(cscr);
+// you can't walk through these (boxes in the floor plan, rotated like their furniture)
+const BOXES=[{x:0,z:-1.85,hx:1.65,hz:0.4,r:0},{x:-2.15,z:-1.1,hx:0.875,hz:0.4,r:0.967},{x:2.15,z:-1.1,hx:0.875,hz:0.4,r:-0.967},
+ {x:CHAIR.x,z:-0.33,hx:0.4,hz:0.33,r:0},{x:0.34,z:-0.7,hx:0.04,hz:0.4,r:0},{x:COMP.x,z:COMP.z,hx:0.3,hz:0.05,r:Math.atan2(SEAT.x-COMP.x,SEAT.z-COMP.z)},
+ {x:0,z:A-0.38,hx:1.75,hz:0.35,r:0}];
+function blocked(x,z){for(let i=0;i<8;i++){const a=i*Q;if(x*Math.sin(a)-z*Math.cos(a)>WALL)return true}
+for(const b of BOXES){const dx=x-b.x,dz=z-b.z,c=Math.cos(b.r),s=Math.sin(b.r);if(Math.abs(dx*c-dz*s)<b.hx+MARGIN&&Math.abs(dx*s+dz*c)<b.hz+MARGIN)return true}return false}
+
+// ---- the three TVs, fixed high on the walls ----
+const TVDEF=[{key:'done',label:'// AGENTS FINISHED',sub:'no work left in this job',a:-Q,off:0.95,inset:0.45},{key:'hand',label:'// BROWSERS HANDED DOWN',sub:'windows passed to waiting agents',a:0,off:0,inset:0.12},{key:'prob',label:'// PROBLEMS',sub:'',a:Q,off:-0.95,inset:0.45}];
+const TV={};
+TVDEF.forEach(d=>{const g=new THREE.Group();g.position.copy(U(d.a).multiplyScalar(A-d.inset).add(T(d.a).multiplyScalar(d.off))).setY(2.1);g.lookAt(0,0.3,START.z);
+const body=new THREE.BoxGeometry(2.28,1.34,0.1);g.add(new THREE.Mesh(body,B(0x0C0F12)),new THREE.LineSegments(new THREE.EdgesGeometry(body),new THREE.LineBasicMaterial({color:0x252C32})));
+const s=tex(960,540),scr=new THREE.Mesh(new THREE.PlaneGeometry(2.14,1.2),M(s.t));scr.position.z=0.052;g.add(scr);
+const led=new THREE.Mesh(new THREE.CircleGeometry(0.016,10),B(0xE39B2D));led.position.set(1.06,-0.63,0.052);g.add(led);
+scene.add(g);TV[d.key]={d,c:s.c,t:s.t,val:null,of:'',raised:null};tvDraw(d.key)});
+function tvDraw(k){const t=TV[k],c=t.c,W=960,H=540,val=t.val,red=k==='prob'&&val>0,col=red?'#FF5A52':'#8FF7FB';
+c.shadowBlur=0;c.fillStyle='#000000';c.fillRect(0,0,W,H);c.strokeStyle=red?'#4A1A18':'#0E3A40';c.lineWidth=4;c.strokeRect(10,10,W-20,H-20);
+c.textAlign='left';c.fillStyle='#62B9C1';c.font=mono(48);c.fillText(t.d.label,40,76);
+const main=val==null?'-':String(val),of=val==null?'':t.of;
+// digits fill about 2/3 of the screen height; shrink only if the number is too wide
+c.font=num(100);const per=(c.measureText('0').actualBoundingBoxAscent||72)/100,width=f=>{c.font=num(f);const w=c.measureText(main).width;c.font=num(f*0.4);return w+c.measureText(of).width};
+let F=H*0.66/per;const w0=width(F);if(w0>W-70)F*=(W-70)/w0;
+c.font=num(F);const nw=c.measureText(main).width;c.font=num(F*0.4);const x0=(W-nw-c.measureText(of).width)/2,base=98+(372+F*per)/2;
+c.shadowColor=col;c.shadowBlur=24;c.fillStyle=col;c.font=num(F);c.fillText(main,x0,base);c.font=num(F*0.4);c.fillText(of,x0+nw,base);
+c.shadowBlur=0;c.textAlign='center';c.fillStyle='#62B9C1';c.font=mono(42);
+c.fillText(k==='prob'?(t.raised==null?'':t.raised+' raised so far · '+(val?'waiting on you':'all clear')):t.d.sub,W/2,H-34);
+t.t.needsUpdate=true;R.tv[k]={val,text:main+of,color:col}}
+function setTV(k,val,of,raised){const t=TV[k];if(t.val===val&&t.of===of&&t.raised===raised)return;t.val=val;t.of=of;t.raised=raised;tvDraw(k)}
+
+// ---- the 53 agent screens: 9 per wall on six walls ----
+const AW=[-1,1,2,3,-3,-2].map(k=>k*Q),ROWS=[0.85,-0.1,-1.05],S=[];let sel=null;
+const LABEL={working:'RUNNING',waiting:'QUEUED',finished:'FINISHED',needs_you:'NEEDS YOU',stopped:'STOPPED',idle:'STARTING'};
+for(let i=0;i<53;i++){const a=AW[Math.floor(i/9)],k=i%9,off=(k%3-1)*1.34,y=ROWS[Math.floor(k/3)],s0=tex(512,320);
+const hl=put(new THREE.PlaneGeometry(1.46,1.0),new THREE.MeshBasicMaterial({color:0xD32F2F,transparent:true,opacity:0.35,depthWrite:false}),a,off,y,0.01);hl.visible=false;
+put(new THREE.PlaneGeometry(1.32,0.86),B(0x06080A),a,off,y,0.02);
+const m=put(new THREE.PlaneGeometry(1.22,0.77),M(s0.t),a,off,y,0.035);
+const s={n:i+1,a,off,c:s0.c,t:s0.t,mesh:m,halo:hl,d:null,sig:''};m.userData=s;S.push(s);draw(s)}
+function halo(s){const al=!!s.d&&s.d.state==='needs_you';s.halo.visible=al||s===sel;s.halo.material.color.set(al?0xD32F2F:0x4FD8E0)}
+function draw(s){halo(s);const d=s.d||{state:'idle'},st=d.state;
+const sig=[st,d.pages,d.line,d.gave_to,d.used_window,d.reason,d.task,d.site,d.log,Math.floor((d.prog||0)*12)].join('|');if(s.sig===sig)return;s.sig=sig;
+const c=s.c;c.textAlign='left';c.shadowBlur=0;
+if(st==='needs_you'){c.fillStyle='#1A0505';c.fillRect(0,0,512,320);c.fillStyle='#D32F2F';c.fillRect(0,0,512,64);c.fillStyle='#FFFFFF';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText('NEEDS YOU',492,46);c.textAlign='left';
+c.fillStyle='#FF5A52';c.beginPath();c.moveTo(80,96);c.lineTo(140,204);c.lineTo(20,204);c.closePath();c.fill();c.fillStyle='#1A0505';c.font=mono(64);c.fillText('!',64,194);
+const w=(d.reason||'').split(' '),h=Math.ceil(w.length/2);c.fillStyle='#FFB3AE';c.font=mono(32);c.fillText(fit(c,w.slice(0,h).join(' '),330),164,130);c.fillText(fit(c,w.slice(h).join(' '),330),164,172);
+c.fillStyle='#E08A84';c.font=mono(28);c.fillText('> click to help',164,256);s.t.needsUpdate=true;return}
+const fin=st==='finished',grey=st==='waiting'||st==='stopped'||st==='idle';
+c.fillStyle='#021316';c.fillRect(0,0,512,320);c.fillStyle=fin?'#1FA3AD':grey?'#1E262A':'#06262B';c.fillRect(0,0,512,64);
+c.strokeStyle=grey?'#1A2326':'#1F5F66';c.lineWidth=4;c.strokeRect(2,2,508,316);
+c.fillStyle=fin?'#021316':grey?'#B5C3C7':'#7FF0F5';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText(LABEL[st]||st.toUpperCase(),492,46);c.textAlign='left';
+if(st==='waiting'){c.fillStyle='#B5C3C7';c.font=mono(64);c.fillText('#'+d.line+' in line',24,166);c.fillStyle='#7C8C90';c.font=mono(28);c.fillText('waiting for a browser window',24,232)}
+else if(st==='idle'){c.fillStyle='#7C8C90';c.font=mono(30);c.fillText(s.d?'picking up the next task':'connecting to Errand...',24,170)}
+else{const txt=String(d.pages);c.fillStyle=st==='stopped'?'#7C8C90':'#5CE1E6';c.font=mono(84);const tw=c.measureText(txt).width;c.fillText(txt,24,150);c.fillStyle='#62B9C1';c.font=mono(30);c.fillText(d.pages===1?'page':'pages',40+tw,150);
+if(st==='working'){c.font=mono(28);c.fillStyle='#9FE3E8';c.fillText(fit(c,(d.task||'')+' · '+(d.site||''),464),24,200);
+c.font=mono(26);c.fillStyle='#3FB8C0';c.fillText(fit(c,'> '+(d.log?d.log.split(': ').pop():d.window?'browser window open':'thinking'),464),24,238);
+c.fillStyle='#0A2226';c.fillRect(24,262,464,18);c.fillStyle='#3FC8D0';c.fillRect(24,262,464*Math.min(1,d.prog||0),18)}
+else if(fin){c.font=mono(28);c.fillStyle='#62B9C1';c.fillText(d.used_window?(d.gave_to?'window passed to #'+d.gave_to:'window closed: no one waiting'):'no window used',24,212);c.font=mono(24);c.fillStyle='#3F8F96';c.fillText('no work left in this job',24,256)}
+else{c.font=mono(28);c.fillStyle='#7C8C90';c.fillText('stopped by you',24,212)}}
+s.t.needsUpdate=true}
+
+// ---- main screen, desk monitors, the chief's computer screen ----
+let ST=null;const upList=[];
+function bigDraw(){const c=big.c,st=ST;c.shadowBlur=0;c.fillStyle='#020C0F';c.fillRect(0,0,1024,394);c.strokeStyle='rgba(79,216,224,0.12)';c.lineWidth=2;c.beginPath();
+for(let k=0;k<=16;k++){const x=k/16*1024;c.moveTo(512,197);c.lineTo(x,0);c.moveTo(512,197);c.lineTo(x,394)}c.stroke();
+for(let k=1;k<6;k++){const f=k*k/30;c.strokeRect(512-512*f,197-197*f,1024*f,394*f)}
+c.fillStyle='rgba(2,12,15,0.88)';c.fillRect(100,62,824,276);c.strokeStyle='#1F5F66';c.strokeRect(100,62,824,276);
+c.textAlign='left';c.fillStyle='#62B9C1';c.font=mono(28);c.fillText(fit(c,'// JOB · '+(st?st.job.toUpperCase()+' · '+st.total+' PAGES · ONE PROMPT':'CONNECTING'),976),24,42);
+c.textAlign='center';
+if(!st){c.fillStyle='#62B9C1';c.font=mono(40);c.fillText('connecting to Errand...',512,214);big.t.needsUpdate=true;return}
+const txt=st.pages_done+' / '+st.total;c.shadowColor='#8FF7FB';c.shadowBlur=20;c.fillStyle='#8FF7FB';fitFont(c,txt,760,104,num);c.fillText(txt,512,196);c.shadowBlur=0;
+c.fillStyle='#0A2226';c.fillRect(162,226,700,18);c.fillStyle='#3FC8D0';c.fillRect(162,226,700*st.pages_done/st.total,18);
+const sec=st.seconds_left?Math.ceil(st.seconds_left/10)*10:0;c.fillStyle='#62B9C1';c.font=mono(32);
+c.fillText(st.complete?'MISSION COMPLETE · all '+st.total+' pages done':st.paused?'PAUSED · all agents waiting for you':st.speed?st.speed.toFixed(1)+' pages a second · about '+(sec>=60?Math.floor(sec/60)+' min ':'')+(sec%60)+' s left':st.problems?'stalled · '+st.problems+' waiting on you':'measuring speed...',512,300);big.t.needsUpdate=true}
+function deskDraw(i,label,value,sub){const d=deskMons[i],c=d.c;c.shadowBlur=0;c.fillStyle='#021316';c.fillRect(0,0,512,300);c.strokeStyle='#1F5F66';c.lineWidth=4;c.strokeRect(3,3,506,294);
+c.textAlign='left';c.fillStyle='#62B9C1';c.font=mono(32);c.fillText(label,24,56);c.shadowColor='#8FF7FB';c.shadowBlur=14;c.fillStyle='#8FF7FB';fitFont(c,value,464,72,num);c.fillText(value,24,166);c.shadowBlur=0;c.fillStyle='#62B9C1';c.font=mono(28);c.fillText(fit(c,sub,464),24,246);d.t.needsUpdate=true}
+function desks(){const st=ST;if(!st)return;
+deskDraw(0,'WINDOWS IN USE',st.windows_in_use+'/'+st.windows,'private browser windows');
+deskDraw(1,'BRAINS ONLINE',st.brains+'/'+st.brains,st.paused?'paused':'all thinking at once');
+deskDraw(2,'QUEUED FOR A WINDOW',String(st.waiting),st.waiting?'next: '+st.next_in_line.map(n=>'#'+n).join(' '):'nobody waiting');
+deskDraw(3,'LAST HAND-OFF',st.last_handoff||'none yet','clean wipe in 0.15 s');
+deskDraw(4,'SPEED',st.speed?st.speed.toFixed(1)+' p/s':'...','pages per second')}
+let compSig=null;
+function compDraw(){const last=upList.slice(-3).reverse(),sig=seated+'|'+last.map(u=>u.n).join();if(sig===compSig)return;compSig=sig;
+const c=comp.c;c.shadowBlur=0;c.fillStyle='#020E11';c.fillRect(0,0,512,320);c.strokeStyle='#1F5F66';c.lineWidth=4;c.strokeRect(2,2,508,316);
+c.fillStyle='#06262B';c.fillRect(4,4,504,52);c.textAlign='left';c.fillStyle='#7FF0F5';c.font=mono(26);c.fillText("CHIEF'S TERMINAL",16,40);
+c.textAlign='right';c.fillStyle='#62B9C1';c.font=mono(22);c.fillText(seated?'in use':'sit down to use',496,40);c.textAlign='left';
+let y=96;for(const u of last){c.fillStyle=u.kind==='problem'?'#FFB3AE':'#CFF6F8';c.font=mono(25);for(const l of wrap(c,u.time.slice(0,5)+' '+u.text,480).slice(0,2)){c.fillText(fit(c,l,480),16,y);y+=30}y+=14}
+comp.t.needsUpdate=true}
+
+// ---- hand-off beams: slow arcs between the two screens, fading in and out ----
+const beams=[],ballGeo=new THREE.SphereGeometry(0.05,10,8);
+function beam(f,t){if(!f||!t||f===t||beams.length>=6)return;const p0=f.mesh.position.clone(),p2=t.mesh.position.clone(),p1=p0.clone().add(p2).multiplyScalar(0.35);p1.y+=1.2;
+const curve=new THREE.QuadraticBezierCurve3(p0,p1,p2),line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(40)),new THREE.LineBasicMaterial({color:0x4FD8E0,transparent:true,opacity:0}));
+const ball=new THREE.Mesh(ballGeo,new THREE.MeshBasicMaterial({color:0x7FF0F5,transparent:true,opacity:0}));ball.position.copy(p0);scene.add(line,ball);beams.push({curve,line,ball,t:0})}
+function beamStep(dt){for(let i=beams.length-1;i>=0;i--){const b=beams[i];b.t+=dt;const k=b.t/2.4,f=b.t<1?b.t:k<=1?1:Math.max(0,1-(b.t-2.4)/1.5);
+if(k<=1)b.ball.position.copy(b.curve.getPoint(k));b.line.material.opacity=0.45*f;b.ball.material.opacity=0.8*f;
+if(k>1&&f<=0){scene.remove(b.line,b.ball);b.line.geometry.dispose();b.line.material.dispose();b.ball.material.dispose();beams.splice(i,1)}}}
+
+// ---- you: walking, looking, gliding ----
+const pos={x:START.x,z:START.z},vel={x:0,z:0};
+let eyeY=EYE,yaw=0,pitch=PITCH,FOV=66,fov=66,fovT=66,zoomed=false,glide=null,seated=false,panelOpen=false,locked=false;
+const baseFov=asp=>Math.max(66,Math.min(100,2*Math.atan(Math.tan(28*Math.PI/180)/asp)*180/Math.PI));
+function face(x,z,y,p){return {yaw:Math.atan2(-(p.x-x),-(p.z-z)),pitch:Math.atan2(p.y-y,Math.hypot(p.x-x,p.z-z))}}
+function glideTo(to,dur,done){glide={k:0,dur,done,from:{x:pos.x,z:pos.z,y:eyeY,yaw,pitch},to:Object.assign({},to,{yaw:yaw+wrapA(to.yaw-yaw)})};vel.x=vel.z=0}
+function glideStep(dt){const g=glide;g.k=Math.min(1,g.k+dt/g.dur);const e=g.k*g.k*(3-2*g.k),f=g.from,t=g.to,l=(a,b)=>a+(b-a)*e;
+pos.x=l(f.x,t.x);pos.z=l(f.z,t.z);eyeY=l(f.y,t.y);yaw=l(f.yaw,t.yaw);pitch=l(f.pitch,t.pitch);if(g.k>=1){glide=null;if(g.done)g.done()}}
+function zoomOn(s,x,z){const p=s.mesh.position;fovT=clamp(2*Math.atan(0.9/Math.hypot(p.x-x,p.y-EYE,p.z-z))*180/Math.PI,20,FOV);zoomed=true}
+function unzoom(){fovT=FOV;zoomed=false}
+// a free spot in front of a screen, as far back as the furniture allows
+function spotFor(s){const u=U(s.a),t=T(s.a);for(let d=1.9;d>0.85;d-=0.1){const x=u.x*(A-d)+t.x*s.off,z=u.z*(A-d)+t.z*s.off;if(!blocked(x,z))return {x,z}}return {x:pos.x,z:pos.z}}
+function flyTo(s){if(seated||glide)return;select(s);const f=face(pos.x,pos.z,eyeY,s.mesh.position);glideTo({x:pos.x,z:pos.z,y:eyeY,yaw:f.yaw,pitch:f.pitch},0.9);zoomOn(s,pos.x,pos.z)}
+function goTo(s){if(!s||glide)return;if(seated){standUp(()=>goTo(s));return}select(s);const sp=spotFor(s),f=face(sp.x,sp.z,EYE,s.mesh.position);glideTo({x:sp.x,z:sp.z,y:EYE,yaw:f.yaw,pitch:f.pitch},1.5);zoomOn(s,sp.x,sp.z)}
+function faceTVs(){if(glide)return;if(seated){standUp(faceTVs);return}select(null);unzoom();glideTo({x:START.x,z:START.z,y:EYE,yaw:0,pitch:PITCH},1.5)}
+const MOVE={KeyW:[0,1],ArrowUp:[0,1],KeyS:[0,-1],ArrowDown:[0,-1],KeyA:[-1,0],ArrowLeft:[-1,0],KeyD:[1,0],ArrowRight:[1,0]},keys=new Set(),joy={x:0,y:0};
+function walk(dt){let ix=joy.x,iz=joy.y;for(const k of keys){ix+=MOVE[k][0];iz+=MOVE[k][1]}const len=Math.hypot(ix,iz);if(len>1){ix/=len;iz/=len}if(len>0&&zoomed)unzoom();
+const sy=Math.sin(yaw),cy=Math.cos(yaw),tx=(-sy*iz+cy*ix)*SPEED,tz=(-cy*iz-sy*ix)*SPEED;
+// reach full speed in 0.3 s and stop in 0.3 s
+let dx=tx-vel.x,dz=tz-vel.z;const dl=Math.hypot(dx,dz),mx=ACC*dt;if(dl>mx){dx*=mx/dl;dz*=mx/dl}vel.x+=dx;vel.z+=dz;if(!vel.x&&!vel.z)return;
+const nx=pos.x+vel.x*dt,nz=pos.z+vel.z*dt;
+if(!blocked(nx,nz)){pos.x=nx;pos.z=nz}else if(!blocked(nx,pos.z)){pos.x=nx;vel.z=0}else if(!blocked(pos.x,nz)){pos.z=nz;vel.x=0}else{vel.x=vel.z=0}}
+const nearChair=()=>!seated&&!glide&&Math.hypot(pos.x-CHAIR.x,pos.z-CHAIR.z)<=SIT_DIST;
+addEventListener('keydown',e=>{if(seated||e.ctrlKey||e.metaKey||e.altKey)return;
+if(MOVE[e.code]){keys.add(e.code);e.preventDefault()}else if(e.code==='KeyE'&&nearChair()){e.preventDefault();sit()}});
+addEventListener('keyup',e=>keys.delete(e.code));
+addEventListener('blur',()=>keys.clear());
+// look: drag (as v11) or, after a click on the room, the locked mouse; pick: click, or the centre dot while locked
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2(),meshes=S.map(s=>s.mesh);
+function pickAt(x,y){mv.set(x/innerWidth*2-1,-y/innerHeight*2+1);ray.setFromCamera(mv,cam);const h=ray.intersectObjects(meshes)[0];return h?h.object.userData:null}
+let drag=null;
+cv.addEventListener('pointerdown',e=>{if(seated||locked||drag)return;drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:0,mouse:e.pointerType==='mouse'};cv.setPointerCapture(e.pointerId);cv.style.cursor='grabbing'});
+cv.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved+=Math.abs(dx)+Math.abs(dy);drag.x=e.clientX;drag.y=e.clientY;
+if(glide)return;const k=fov/FOV;yaw+=dx*0.005*k;pitch=clamp(pitch+dy*0.004*k,-1.0,1.3)});
+cv.addEventListener('pointerup',e=>{if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;cv.style.cursor='';if(d.moved>=5)return;
+const s=pickAt(e.clientX,e.clientY);if(s)flyTo(s);else if(d.mouse&&!PHONE){const p=cv.requestPointerLock();if(p&&p.catch)p.catch(()=>{})}});
+cv.addEventListener('pointercancel',()=>{drag=null;cv.style.cursor=''});
+document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===cv;dotEl.style.display=locked?'block':'none';info()});
+document.addEventListener('mousemove',e=>{if(!locked||glide||seated)return;const k=0.0022*fov/FOV;yaw-=e.movementX*k;pitch=clamp(pitch-e.movementY*k,-1.0,1.3)});
+cv.addEventListener('mousedown',()=>{if(!locked||seated)return;const s=pickAt(innerWidth/2,innerHeight/2);if(s)flyTo(s)});
+// phone: thumb stick bottom-left, drag anywhere else to look, tap to pick
+const joyEl=$('joy'),knob=$('knob');let joyId=null;
+if(PHONE)joyEl.style.display='block';
+function joyMove(e){const r=joyEl.getBoundingClientRect(),rad=r.width/2-24;let dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2;const l=Math.hypot(dx,dy);if(l>rad){dx*=rad/l;dy*=rad/l}knob.style.transform='translate('+dx+'px,'+dy+'px)';joy.x=dx/rad;joy.y=-dy/rad}
+const joyEnd=e=>{if(e.pointerId!==joyId)return;joyId=null;joy.x=joy.y=0;knob.style.transform=''};
+joyEl.addEventListener('pointerdown',e=>{joyId=e.pointerId;joyEl.setPointerCapture(e.pointerId);joyMove(e)});
+joyEl.addEventListener('pointermove',e=>{if(e.pointerId===joyId)joyMove(e)});
+joyEl.addEventListener('pointerup',joyEnd);joyEl.addEventListener('pointercancel',joyEnd);
+
+// ---- sitting at the chief's computer ----
+const TERM_URL='http://'+location.hostname+':8766/';
+function termNote(text){termMsgEl.textContent=text;termMsgEl.style.display=text?'flex':'none'}
+function focusTerm(){if(!panelOpen||!termEl.src)return;termEl.focus();try{termEl.contentWindow.postMessage('focus',TERM_URL.slice(0,-1))}catch(e){}}
+function loadTerm(){fetch(TERM_URL,{mode:'no-cors'}).then(()=>{termNote('');termEl.addEventListener('load',focusTerm,{once:true});termEl.src=TERM_URL},
+()=>termNote("The terminal bridge isn't running. Start Errand with: python -m errand start"))}
+function openPanel(){if(!seated)return;panelOpen=true;dimEl.style.display='flex';void dimEl.offsetWidth;dimEl.classList.add('open');
+if(!PHONE){if(!LOCAL)termNote('Claude Code works on the laptop only.');else if(!termEl.src)loadTerm()}focusTerm()}
+function closePanel(){panelOpen=false;dimEl.classList.remove('open');setTimeout(()=>{if(!panelOpen)dimEl.style.display='none'},500);if(document.activeElement===termEl)termEl.blur()}
+function sit(){if(seated||glide)return;seated=true;keys.clear();if(locked)document.exitPointerLock();select(null);unzoom();
+const f=face(SEAT.x,SEAT.z,SEAT_EYE,COMP);glideTo({x:SEAT.x,z:SEAT.z,y:SEAT_EYE,yaw:f.yaw,pitch:f.pitch},1.0,openPanel);compDraw()}
+// Esc never stands you up: Claude Code uses Esc to interrupt, so it must reach the terminal
+function standUp(then){if(!seated||glide)return;closePanel();glideTo({x:UPSPOT.x,z:UPSPOT.z,y:EYE,yaw:0,pitch:PITCH},1.0,()=>{seated=false;compDraw();if(then)then()})}
+$('stand').onclick=()=>standUp();
+dimEl.addEventListener('pointerdown',e=>{if(e.target===dimEl)standUp()});
+sitBtn.onclick=()=>{if(nearChair())sit()};
+
+// ---- selection, the info bar and the buttons ----
+function select(s){const prev=sel;sel=s;if(prev)halo(prev);if(s)halo(s);info()}
+function info(){const s=sel,d=s&&s.d,al=!!d&&d.state==='needs_you';okBtn.hidden=skipBtn.hidden=!al;
+if(!s){selEl.textContent=PHONE?'> thumb stick to walk · drag to look · tap a screen to zoom in':locked?'> W A S D to walk · aim the dot at a screen and click · Esc frees the mouse':'> click the room to look with the mouse · W A S D or arrows to walk · click a screen to zoom in';return}
+let t='> agent #'+s.n;
+if(!d)t+=' · waiting for data';
+else if(al)t+=' needs you: it '+d.reason+'.';
+else if(d.state==='waiting')t+=' · queued, #'+d.line+' in line for a browser window';
+else if(d.state==='finished')t+=' · finished · '+d.pages+' pages · '+(d.used_window?(d.gave_to?'passed its window to #'+d.gave_to:'closed its window: no one waiting'):'used no window');
+else if(d.state==='working')t+=' · running · '+d.task+' on '+d.site+' · '+d.pages+' pages done · '+(d.window?'has a private browser window':'no window needed');
+else t+=' · '+(LABEL[d.state]||d.state).toLowerCase();
+selEl.textContent=t}
+function toast(msg){toastEl.textContent=msg;toastEl.style.opacity=1;clearTimeout(toast.h);toast.h=setTimeout(()=>toastEl.style.opacity=0,2200)}
+function api(path,body){return fetch(path,{method:body?'POST':'GET',headers:{Authorization:'Bearer '+TOKEN,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined})
+.then(r=>r.ok?r.json():r.json().catch(()=>({})).then(j=>{throw new Error(j.detail||r.statusText)}))}
+function answer(approve){const s=sel;if(!s)return;okBtn.hidden=skipBtn.hidden=true;
+api('/api/problems/'+s.n,{approve}).then(r=>toast(r.ok?'agent #'+s.n+(approve?' is back to work':' skipped that page'):r.error),e=>toast("couldn't reach Errand: "+e.message))}
+okBtn.onclick=()=>answer(true);skipBtn.onclick=()=>answer(false);
+let ni=0;$('next').onclick=()=>{const p=S.filter(s=>s.d&&s.d.state==='needs_you');if(!p.length){toast('no problems right now');return}goTo(p[ni++%p.length])};
+$('home').onclick=faceTVs;
+
+// ---- live data: /ws sends the whole state every 0.75 s; numbers change at most that often ----
+function addUpdate(u,live){upList.push(u);if(upList.length>200)upList.shift();
+const li=document.createElement('li');if(!live)li.className='old';if(u.kind==='problem')li.classList.add('problem');
+const tm=document.createElement('time');tm.textContent=u.time;li.append(tm,document.createTextNode(u.text));
+if(u.kind==='problem'&&u.agent){const b=document.createElement('button');b.textContent='Go to it';b.onclick=()=>goTo(S[u.agent-1]);li.append(b)}
+upEl.prepend(li);while(upEl.children.length>200)upEl.lastChild.remove();
+if(live&&u.kind==='handoff'){const m=/→ #(\d+)/.exec(u.text);if(m&&u.agent)beam(S[u.agent-1],S[+m[1]-1])}}
+function apply(m){const st=m.status;ST=st;R.status=st;
+if(m.initial){upList.length=0;upEl.textContent=''}
+for(const d of m.agents){const s=S[d.n-1];if(s){s.d=d;draw(s)}}
+setTV('done',st.finished,'/'+st.agents);setTV('hand',st.handoffs,'/'+(st.handoffs+st.waiting));setTV('prob',st.problems,'',st.raised);
+bigDraw();desks();for(const u of m.updates)addUpdate(u,!m.initial);compDraw();info()}
+let pending=null,lastApply=-1e9;
+function connect(){const ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws?token='+encodeURIComponent(TOKEN));let first=true;
+ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.t!=='state')return;if(first){first=false;m.initial=true;pending=m;return}
+if(pending){m.updates=pending.updates.concat(m.updates).slice(-200);m.initial=pending.initial}pending=m};
+ws.onclose=()=>setTimeout(reconnect,2000)}
+// after Errand restarts this page's token is stale: reload to get the new one
+function reconnect(){fetch('/').then(r=>r.text()).then(t=>t.includes(TOKEN)?connect():location.reload(),connect)}
+connect();
+
+// ---- the frame loop ----
+function resize(){ren.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;FOV=baseFov(cam.aspect);if(!zoomed)fovT=fov=FOV}
+addEventListener('resize',resize);resize();
+let lastT=performance.now(),lastNear=null;
+function frame(now){requestAnimationFrame(frame);const dt=clamp((now-lastT)/1000,0,0.1);lastT=now;R.frames++;
+sky.uniforms.t.value=now/1000;
+if(glide)glideStep(dt);else if(!seated)walk(dt);
+fov+=(fovT-fov)*(1-Math.exp(-dt*3));cam.fov=fov;cam.updateProjectionMatrix();
+cam.position.set(pos.x,eyeY,pos.z);cam.rotation.set(pitch,yaw,0,'YXZ');
+beamStep(dt);
+if(pending&&now-lastApply>=750){const m=pending;pending=null;lastApply=now;apply(m)}
+const near=nearChair();if(near!==lastNear){lastNear=near;hintEl.style.opacity=near&&!PHONE?1:0;sitBtn.style.display=near&&PHONE?'block':'none'}
+ren.render(scene,cam)}
+Object.defineProperties(R,{pos:{get:()=>({x:pos.x,z:pos.z,y:eyeY})},yaw:{get:()=>yaw},seated:{get:()=>seated},panelOpen:{get:()=>panelOpen},
+nearChair:{get:nearChair},gliding:{get:()=>!!glide},locked:{get:()=>locked}});
+Object.assign(R,{WALL,MARGIN,BOXES,frames:0});
+bigDraw();info();
+document.fonts.load('700 100px Orbitron').then(()=>document.fonts.load('40px "Share Tech Mono"')).finally(()=>{S.forEach(s=>{s.sig='';draw(s)});Object.keys(TV).forEach(tvDraw);bigDraw();desks();compSig=null;compDraw()});
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

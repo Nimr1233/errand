@@ -132,7 +132,7 @@ Each screen shows the agent number and its state in the header, then large, read
 
 **Left, about 70%: Claude Code.**
 - This is the real `claude` program running on the laptop, shown in a terminal.
-- It is drawn by xterm.js (an exact pinned version from cdnjs) inside an iframe served by the terminal bridge (4.3).
+- It is drawn by xterm.js (an exact pinned version from a CDN: jsDelivr, `@xterm/xterm@5.5.0`) inside an iframe served by the terminal bridge (5.1).
 
 **Right, about 30%: Agent updates.** Newest at the top, each line shows the time, the agent and what happened:
 
@@ -262,7 +262,19 @@ agents ◄── engine (FastAPI, 127.0.0.1:8765) ◄─────────
 ## 9. New free pieces
 
 - **pywinpty:** Windows pseudo-terminal.
-- **xterm.js:** terminal drawing, from cdnjs, exact pinned version.
+- **xterm.js:** terminal drawing, from jsDelivr, exact pinned version (`@xterm/xterm@5.5.0`, `@xterm/addon-fit@0.10.0`).
 - **The official MCP Python SDK:** already planned.
 - **Orbitron:** font, from Google Fonts.
 - **Three.js r128:** the room, from cdnjs, as in the mockups.
+
+## 10. As built (2026-10-19)
+
+Everything above is built and tested (`python -m pytest`). Where the build differs from or adds to the text above:
+- **Framing locks.** The bridge page may be framed only by the room (`frame-ancestors` 8765), and the room page by nothing. Without this, any website could frame the terminal and trick your typing into Claude Code: a frame's own origin passes the Origin lock.
+- **Logs.** Both servers log warnings only, because uvicorn's info lines print the token from `/ws?token=` and `/term?token=`.
+- **Quiet replay.** While a page redraws the 2,000-line buffer it sends no keys. Otherwise it re-answers old terminal queries, and the answers are typed into Claude Code.
+- **Restart.** A page whose token is stale after Errand restarts reloads itself.
+- **Skip.** Next to "Approve and continue", a selected problem also offers "Skip this page" (`answer_problem(n, approve=false)`).
+- **TV digits.** About 2/3 of the screen height when the number fits; longer numbers (`23/53`) shrink to fit the width.
+- **Finished.** In demo mode a finished agent goes back to work if late "check" tasks appear, so "finished" always means no work left.
+- **Spike.** Esc, Ctrl+C, paste, non-English text and emoji were checked through the whole path with a Python prompt standing in for Claude Code. A final check with the real Claude Code needs its one-time login first.

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "errand",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "errand", "start"],
+      "port": 8765
+    }
+  ]
+}
