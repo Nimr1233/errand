@@ -44,7 +44,7 @@ When an agent is free, it does the first of these it can:
 | Agents waiting in line | always 0; the "queued" state is gone |
 | BROWSERS HANDED DOWN TV | hand-offs so far, out of hand-offs so far plus pages on the shelf now (e.g. `312/349`) |
 | Desk monitor 3 | "PAGES WAITING FOR A WINDOW": pages on the shelf, and the next 3 |
-| A finished agent's screen | "last window passed on", "window closed: no pages waiting" or "no window used" |
+| A finished agent's screen | "window closed: no pages waiting" or "no window used", and "took N from the shelf" if it had hand-offs (a finished agent always closed its last window, because its window passes on only while it keeps working) |
 
 The engine's status reports `shelf` (pages waiting) and `next_on_shelf` (the next 3, as `site/page`), instead of `waiting` and `next_in_line`. Agent views lose `line`.
 

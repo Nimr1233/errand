@@ -395,7 +395,7 @@ Steps for each URL, in order, stopping at the first that works:
 - N defaults to **25**, the measured maximum (`bench/windows.md`, 2026-10-19): with the 53 brains loaded, 25 windows of Wikipedia pages stayed above 2 GB free RAM, at about 75 MB each. On heavier pages or with less free RAM, the memory guard below opens fewer windows automatically.
 - **Memory guard:** if free RAM drops below 2 GB, the pool stops opening new windows until memory recovers.
 
-**Borrow, wait, hand off:**
+**Borrow, wait, hand off:** *(changed 2026-10-20: agents no longer wait in line; pages wait on a shelf while the agent takes other work. See `2026-10-20-no-wait-line-design.md`. Steps 2–3 below describe the old rule.)*
 1. An agent that needs a browser asks the pool. If a window is free, it gets it immediately.
 2. If all N windows are busy, the agent joins a **waiting line**. Interactive jobs (the user is watching) go ahead of bulk jobs. Otherwise it's first come, first served.
 3. When an agent finishes its browser job, it returns the window. The pool **hands it straight to the next agent in line**.

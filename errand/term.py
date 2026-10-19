@@ -25,8 +25,13 @@ ORIGINS = {f'http://{h}' for h in HOSTS}
 FRAME_ANCESTORS = 'frame-ancestors http://127.0.0.1:8765 http://localhost:8765'
 TOKEN = secrets.token_urlsafe(32)  # new each start, embedded only in this server's own page
 SCROLLBACK_LINES = 2000
-# Set by a parent Claude Code session; Claude Code refuses to start "nested" when it sees it.
-DROP_ENV = {'CLAUDECODE', 'CLAUDE_CODE_ENTRYPOINT', 'CLAUDE_CODE_SSE_PORT'}
+def child_env(env):
+    """The environment for the room's Claude Code. If Errand was started from inside a Claude session
+    (the desktop app, or Claude starting it for you), that session's settings are dropped: Claude Code
+    would refuse to start "nested", or run on the parent's proxy and login instead of your own."""
+    if 'CLAUDECODE' not in env and 'CLAUDE_CODE_ENTRYPOINT' not in env:
+        return dict(env)
+    return {k: v for k, v in env.items() if not k.upper().startswith(('CLAUDE', 'ANTHROPIC', 'MCP_'))}
 
 
 def find_claude():
@@ -69,7 +74,7 @@ class Session:
         exe = find_claude()
         if not exe:
             return False
-        env = {k: v for k, v in os.environ.items() if k not in DROP_ENV}
+        env = child_env(os.environ)
         self.chunks.clear()
         self.lines = 0
         self.proc = PtyProcess.spawn([exe], cwd=os.path.expanduser('~'), env=env, dimensions=self.size)

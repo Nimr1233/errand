@@ -3,8 +3,9 @@ so mission control and the Errand connector can be built and tested without the 
 
 Rules it follows:
 - shared task queue: agents pull the next task, nobody owns a fixed page list (main spec section 13)
-- 25-window pool: a browser task waits in line for a window; a returned window goes straight to
-  the next agent in line (a hand-off, main spec section 16)
+- the no-wait line (spec 2026-10-20-no-wait-line-design.md): agents never stand in line. A browser
+  page that finds all 25 windows busy goes on the shelf and the agent takes the next task; an agent
+  that finishes a browser page keeps its window for the next page on the shelf (a hand-off)
 - an agent is "finished" when the queue has nothing left for it and its last task is done
 - problems wait for you until answered
 """
@@ -37,22 +38,21 @@ class Agent:
         self.reset()
 
     def reset(self):
-        self.state = 'idle'  # idle | working | waiting | needs_you | finished | stopped
+        self.state = 'idle'  # idle | working | needs_you | finished | stopped
         self.task = None
         self.prog = 0.0
         self.pages = 0
         self.window = False
-        self.line = 0
-        self.gave_to = 0
         self.used_window = False
+        self.passes = 0  # pages it took from the shelf in a window it kept
         self.reason = ''
         self.steps = deque(maxlen=8)
 
     def view(self):
         t = self.task or {}
         return {'n': self.n, 'state': self.state, 'task': t.get('kind'), 'site': t.get('site'),
-                'pages': self.pages, 'line': self.line, 'window': self.window, 'gave_to': self.gave_to,
-                'used_window': self.used_window, 'reason': self.reason, 'prog': round(self.prog, 2),
+                'pages': self.pages, 'window': self.window, 'used_window': self.used_window,
+                'passes': self.passes, 'reason': self.reason, 'prog': round(self.prog, 2),
                 'log': self.steps[-1] if self.steps else ''}
 
 
@@ -71,7 +71,7 @@ class DemoEngine:
         self.queue = deque({'kind': 'extract', 'page': i, 'site': SITES[i % len(SITES)],
                             'browser': self.rng.random() < 0.45} for i in range(self.total))
         self.free = WINDOWS
-        self.line = deque()
+        self.shelf = deque()  # browser pages waiting for a window
         self.pages_done = self.handoffs = self.raised = self.blocked = 0
         self.last_hand = ''
         self.paused = False
@@ -100,14 +100,11 @@ class DemoEngine:
         a = self._agent(n)
         if a is None or a.state in ('finished', 'stopped'):
             return {'ok': False, 'error': f'agent #{n} is not running'}
-        if a in self.line:
-            self.line.remove(a)
-            self._reline()
         if a.task:
             self.queue.appendleft(a.task)  # its unfinished task goes back for another agent
             a.task = None
         if a.window:
-            self._return_window(a)
+            self._release(a)  # the next free agent takes it with a page from the shelf
         a.state = 'stopped'
         self.updates.add('stopped', f'#{n} stopped by you', n)
         return {'ok': True}
@@ -128,10 +125,11 @@ class DemoEngine:
         left = self.total - self.pages_done
         return {'job': self.job, 'total': self.total, 'pages_done': self.pages_done, 'speed': round(self.rate, 1),
                 'seconds_left': round(left / self.rate) if self.rate else None, 'agents': N,
-                'finished': n_finished, 'handoffs': self.handoffs, 'waiting': len(self.line),
+                'finished': n_finished, 'handoffs': self.handoffs, 'shelf': len(self.shelf),
                 'problems': sum(a.state == 'needs_you' for a in self.agents), 'raised': self.raised,
                 'blocked': self.blocked, 'windows': WINDOWS, 'windows_in_use': WINDOWS - self.free,
-                'next_in_line': [a.n for a in self.line][:3], 'last_handoff': self.last_hand,
+                'next_on_shelf': [f"{t['site']}/page-{t['page']}" for t in list(self.shelf)[:3]],
+                'last_handoff': self.last_hand,
                 'brains': N, 'paused': self.paused, 'complete': self.complete(),
                 'results': f'jobs/{slug(self.job)}.csv (demo: no file written)'}
 
@@ -167,8 +165,9 @@ class DemoEngine:
                     self._raise(a)
                 elif a.prog >= 1:
                     self._finish_task(a)
-            # a finished agent goes back to work if new tasks appear (a "check" added by a late extract)
-            if a.state == 'idle' or (a.state == 'finished' and self.queue):
+            # a finished agent goes back to work if new tasks appear (a "check" added by a late
+            # extract), or if a window frees up (after a stop) while pages wait on the shelf
+            if a.state == 'idle' or (a.state == 'finished' and (self.queue or (self.shelf and self.free))):
                 self._take_task(a)
         self.hist.append(self.pages_done)
         self.hist = self.hist[-9:]
@@ -205,22 +204,42 @@ class DemoEngine:
         self.updates.add('problem', f'#{a.n} needs you: {a.reason}', a.n)
 
     def _take_task(self, a):
-        if not self.queue:
+        """The no-wait rule: a page from the shelf if a window is at hand, else the next queue task.
+        A browser page that finds every window busy goes on the shelf and the agent takes the next."""
+        if self.shelf and (a.window or self.free):
+            t = self.shelf.popleft()
+            if a.window:  # a hand-off: its window goes straight to the next page waiting
+                self.handoffs += 1
+                a.passes += 1
+                self.last_hand = f"#{a.n} > page-{t['page']}"
+                self.updates.add('handoff', f"#{a.n} kept its window for the next page: {t['site']}/page-{t['page']}", a.n)
+            else:
+                self._grab(a)
+            return self._start(a, t)
+        if a.window:
+            self._release(a)  # no pages waiting: the window goes back to the pool
+        while self.queue:
+            t = self.queue.popleft()
+            if not t['browser']:
+                return self._start(a, t)
+            if self.free:
+                self._grab(a)
+                return self._start(a, t)
+            self.shelf.append(t)  # every window busy: the page waits, the agent doesn't
+        if a.state != 'finished':
             a.state = 'finished'
             self.updates.add('finished', f'#{a.n} finished · no work left · {a.pages} pages done', a.n)
-            return
-        a.task = self.queue.popleft()
-        a.prog = 0.0
-        if not a.task['browser']:
-            a.state = 'working'
-        elif self.free:
-            self.free -= 1
-            a.window = a.used_window = True
-            a.state = 'working'
-        else:
-            a.state = 'waiting'
-            self.line.append(a)
-            a.line = len(self.line)
+
+    def _start(self, a, t):
+        a.task, a.prog, a.state = t, 0.0, 'working'
+
+    def _grab(self, a):
+        self.free -= 1
+        a.window = a.used_window = True
+
+    def _release(self, a):
+        a.window = False
+        self.free += 1
 
     def _finish_task(self, a, skipped=False):
         t = a.task
@@ -236,29 +255,7 @@ class DemoEngine:
         a.steps.append(f"{t['kind']} {t['site']}/page-{t['page']}: {LOG[(a.n + a.pages) % len(LOG)]}")
         a.task = None
         a.prog = 0.0
-        if a.window:
-            self._return_window(a)
-        a.state = 'idle'
-
-    def _return_window(self, a):
-        a.window = False
-        if self.line:
-            w = self.line.popleft()
-            w.window = w.used_window = True
-            w.state = 'working'
-            w.line = 0
-            self._reline()
-            self.handoffs += 1
-            a.gave_to = w.n
-            self.last_hand = f'#{a.n} > #{w.n}'
-            self.updates.add('handoff', f'#{a.n} → #{w.n} window handed down', a.n)
-        else:
-            a.gave_to = 0  # its last window closed with no one waiting
-            self.free += 1
-
-    def _reline(self):
-        for i, w in enumerate(self.line):
-            w.line = i + 1
+        a.state = 'idle'  # it keeps any window: _take_task passes it to a waiting page or returns it
 
 
 def slug(text):

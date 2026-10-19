@@ -244,6 +244,11 @@ From `reports/Full feature free Errand plan.md`:
 - colours, arrow keys and reload were checked in session 1 with the real Claude Code
 - **Still to do by the user:** sit down once with the real Claude Code, finish its first-run setup and log in (Claude never enters logins), then try Esc to interrupt and Ctrl+C.
 
+**Session 3 (2026-10-20):**
+- The user logged in to Claude Code with their own Pro account through `python -m errand login`, a new command that runs Claude Code in a normal terminal where pasting the login code works. Claude never enters logins or codes.
+- `errand/term.py` now drops every `CLAUDE*`, `ANTHROPIC*` and `MCP_*` variable when Errand was started from inside a Claude session. Otherwise the room's Claude Code would run on the desktop app's proxy and login.
+- The user asked for agents without a window to each get an Android phone driven by google/artemis. We checked it and decided against it (spec `2026-10-20-no-wait-line-design.md`, section 1). Instead we built the **no-wait line**: pages wait on a shelf for a window, agents never wait. It's in the demo engine, room and connector, with tests.
+
 **Known limits (marked `shortcut:` in the code where it applies):**
 - With two pages open at once, both answer the terminal's live queries (Claude Code would get each answer twice). One room tab is fine.
 - The TV digits reach 2/3 of the screen height only for short numbers; `23/53` is width-limited to about half the height. Readable at 700 px (checked).

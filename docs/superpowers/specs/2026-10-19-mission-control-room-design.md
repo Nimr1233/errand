@@ -269,6 +269,8 @@ agents ◄── engine (FastAPI, 127.0.0.1:8765) ◄─────────
 
 ## 10. As built (2026-10-19)
 
+**No-wait line (2026-10-20, `2026-10-20-no-wait-line-design.md`):** agents never wait in line, so the "queued" screen state (2.4) is gone. Desk monitor 3 (2.1) shows pages waiting for a window. The BROWSERS HANDED DOWN TV (2.2) counts windows passed straight to a waiting page, out of that plus the pages waiting. The hand-off beams (2.5) are removed.
+
 Everything above is built and tested (`python -m pytest`). Where the build differs from or adds to the text above:
 - **Framing locks.** The bridge page may be framed only by the room (`frame-ancestors` 8765), and the room page by nothing. Without this, any website could frame the terminal and trick your typing into Claude Code: a frame's own origin passes the Origin lock.
 - **Logs.** Both servers log warnings only, because uvicorn's info lines print the token from `/ws?token=` and `/term?token=`.

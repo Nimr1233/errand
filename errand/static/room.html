@@ -199,7 +199,7 @@ function setTV(k,val,of,raised){const t=TV[k];if(t.val===val&&t.of===of&&t.raise
 
 // ---- the 53 agent screens: 9 per wall on six walls ----
 const AW=[-1,1,2,3,-3,-2].map(k=>k*Q),ROWS=[0.85,-0.1,-1.05],S=[];let sel=null;
-const LABEL={working:'RUNNING',waiting:'QUEUED',finished:'FINISHED',needs_you:'NEEDS YOU',stopped:'STOPPED',idle:'STARTING'};
+const LABEL={working:'RUNNING',finished:'FINISHED',needs_you:'NEEDS YOU',stopped:'STOPPED',idle:'STARTING'};
 for(let i=0;i<53;i++){const a=AW[Math.floor(i/9)],k=i%9,off=(k%3-1)*1.34,y=ROWS[Math.floor(k/3)],s0=tex(512,320);
 const hl=put(new THREE.PlaneGeometry(1.46,1.0),new THREE.MeshBasicMaterial({color:0xD32F2F,transparent:true,opacity:0.35,depthWrite:false}),a,off,y,0.01);hl.visible=false;
 put(new THREE.PlaneGeometry(1.32,0.86),B(0x06080A),a,off,y,0.02);
@@ -207,23 +207,22 @@ const m=put(new THREE.PlaneGeometry(1.22,0.77),M(s0.t),a,off,y,0.035);
 const s={n:i+1,a,off,c:s0.c,t:s0.t,mesh:m,halo:hl,d:null,sig:''};m.userData=s;S.push(s);draw(s)}
 function halo(s){const al=!!s.d&&s.d.state==='needs_you';s.halo.visible=al||s===sel;s.halo.material.color.set(al?0xD32F2F:0x4FD8E0)}
 function draw(s){halo(s);const d=s.d||{state:'idle'},st=d.state;
-const sig=[st,d.pages,d.line,d.gave_to,d.used_window,d.reason,d.task,d.site,d.log,Math.floor((d.prog||0)*12)].join('|');if(s.sig===sig)return;s.sig=sig;
+const sig=[st,d.pages,d.passes,d.used_window,d.reason,d.task,d.site,d.log,Math.floor((d.prog||0)*12)].join('|');if(s.sig===sig)return;s.sig=sig;
 const c=s.c;c.textAlign='left';c.shadowBlur=0;
 if(st==='needs_you'){c.fillStyle='#1A0505';c.fillRect(0,0,512,320);c.fillStyle='#D32F2F';c.fillRect(0,0,512,64);c.fillStyle='#FFFFFF';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText('NEEDS YOU',492,46);c.textAlign='left';
 c.fillStyle='#FF5A52';c.beginPath();c.moveTo(80,96);c.lineTo(140,204);c.lineTo(20,204);c.closePath();c.fill();c.fillStyle='#1A0505';c.font=mono(64);c.fillText('!',64,194);
 const w=(d.reason||'').split(' '),h=Math.ceil(w.length/2);c.fillStyle='#FFB3AE';c.font=mono(32);c.fillText(fit(c,w.slice(0,h).join(' '),330),164,130);c.fillText(fit(c,w.slice(h).join(' '),330),164,172);
 c.fillStyle='#E08A84';c.font=mono(28);c.fillText('> click to help',164,256);s.t.needsUpdate=true;return}
-const fin=st==='finished',grey=st==='waiting'||st==='stopped'||st==='idle';
+const fin=st==='finished',grey=st==='stopped'||st==='idle';
 c.fillStyle='#021316';c.fillRect(0,0,512,320);c.fillStyle=fin?'#1FA3AD':grey?'#1E262A':'#06262B';c.fillRect(0,0,512,64);
 c.strokeStyle=grey?'#1A2326':'#1F5F66';c.lineWidth=4;c.strokeRect(2,2,508,316);
 c.fillStyle=fin?'#021316':grey?'#B5C3C7':'#7FF0F5';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText(LABEL[st]||st.toUpperCase(),492,46);c.textAlign='left';
-if(st==='waiting'){c.fillStyle='#B5C3C7';c.font=mono(64);c.fillText('#'+d.line+' in line',24,166);c.fillStyle='#7C8C90';c.font=mono(28);c.fillText('waiting for a browser window',24,232)}
-else if(st==='idle'){c.fillStyle='#7C8C90';c.font=mono(30);c.fillText(s.d?'picking up the next task':'connecting to Errand...',24,170)}
+if(st==='idle'){c.fillStyle='#7C8C90';c.font=mono(30);c.fillText(s.d?'picking up the next task':'connecting to Errand...',24,170)}
 else{const txt=String(d.pages);c.fillStyle=st==='stopped'?'#7C8C90':'#5CE1E6';c.font=mono(84);const tw=c.measureText(txt).width;c.fillText(txt,24,150);c.fillStyle='#62B9C1';c.font=mono(30);c.fillText(d.pages===1?'page':'pages',40+tw,150);
 if(st==='working'){c.font=mono(28);c.fillStyle='#9FE3E8';c.fillText(fit(c,(d.task||'')+' · '+(d.site||''),464),24,200);
 c.font=mono(26);c.fillStyle='#3FB8C0';c.fillText(fit(c,'> '+(d.log?d.log.split(': ').pop():d.window?'browser window open':'thinking'),464),24,238);
 c.fillStyle='#0A2226';c.fillRect(24,262,464,18);c.fillStyle='#3FC8D0';c.fillRect(24,262,464*Math.min(1,d.prog||0),18)}
-else if(fin){c.font=mono(28);c.fillStyle='#62B9C1';c.fillText(d.used_window?(d.gave_to?'window passed to #'+d.gave_to:'window closed: no one waiting'):'no window used',24,212);c.font=mono(24);c.fillStyle='#3F8F96';c.fillText('no work left in this job',24,256)}
+else if(fin){c.font=mono(28);c.fillStyle='#62B9C1';c.fillText(d.used_window?'window closed: no pages waiting':'no window used',24,212);c.font=mono(24);c.fillStyle='#3F8F96';c.fillText(fit(c,d.passes?'no work left · took '+d.passes+' from the shelf':'no work left in this job',464),24,256)}
 else{c.font=mono(28);c.fillStyle='#7C8C90';c.fillText('stopped by you',24,212)}}
 s.t.needsUpdate=true}
 
@@ -245,7 +244,7 @@ c.textAlign='left';c.fillStyle='#62B9C1';c.font=mono(32);c.fillText(label,24,56)
 function desks(){const st=ST;if(!st)return;
 deskDraw(0,'WINDOWS IN USE',st.windows_in_use+'/'+st.windows,'private browser windows');
 deskDraw(1,'BRAINS ONLINE',st.brains+'/'+st.brains,st.paused?'paused':'all thinking at once');
-deskDraw(2,'QUEUED FOR A WINDOW',String(st.waiting),st.waiting?'next: '+st.next_in_line.map(n=>'#'+n).join(' '):'nobody waiting');
+deskDraw(2,'PAGES WAITING FOR A WINDOW',String(st.shelf),st.shelf?'next: '+st.next_on_shelf.map(p=>p.split('/').pop()).join(' '):'none waiting');
 deskDraw(3,'LAST HAND-OFF',st.last_handoff||'none yet','clean wipe in 0.15 s');
 deskDraw(4,'SPEED',st.speed?st.speed.toFixed(1)+' p/s':'...','pages per second')}
 let compSig=null;
@@ -255,15 +254,6 @@ c.fillStyle='#06262B';c.fillRect(4,4,504,52);c.textAlign='left';c.fillStyle='#7F
 c.textAlign='right';c.fillStyle='#62B9C1';c.font=mono(22);c.fillText(seated?'in use':'sit down to use',496,40);c.textAlign='left';
 let y=96;for(const u of last){c.fillStyle=u.kind==='problem'?'#FFB3AE':'#CFF6F8';c.font=mono(25);for(const l of wrap(c,u.time.slice(0,5)+' '+u.text,480).slice(0,2)){c.fillText(fit(c,l,480),16,y);y+=30}y+=14}
 comp.t.needsUpdate=true}
-
-// ---- hand-off beams: slow arcs between the two screens, fading in and out ----
-const beams=[],ballGeo=new THREE.SphereGeometry(0.05,10,8);
-function beam(f,t){if(!f||!t||f===t||beams.length>=6)return;const p0=f.mesh.position.clone(),p2=t.mesh.position.clone(),p1=p0.clone().add(p2).multiplyScalar(0.35);p1.y+=1.2;
-const curve=new THREE.QuadraticBezierCurve3(p0,p1,p2),line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(40)),new THREE.LineBasicMaterial({color:0x4FD8E0,transparent:true,opacity:0}));
-const ball=new THREE.Mesh(ballGeo,new THREE.MeshBasicMaterial({color:0x7FF0F5,transparent:true,opacity:0}));ball.position.copy(p0);scene.add(line,ball);beams.push({curve,line,ball,t:0})}
-function beamStep(dt){for(let i=beams.length-1;i>=0;i--){const b=beams[i];b.t+=dt;const k=b.t/2.4,f=b.t<1?b.t:k<=1?1:Math.max(0,1-(b.t-2.4)/1.5);
-if(k<=1)b.ball.position.copy(b.curve.getPoint(k));b.line.material.opacity=0.45*f;b.ball.material.opacity=0.8*f;
-if(k>1&&f<=0){scene.remove(b.line,b.ball);b.line.geometry.dispose();b.line.material.dispose();b.ball.material.dispose();beams.splice(i,1)}}}
 
 // ---- you: walking, looking, gliding ----
 const pos={x:START.x,z:START.z},vel={x:0,z:0};
@@ -338,8 +328,7 @@ if(!s){selEl.textContent=PHONE?'> thumb stick to walk · drag to look · tap a s
 let t='> agent #'+s.n;
 if(!d)t+=' · waiting for data';
 else if(al)t+=' needs you: it '+d.reason+'.';
-else if(d.state==='waiting')t+=' · queued, #'+d.line+' in line for a browser window';
-else if(d.state==='finished')t+=' · finished · '+d.pages+' pages · '+(d.used_window?(d.gave_to?'passed its window to #'+d.gave_to:'closed its window: no one waiting'):'used no window');
+else if(d.state==='finished')t+=' · finished · '+d.pages+' pages · '+(d.used_window?(d.passes?'took '+d.passes+' pages from the shelf, then ':'')+'closed its window: no pages waiting':'used no window');
 else if(d.state==='working')t+=' · running · '+d.task+' on '+d.site+' · '+d.pages+' pages done · '+(d.window?'has a private browser window':'no window needed');
 else t+=' · '+(LABEL[d.state]||d.state).toLowerCase();
 selEl.textContent=t}
@@ -357,12 +346,11 @@ function addUpdate(u,live){upList.push(u);if(upList.length>200)upList.shift();
 const li=document.createElement('li');if(!live)li.className='old';if(u.kind==='problem')li.classList.add('problem');
 const tm=document.createElement('time');tm.textContent=u.time;li.append(tm,document.createTextNode(u.text));
 if(u.kind==='problem'&&u.agent){const b=document.createElement('button');b.textContent='Go to it';b.onclick=()=>goTo(S[u.agent-1]);li.append(b)}
-upEl.prepend(li);while(upEl.children.length>200)upEl.lastChild.remove();
-if(live&&u.kind==='handoff'){const m=/→ #(\d+)/.exec(u.text);if(m&&u.agent)beam(S[u.agent-1],S[+m[1]-1])}}
+upEl.prepend(li);while(upEl.children.length>200)upEl.lastChild.remove()}
 function apply(m){const st=m.status;ST=st;R.status=st;
 if(m.initial){upList.length=0;upEl.textContent=''}
 for(const d of m.agents){const s=S[d.n-1];if(s){s.d=d;draw(s)}}
-setTV('done',st.finished,'/'+st.agents);setTV('hand',st.handoffs,'/'+(st.handoffs+st.waiting));setTV('prob',st.problems,'',st.raised);
+setTV('done',st.finished,'/'+st.agents);setTV('hand',st.handoffs,'/'+(st.handoffs+st.shelf));setTV('prob',st.problems,'',st.raised);
 bigDraw();desks();for(const u of m.updates)addUpdate(u,!m.initial);compDraw();info()}
 let pending=null,lastApply=-1e9;
 function connect(){const ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws?token='+encodeURIComponent(TOKEN));let first=true;
@@ -382,7 +370,6 @@ sky.uniforms.t.value=now/1000;
 if(glide)glideStep(dt);else if(!seated)walk(dt);
 fov+=(fovT-fov)*(1-Math.exp(-dt*3));cam.fov=fov;cam.updateProjectionMatrix();
 cam.position.set(pos.x,eyeY,pos.z);cam.rotation.set(pitch,yaw,0,'YXZ');
-beamStep(dt);
 if(pending&&now-lastApply>=750){const m=pending;pending=null;lastApply=now;apply(m)}
 const near=nearChair();if(near!==lastNear){lastNear=near;hintEl.style.opacity=near&&!PHONE?1:0;sitBtn.style.display=near&&PHONE?'block':'none'}
 ren.render(scene,cam)}

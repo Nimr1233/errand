@@ -42,6 +42,14 @@ def test_missing_or_wrong_token_refused(client):
     refused(client, '/term?token=wrong', origin=BASE)
 
 
+def test_claude_code_gets_your_environment_not_the_parent_sessions():
+    mine = {'PATH': 'p', 'USERPROFILE': 'u', 'ANTHROPIC_BASE_URL': 'mine'}
+    assert term.child_env(mine) == mine  # started from your own terminal: nothing removed
+    inside = {**mine, 'CLAUDECODE': '1', 'CLAUDE_CODE_SESSION_ID': 's', 'MCP_SERVER_CONNECTION_BATCH_SIZE': '3',
+              'ERRAND_CLAUDE': 'x'}
+    assert term.child_env(inside) == {'PATH': 'p', 'USERPROFILE': 'u', 'ERRAND_CLAUDE': 'x'}
+
+
 def test_all_four_locks_pass(client):
     with client.websocket_connect(GOOD, headers={'host': HOST, 'origin': BASE}) as ws:
         assert ws.receive_json() == {'t': 'reset'}
