@@ -384,3 +384,36 @@ Steps for each URL, in order, stopping at the first that works:
 **Comparison:** rtrvr's demo took 184 s for 105 pages.
 
 **Output:** `bench/results.md`, with every number and the exact commands used.
+
+## 16. Browser pool, hand-off and mission control (added 2026-10-19)
+
+**Why:** 53 agents can think at once, but a 16 GB laptop can't hold 53 live browsers. Each live page uses roughly 150–500 MB (estimate). So a small pool of private browser windows is shared, and no window sits idle.
+
+**The pool:**
+- One Chrome program (Playwright) holds up to **N private browser windows** (browser contexts).
+- Each window has its own cookies, storage and tabs, like separate incognito windows.
+- N starts at **15**, with a maximum of **20**. The real number is set by a benchmark, the same way the 53 brains were measured.
+- **Memory guard:** if free RAM drops below 2 GB, the pool stops opening new windows until memory recovers.
+
+**Borrow, wait, hand off:**
+1. An agent that needs a browser asks the pool. If a window is free, it gets it immediately.
+2. If all N windows are busy, the agent joins a **waiting line**. Interactive jobs (the user is watching) go ahead of bulk jobs. Otherwise it's first come, first served.
+3. When an agent finishes its browser job, it returns the window. The pool **hands it straight to the next agent in line**.
+4. Agents without a browser keep thinking in their brain slots. Only browser work waits in the line.
+
+**Clean hand-off (safety rule):**
+- Before a window goes to the next agent, it is **wiped**: the browser context closes and a fresh one opens with no cookies, storage, open pages or logins. This takes well under a second, and it means one job's logins never leak into another job.
+- **Same-account exception:** if the next agent in line is working on **the same site with the same account**, the task marks it and the window passes over **still logged in**. That saves a login.
+- **Who logs in:** logins are always the user's own. The user enters them, or they're loaded from the user's own saved session. The bulk fetch ladder (section 14) still never logs in, and Errand never creates accounts or uses several accounts.
+
+**Stuck or broken windows:**
+- A window held for 5 minutes with no progress is taken back and wiped, and that agent's task is marked `stuck`.
+- A crashed window is replaced with a fresh one.
+
+**Mission control screen** (the local page from section 13, `127.0.0.1:8765`; reachable from the phone over Tailscale):
+- **One tile per agent, all 53.**
+  - **Agents using a browser:** the tile shows a **live picture of its window** (Chrome's screencast at a low frame rate, about 2–5 frames per second, to save CPU).
+  - **Agents working without a browser:** the tile shows **what the agent is reading and writing** as it streams.
+- **Status on every tile:** `waiting for a browser (#3 in line)`, `working`, `done`, `stuck` or `needs you`.
+- **Take over (phase 3):** tap a browser tile to control that window directly, then hand it back to the agent.
+- **Pool bar:** how many windows are busy, free or being wiped, and how long the waiting line is.
