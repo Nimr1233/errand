@@ -392,7 +392,7 @@ Steps for each URL, in order, stopping at the first that works:
 **The pool:**
 - One Chrome program (Playwright) holds up to **N private browser windows** (browser contexts).
 - Each window has its own cookies, storage and tabs, like separate incognito windows.
-- N defaults to **20**, with a maximum of **25**. Measured on 2026-10-19 (`bench/windows.md`): with the 53 brains loaded, 25 windows of Wikipedia pages stayed above 2 GB free RAM, at about 75 MB each. Heavier pages use more memory, and the memory guard below handles that.
+- N defaults to **25**, the measured maximum (`bench/windows.md`, 2026-10-19): with the 53 brains loaded, 25 windows of Wikipedia pages stayed above 2 GB free RAM, at about 75 MB each. On heavier pages or with less free RAM, the memory guard below opens fewer windows automatically.
 - **Memory guard:** if free RAM drops below 2 GB, the pool stops opening new windows until memory recovers.
 
 **Borrow, wait, hand off:**
@@ -410,10 +410,130 @@ Steps for each URL, in order, stopping at the first that works:
 - A window held for 5 minutes with no progress is taken back and wiped, and that agent's task is marked `stuck`.
 - A crashed window is replaced with a fresh one.
 
-**Mission control screen** (the local page from section 13, `127.0.0.1:8765`; reachable from the phone over Tailscale):
+**Mission control screen** (the local page from section 13, `127.0.0.1:8765`; reachable from the phone over Tailscale; full design in section 17):
 - **One tile per agent, all 53.**
   - **Agents using a browser:** the tile shows a **live picture of its window** (Chrome's screencast: JPEG quality 40, 640×400, every 2nd frame). Measured with 26 windows scrolling: about 1 frame per second per tile, and 35% CPU in total.
   - **Agents working without a browser:** the tile shows **what the agent is reading and writing** as it streams.
 - **Status on every tile:** `waiting for a browser (#3 in line)`, `working`, `done`, `stuck` or `needs you`.
 - **Take over (phase 3):** tap a browser tile to control that window directly, then hand it back to the agent.
 - **Pool bar:** how many windows are busy, free or being wiped, and how long the waiting line is.
+
+## 17. Mission control screen (design, added 2026-10-19)
+
+**Purpose:** see what every one of the 53 agents is doing, step in when one needs you, and see results arrive, on the laptop or the phone.
+
+### Layout (laptop, about 1440 px wide)
+
+```
+┌───────────────────────────── top bar ──────────────────────────────┐
+│ Job: "Book prices"  ▓▓▓▓▓▓░░░ 640/1000 pages · 2.6 pages/s · 04:12 │
+│ Brains 53/53 busy · Windows 25/25 busy, 7 waiting · Gemini 41/250  │
+│ [Pause all] [Stop job]                         Needs you: 2  ⚠ 1   │
+├───────────────────────── tile grid (9 × 6) ────────────┬── focus ──┤
+│ [#1 ▶ browser] [#2 ▶ reading] [#3 ⏳ #2 in line] ...    │  #14 big  │
+│ [#10 ⚠ stuck ] [#11 ✋ needs you] [#12 ✓ done] ...       │  live     │
+│  ... 53 tiles ...                                      │  picture  │
+├──────────────────────── results strip ─────────────────┤  + steps  │
+│ latest rows · 37 low-confidence rows to review · [CSV] │  [Take    │
+└────────────────────────────────────────────────────────┴   over]  ─┘
+```
+
+**1. Top bar (always visible)**
+- **Job progress:** pages done out of total, rows found, speed (pages per second), time so far and estimated time left.
+- **Busy counters:**
+  - brains busy out of 53
+  - windows busy out of 25, plus how many agents are waiting in line
+  - Gemini calls used today against the daily limit read from AI Studio
+- **Buttons:** **Pause all**, **Resume**, **Stop job**.
+- **Attention counters:** "Needs you: N" and "Stuck: N". Clicking one filters the grid to those agents.
+
+**2. Tile grid (53 tiles)**
+- **Each tile shows:**
+  - agent number
+  - status, as a coloured badge with a word (never colour alone)
+  - the site and page it's on
+  - which brain it uses (`2B` or `Gemini`)
+  - how long the current step has run
+- **Middle of the tile:**
+  - **Browser agents:** a small live picture of their window.
+  - **Reading agents:** the last few lines of what they are reading and writing, updated as text arrives.
+- **Statuses and colours:**
+
+  | Status | Colour |
+  |---|---|
+  | `idle` | grey |
+  | `working` | blue |
+  | `waiting for a browser (#n in line)` | amber |
+  | `stuck` | red |
+  | `needs you` | purple |
+  | `done` | green |
+
+- **Filters:** All, Browser, Reading, Stuck, Needs you. Sorting puts the tiles that need attention first.
+
+**3. Focus panel (opens when you click a tile)**
+- **Large live picture.** Its screencast switches to 1280×800, quality 70, every frame, while the panel is open.
+- **The agent's step list:** what it did, and what each action returned.
+- **Its current reasoning text and the fields it has filled so far.**
+- **Buttons:**
+  - **Take over:** your clicks and keys go to that window; the agent pauses.
+  - **Give back:** the agent continues from the current page.
+  - **Pause**
+  - **Skip this page**
+  - **Stop agent**
+
+**4. "Needs you" cards**
+- **What they're for:** every action that needs your approval (send, pay, delete, post, log in) and every agent stuck for 5 minutes.
+- **What a card shows:** what the agent wants to do, on which page, and a small picture of it.
+- **Buttons:** **Approve** or **Deny**. A stuck card also offers **Take over** or **Skip**.
+- **Telegram:** the same cards also go to Telegram (phase 2), so you can approve from your phone.
+
+**5. Results strip**
+- The newest rows as they arrive.
+- The review list: rows a checker brain disagreed with, or with missing fields.
+- **Download CSV**.
+
+### Phone layout
+- **One column**, sorted by attention: `needs you` → `stuck` → `working` → `waiting` → `done`.
+- **Tiles are compact:** status, site and one line of text. Live pictures show only for tiles on screen.
+- **Tapping a tile** opens the focus panel full screen. Take over works by touch: taps become clicks, and the on-screen keyboard sends keys.
+
+### How it works
+- **Server:** the engine's own local web server (the same FastAPI app as the phase 1 API) serves one HTML page with plain JavaScript and CSS grid. No UI framework, no build step.
+- **One WebSocket, `/ws`, carries everything.**
+  - **Server → page:**
+    - `job` (progress numbers)
+    - `pool` (windows busy, free or being wiped, and the waiting line)
+    - `agent` (status, site, brain, step, place in line)
+    - `text` (new reasoning text, batched every 200 ms)
+    - `frame` (one screencast JPEG for one agent)
+    - `needs_you` (an approval or stuck card)
+  - **Page → server:**
+    - `take_over`, `input` (click, key, scroll), `give_back`
+    - `approve` or `deny`
+    - `pause`, `resume`, `stop`, `skip`
+  - **How input reaches the window:** it goes to the browser window through Chrome DevTools `Input.dispatchMouseEvent` / `Input.dispatchKeyEvent`.
+- **Picture budget** (measured: 26 tiles at about 1 frame per second used about 35% CPU):
+  - **Grid tiles:** 640×400, quality 40, every 2nd frame.
+  - **Hidden tiles:** tiles scrolled off screen, or shown while the phone screen is off, stop their screencast.
+  - **The focused tile:** full size and rate.
+  - **If the laptop CPU stays above 85%:** grid pictures drop to every 4th frame.
+- **Text budget:** each tile keeps only its last 40 lines; the full log is in the focus panel.
+
+### Safety
+- **Network:** the server listens on `127.0.0.1` only. The phone reaches it through Tailscale's private network (`tailscale serve`), never on the public internet.
+- **Pairing:** the first time a device opens mission control, it must enter a one-time pairing code shown on the laptop. That device then gets a random token. Take over, approve and stop all require that token.
+- **Approvals:** irreversible actions (send, pay, delete, post) are approved only from mission control or the owner's Telegram account.
+
+### Build phases and tests
+- **Phase 1:**
+  - top bar, tile grid with statuses and streamed text, results strip, CSV, filters, phone layout
+  - a **demo mode**, where fake agents send realistic events, so the screen can be built and tested without the brains running
+- **Phase 3:** live pictures, focus panel, take over and give back, "needs you" cards with approvals.
+- **Tests:**
+  - A Playwright test opens the page in demo mode and checks that:
+    - 53 tiles appear
+    - statuses change
+    - a "needs you" card can be approved
+    - filters work
+    - the phone layout puts `needs you` first
+  - A load check: demo mode with 53 tiles updating keeps the page under 30% CPU.
