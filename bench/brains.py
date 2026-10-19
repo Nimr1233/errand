@@ -106,8 +106,8 @@ class GpuSampler(threading.Thread):
             self.stop.wait(1)
 
 
-def start_server(np_, log):
-    cmd = [str(LLAMA), '-m', str(MODEL), '-np', str(np_), '-c', str(np_ * 4096), '-ngl', '99',
+def start_server(np_, ctx, log):
+    cmd = [str(LLAMA), '-m', str(MODEL), '-np', str(np_), '-c', str(np_ * ctx), '-ngl', '99',
            '-fa', 'on', '-ctk', 'q8_0', '-ctv', 'q8_0', '-ctxcp', '2', '-cram', '2048',
            '--reasoning-budget', '0', '--host', '127.0.0.1', '--port', '8080']
     proc = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT)
@@ -129,7 +129,8 @@ def run_extract(np_):
     htmls = [p.read_text(encoding='utf-8') for p in PAGES]
     gts = [truth(h) for h in htmls]
 
-    def job(i):
+    def job(k):
+        i = k % len(htmls)  # with more slots than pages, pages repeat so every slot is busy at once
         data, secs = chat(SYSTEM, page_text(htmls[i]))
         msg = data['choices'][0]['message']
         answer = last_json(msg.get('content')) or {}
@@ -140,7 +141,7 @@ def run_extract(np_):
 
     t = time.perf_counter()
     with ThreadPoolExecutor(max_workers=np_) as pool:  # exactly np_ requests in flight
-        rows = list(pool.map(job, range(len(htmls))))
+        rows = list(pool.map(job, range(max(len(htmls), np_))))
     wall = time.perf_counter() - t
     lat = sorted(r['seconds'] for r in rows)
     cells = [ok for r in rows for ok in r['score'].values()]
@@ -189,15 +190,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--np', type=int, required=True)
     ap.add_argument('--recipe', action='store_true')
+    ap.add_argument('--ctx', type=int, default=4096, help='tokens of memory per slot')
     a = ap.parse_args()
     assert len(PAGES) == 105, f'run bench/fetch.py first: found {len(PAGES)} cached pages'
     for h in (PAGES[0], PAGES[50], PAGES[104]):  # self-check: ground truth parses on every layout sample
         print('truth sample:', truth(h.read_text(encoding='utf-8')))
 
-    name = f"recipe" if a.recipe else f"np{a.np}"
+    name = 'recipe' if a.recipe else f"np{a.np}" + ('' if a.ctx == 4096 else f'-c{a.ctx}')
     with open(ROOT / f'server-{name}.log', 'w') as log:
         baseline_shared = GpuSampler.shared_mib()
-        proc, cmd = start_server(a.np, log)
+        proc, cmd = start_server(a.np, a.ctx, log)
         gpu = GpuSampler(); gpu.start()
         try:
             if a.recipe:
@@ -206,7 +208,7 @@ def main():
                 rows, summary = run_extract(a.np)
         finally:
             gpu.stop.set(); gpu.join(); proc.terminate(); proc.wait(30)
-    summary.update({'np': a.np, 'server_cmd': ' '.join(cmd), 'max_vram_mib': gpu.vram,
+    summary.update({'np': a.np, 'ctx_per_slot': a.ctx, 'server_cmd': ' '.join(cmd), 'max_vram_mib': gpu.vram,
                     'shared_gpu_mib_delta': round(gpu.shared - baseline_shared)})
     (ROOT / f'brains-{name}.json').write_text(json.dumps({'summary': summary, 'rows': rows}, indent=2),
                                               encoding='utf-8')
