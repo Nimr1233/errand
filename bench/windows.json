@@ -1,0 +1,175 @@
+{
+  "max_windows_above_guard": 25,
+  "stopped_by": "memory guard (2 GB free)",
+  "screencast": {
+    "windows": 26,
+    "seconds": 17.4,
+    "cpu_percent": 34.8,
+    "frames_per_second_total": 27.9
+  },
+  "handoff_seconds": {
+    "median": 0.146,
+    "max": 0.166
+  },
+  "windows": [
+    {
+      "windows": 1,
+      "load_seconds": 4.41,
+      "free_gb": 4.05,
+      "mb_per_window_avg": -198
+    },
+    {
+      "windows": 2,
+      "load_seconds": 1.35,
+      "free_gb": 4.07,
+      "mb_per_window_avg": -108
+    },
+    {
+      "windows": 3,
+      "load_seconds": 1.78,
+      "free_gb": 3.89,
+      "mb_per_window_avg": -10
+    },
+    {
+      "windows": 4,
+      "load_seconds": 1.34,
+      "free_gb": 3.78,
+      "mb_per_window_avg": 19
+    },
+    {
+      "windows": 5,
+      "load_seconds": 1.72,
+      "free_gb": 3.7,
+      "mb_per_window_avg": 32
+    },
+    {
+      "windows": 6,
+      "load_seconds": 1.4,
+      "free_gb": 3.59,
+      "mb_per_window_avg": 46
+    },
+    {
+      "windows": 7,
+      "load_seconds": 1.49,
+      "free_gb": 3.47,
+      "mb_per_window_avg": 56
+    },
+    {
+      "windows": 8,
+      "load_seconds": 1.21,
+      "free_gb": 3.39,
+      "mb_per_window_avg": 60
+    },
+    {
+      "windows": 9,
+      "load_seconds": 1.68,
+      "free_gb": 3.26,
+      "mb_per_window_avg": 68
+    },
+    {
+      "windows": 10,
+      "load_seconds": 1.29,
+      "free_gb": 3.15,
+      "mb_per_window_avg": 72
+    },
+    {
+      "windows": 11,
+      "load_seconds": 1.22,
+      "free_gb": 3.04,
+      "mb_per_window_avg": 76
+    },
+    {
+      "windows": 12,
+      "load_seconds": 1.26,
+      "free_gb": 2.92,
+      "mb_per_window_avg": 79
+    },
+    {
+      "windows": 13,
+      "load_seconds": 1.21,
+      "free_gb": 3.0,
+      "mb_per_window_avg": 67
+    },
+    {
+      "windows": 14,
+      "load_seconds": 1.39,
+      "free_gb": 2.84,
+      "mb_per_window_avg": 74
+    },
+    {
+      "windows": 15,
+      "load_seconds": 1.69,
+      "free_gb": 2.76,
+      "mb_per_window_avg": 75
+    },
+    {
+      "windows": 16,
+      "load_seconds": 1.3,
+      "free_gb": 2.77,
+      "mb_per_window_avg": 70
+    },
+    {
+      "windows": 17,
+      "load_seconds": 1.34,
+      "free_gb": 2.68,
+      "mb_per_window_avg": 70
+    },
+    {
+      "windows": 18,
+      "load_seconds": 1.46,
+      "free_gb": 2.65,
+      "mb_per_window_avg": 69
+    },
+    {
+      "windows": 19,
+      "load_seconds": 1.46,
+      "free_gb": 2.59,
+      "mb_per_window_avg": 68
+    },
+    {
+      "windows": 20,
+      "load_seconds": 1.11,
+      "free_gb": 2.56,
+      "mb_per_window_avg": 66
+    },
+    {
+      "windows": 21,
+      "load_seconds": 1.52,
+      "free_gb": 2.45,
+      "mb_per_window_avg": 68
+    },
+    {
+      "windows": 22,
+      "load_seconds": 1.17,
+      "free_gb": 2.38,
+      "mb_per_window_avg": 69
+    },
+    {
+      "windows": 23,
+      "load_seconds": 1.5,
+      "free_gb": 2.24,
+      "mb_per_window_avg": 72
+    },
+    {
+      "windows": 24,
+      "load_seconds": 1.19,
+      "free_gb": 2.13,
+      "mb_per_window_avg": 74
+    },
+    {
+      "windows": 25,
+      "load_seconds": 1.28,
+      "free_gb": 2.01,
+      "mb_per_window_avg": 76
+    },
+    {
+      "windows": 26,
+      "load_seconds": 1.16,
+      "free_gb": 1.99,
+      "mb_per_window_avg": 74
+    }
+  ],
+  "free_gb_before_brains": 5.56,
+  "free_gb_with_brains": 3.98,
+  "brain_server_cmd": "C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\llama\\llama-server.exe -m C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\dl\\Qwen3.5-2B-Q4_K_M.gguf -np 53 -c 217088 -ngl 99 -fa on -ctk q8_0 -ctv q8_0 -ctxcp 2 -cram 2048 --reasoning-budget 0 --host 127.0.0.1 --port 8080"
+}

@@ -392,7 +392,7 @@ Steps for each URL, in order, stopping at the first that works:
 **The pool:**
 - One Chrome program (Playwright) holds up to **N private browser windows** (browser contexts).
 - Each window has its own cookies, storage and tabs, like separate incognito windows.
-- N starts at **15**, with a maximum of **20**. The real number is set by a benchmark, the same way the 53 brains were measured.
+- N defaults to **20**, with a maximum of **25**. Measured on 2026-10-19 (`bench/windows.md`): with the 53 brains loaded, 25 windows of Wikipedia pages stayed above 2 GB free RAM, at about 75 MB each. Heavier pages use more memory, and the memory guard below handles that.
 - **Memory guard:** if free RAM drops below 2 GB, the pool stops opening new windows until memory recovers.
 
 **Borrow, wait, hand off:**
@@ -402,7 +402,7 @@ Steps for each URL, in order, stopping at the first that works:
 4. Agents without a browser keep thinking in their brain slots. Only browser work waits in the line.
 
 **Clean hand-off (safety rule):**
-- Before a window goes to the next agent, it is **wiped**: the browser context closes and a fresh one opens with no cookies, storage, open pages or logins. This takes well under a second, and it means one job's logins never leak into another job.
+- Before a window goes to the next agent, it is **wiped**: the browser context closes and a fresh one opens with no cookies, storage, open pages or logins. Measured at 0.15 s per hand-off. One job's logins never leak into another job.
 - **Same-account exception:** if the next agent in line is working on **the same site with the same account**, the task marks it and the window passes over **still logged in**. That saves a login.
 - **Who logs in:** logins are always the user's own. The user enters them, or they're loaded from the user's own saved session. The bulk fetch ladder (section 14) still never logs in, and Errand never creates accounts or uses several accounts.
 
@@ -412,7 +412,7 @@ Steps for each URL, in order, stopping at the first that works:
 
 **Mission control screen** (the local page from section 13, `127.0.0.1:8765`; reachable from the phone over Tailscale):
 - **One tile per agent, all 53.**
-  - **Agents using a browser:** the tile shows a **live picture of its window** (Chrome's screencast at a low frame rate, about 2–5 frames per second, to save CPU).
+  - **Agents using a browser:** the tile shows a **live picture of its window** (Chrome's screencast: JPEG quality 40, 640×400, every 2nd frame). Measured with 26 windows scrolling: about 1 frame per second per tile, and 35% CPU in total.
   - **Agents working without a browser:** the tile shows **what the agent is reading and writing** as it streams.
 - **Status on every tile:** `waiting for a browser (#3 in line)`, `working`, `done`, `stuck` or `needs you`.
 - **Take over (phase 3):** tap a browser tile to control that window directly, then hand it back to the agent.
