@@ -1,0 +1,197 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{background:#1b1b1b;margin:16px;color:#aaa;font-family:sans-serif}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}#wrap{width:760px}</style></head><body><div id="wrap">
+<h2 class="sr-only">Command-center mission control mockup with an aurora ceiling.</h2>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+#cr,#cr button{font-family:'Share Tech Mono',monospace}
+#cr button{font-size:12px;background:#0A1316;color:#5CE1E6;border:0.5px solid #1F5F66;border-radius:6px;padding:5px 10px;cursor:pointer}
+#cr button.red{color:#FF6B63;border-color:#7A1C1C}
+</style>
+<div id="cr" style="position:relative;height:480px;border-radius:12px;overflow:hidden;background:#05080A;cursor:grab">
+<div id="cr-toast" style="position:absolute;left:50%;bottom:48px;transform:translateX(-50%);font-size:13px;padding:4px 14px;border-radius:6px;background:#0A1316;border:0.5px solid #1F5F66;color:#5CE1E6;opacity:0;transition:opacity .6s;pointer-events:none"></div>
+<div style="position:absolute;left:10px;bottom:10px;right:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+<div id="cr-sel" style="flex:1;min-width:180px;font-size:12px;color:#6FA8AE"></div>
+<button id="cr-fix" style="display:none"><i class="ti ti-check" aria-hidden="true"></i> APPROVE AND CONTINUE</button>
+<button id="cr-next" class="red"><i class="ti ti-alert-triangle" aria-hidden="true"></i> GO TO PROBLEMS</button>
+<button id="cr-back"><i class="ti ti-home" aria-hidden="true"></i> FACE THE TVS</button>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;font-size:12px;color:var(--text-secondary)">
+<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#06262B;border:1px solid #5CE1E6"></span> running</span>
+<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#1E262A"></span> queued for a window</span>
+<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#1FA3AD"></span> finished</span>
+<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#D32F2F"></span> needs your attention</span>
+<span><span style="display:inline-block;width:10px;height:2px;background:#4FD8E0;vertical-align:middle"></span> browser hand-off</span>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const el=document.getElementById('cr'),toastEl=document.getElementById('cr-toast'),selEl=document.getElementById('cr-sel'),fixBtn=document.getElementById('cr-fix');
+const MONO='"Share Tech Mono", monospace',HINT='> drag to look around · look up for the aurora · click a screen to zoom in';selEl.textContent=HINT;
+const W=el.clientWidth,H=480,scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(66,W/H,0.05,100);
+const CAM=new THREE.Vector3(0,-0.15,1.6);cam.position.copy(CAM);
+scene.fog=new THREE.Fog(0x05080A,6,15);
+const ren=new THREE.WebGLRenderer({antialias:true});ren.setClearColor(0x05080A,1);ren.setSize(W,H);ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));el.insertBefore(ren.domElement,el.firstChild);
+const ANISO=ren.capabilities.getMaxAnisotropy();
+const B=c=>new THREE.MeshBasicMaterial({color:c}),M=t=>new THREE.MeshBasicMaterial({map:t,fog:false});
+const A=5.2,Q=Math.PI/4,L=2*A*Math.tan(Q/2),FLOOR=-2.4,CEIL=2.8,MID=(CEIL+FLOOR)/2;
+const U=a=>new THREE.Vector3(Math.sin(a),0,-Math.cos(a)),T=a=>new THREE.Vector3(Math.cos(a),0,Math.sin(a));
+function put(geo,mat,a,off,y,inset){const m=new THREE.Mesh(geo,mat);m.position.copy(U(a).multiplyScalar(A-inset).add(T(a).multiplyScalar(off))).setY(y);m.lookAt(m.position.clone().sub(U(a)));scene.add(m);return m}
+// anisotropic filtering keeps screens seen at an angle sharp
+function tex(w,h,fn){const cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');if(fn)fn(c,w,h);const t=new THREE.CanvasTexture(cv);t.anisotropy=ANISO;return {c,t}}
+function dot(c,x,y,r,col){c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill()}
+const wallT=tex(512,640,(c,w,h)=>{c.fillStyle='#0F1316';c.fillRect(0,0,w,h);c.lineWidth=2;for(let i=0;i<4;i++)for(let j=0;j<5;j++){c.fillStyle='#13181B';c.fillRect(i*128+7,j*128+7,114,114);c.strokeStyle='#1C2227';c.strokeRect(i*128+7,j*128+7,114,114)}}).t;
+for(let i=0;i<8;i++){const a=i*Q;
+put(new THREE.PlaneGeometry(L+0.04,CEIL-FLOOR),new THREE.MeshBasicMaterial({map:wallT}),a,0,MID,0);
+put(new THREE.BoxGeometry(L-0.3,0.03,0.03),B(0x9FE3E8),a,0,CEIL-0.06,0.06);
+const ca=a+Q/2,cr=A/Math.cos(Q/2)-0.06,p=new THREE.Mesh(new THREE.BoxGeometry(0.16,CEIL-FLOOR,0.16),B(0x0A0D0F));p.position.set(cr*Math.sin(ca),MID,-cr*Math.cos(ca));p.rotation.y=-ca;scene.add(p)}
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(14,14),B(0x080A0C));floor.rotation.x=-Math.PI/2;floor.position.y=FLOOR;scene.add(floor);
+const grid=new THREE.GridHelper(14,28,0x141A1E,0x101417);grid.position.y=FLOOR+0.005;scene.add(grid);
+// ceiling: a night sky with stars, a faint galaxy band and slowly drifting aurora curtains
+const aurora=new THREE.ShaderMaterial({uniforms:{t:{value:0}},
+vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+fragmentShader:`uniform float t;varying vec2 vUv;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(h(i),h(i+vec2(1.0,0.0)),f.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),f.x),f.y);}
+float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*n(p);p*=2.03;a*=0.5;}return v;}
+void main(){vec2 p=(vUv-0.5)*14.0;vec3 col=vec3(0.004,0.006,0.016);
+float d=p.x*0.6+p.y*0.8;col+=vec3(0.10,0.06,0.18)*exp(-d*d*0.08)*fbm(p*0.7+4.0)*1.4;
+vec2 g=floor(p*5.0),f=fract(p*5.0)-0.5;col+=vec3(0.75,0.85,1.0)*step(0.965,h(g))*smoothstep(0.12,0.0,length(f))*(0.5+0.5*h(g+3.1));
+for(int i=0;i<3;i++){float fi=float(i);
+float y=p.y-(fi-1.0)*2.4+1.2*sin(p.x*0.32+t*0.22+fi*2.1)+1.6*(fbm(vec2(p.x*0.25-t*0.06,fi*5.0))-0.5);
+float rays=0.55+0.45*n(vec2(p.x*3.0+t*0.4,fi*7.0+t*0.1));
+col+=mix(vec3(0.12,1.0,0.55),vec3(0.55,0.3,1.0),fi*0.5)*exp(-y*y*0.9)*rays*0.5;}
+gl_FragColor=vec4(col,1.0);}`});
+const ceil=new THREE.Mesh(new THREE.PlaneGeometry(14,14),aurora);ceil.rotation.x=Math.PI/2;ceil.position.y=CEIL;scene.add(ceil);
+const big=tex(1024,394);
+put(new THREE.PlaneGeometry(3.2,1.28),B(0x050607),0,0,0.4,0.03);
+put(new THREE.PlaneGeometry(3.1,1.19),M(big.t),0,0,0.4,0.045);
+const panT=tex(128,384,(c,w,h)=>{c.fillStyle='#0C1013';c.fillRect(0,0,w,h);c.strokeStyle='#20282D';c.lineWidth=3;c.strokeRect(2,2,w-4,h-4);dot(c,40,26,6,'#E39B2D');dot(c,88,26,6,'#E39B2D');
+for(let r=0;r<9;r++)for(let k=0;k<3;k++){const v=(r*3+k*5)%7;c.fillStyle=v===0?'#5CE1E6':v<3?'#1A626A':'#142427';c.fillRect(16+k*34,52+r*36,28,26)}}).t;
+[-1.8,1.8].forEach(x=>put(new THREE.PlaneGeometry(0.34,1.3),M(panT),0,x,0.4,0.04));
+const rackT=tex(128,384,(c,w,h)=>{c.fillStyle='#0A0D0F';c.fillRect(0,0,w,h);c.lineWidth=2;for(let u=0;u<14;u++){c.strokeStyle='#1A2024';c.strokeRect(6,6+u*27,w-12,23);for(let k=0;k<4;k++){const v=(u*7+k*3)%9;c.fillStyle=v===0?'#E39B2D':v<4?'#2FB5BE':'#15292C';c.fillRect(14+k*10,15+u*27,5,5)}}}).t;
+const rd=B(0x0B0E10);[-1.25,0,1.25].forEach(x=>put(new THREE.BoxGeometry(1.0,3.4,0.7),[rd,rd,rd,rd,M(rackT),rd],Math.PI,x,FLOOR+1.7,0.38));
+const keyT=tex(128,40,(c,w,h)=>{c.fillStyle='#14191D';c.fillRect(0,0,w,h);c.fillStyle='#252D33';for(let r=0;r<4;r++)for(let k=0;k<14;k++)c.fillRect(4+k*8.8,4+r*9,7,7)}).t;
+const deskMons=[];
+function desk(x,z,len,ry,mons){const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);
+const add=(geo,mat,px,py,pz,rx)=>{const m=new THREE.Mesh(geo,mat);m.position.set(px,py,pz);if(rx)m.rotation.x=rx;g.add(m);return m};
+add(new THREE.BoxGeometry(len,0.1,0.8),B(0x191E22),0,-1.55,0);
+add(new THREE.BoxGeometry(len,0.86,0.06),B(0x0D1114),0,-1.97,-0.37);
+add(new THREE.BoxGeometry(len-0.12,0.8,0.04),B(0x0F1316),0,-2.0,0.2);
+add(new THREE.BoxGeometry(len,0.012,0.014),B(0x2A8F98),0,-1.5,0.4);
+mons.forEach(mx=>{add(new THREE.BoxGeometry(0.06,0.24,0.04),B(0x101417),mx,-1.38,-0.22);
+add(new THREE.BoxGeometry(0.82,0.5,0.04),B(0x07090B),mx,-1.08,-0.2,-0.08);
+const d=tex(512,300);add(new THREE.PlaneGeometry(0.76,0.44),M(d.t),mx,-1.08,-0.175,-0.08);deskMons.push(d);
+add(new THREE.PlaneGeometry(0.5,0.16),new THREE.MeshBasicMaterial({map:keyT}),mx,-1.494,0.14,-Math.PI/2)})}
+desk(0,-1.85,3.3,0,[-1.05,0,1.05]);desk(-2.15,-1.1,1.75,0.967,[0]);desk(2.15,-1.1,1.75,-0.967,[0]);
+const chair=new THREE.Group();chair.position.set(0,FLOOR,-0.35);scene.add(chair);
+const cm=B(0x1A1F23),ce=new THREE.LineBasicMaterial({color:0x3A444B});
+[[0.75,0.82,0.42,0.97],[0.6,0.22,0.36,1.48]].forEach(([r,h,half,y])=>{const geo=new THREE.CylinderGeometry(r,r,h,16,1,true,-half,half*2),m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0x1A1F23,side:THREE.DoubleSide})),e=new THREE.LineSegments(new THREE.EdgesGeometry(geo,10),ce);m.position.set(0,y,0.33-r);e.position.copy(m.position);chair.add(m,e)});
+[[0.62,0.1,0.58,0,0.5,0],[0.07,0.42,0.07,0,0.25,0],[0.06,0.05,0.42,-0.34,0.74,0.02],[0.06,0.05,0.42,0.34,0.74,0.02],[0.04,0.22,0.04,-0.34,0.62,0.05],[0.04,0.22,0.04,0.34,0.62,0.05]].forEach(([w,h,d,x,y,z])=>{const geo=new THREE.BoxGeometry(w,h,d),m=new THREE.Mesh(geo,cm),e=new THREE.LineSegments(new THREE.EdgesGeometry(geo),ce);m.position.set(x,y,z);e.position.set(x,y,z);chair.add(m,e)});
+for(let k=0;k<5;k++){const a=k/5*Math.PI*2,leg=new THREE.Mesh(new THREE.BoxGeometry(0.05,0.04,0.38),cm);leg.position.set(0.19*Math.sin(a),0.04,0.19*Math.cos(a));leg.rotation.y=a;chair.add(leg)}
+// the run: 1000 pages split over 53 agents, 25 browser windows; an agent that finishes all its pages hands its window to the next agent in line
+const TOTAL=1000,N=53,WIN=25,STEP=0.75;
+const TVDEF=[{key:'done',label:'// AGENTS FINISHED',of:N,sub:'finished all their pages',a:-Q,off:0.95,inset:0.45},{key:'hand',label:'// BROWSERS HANDED DOWN',of:N-WIN,sub:'windows passed to waiting agents',a:0,off:0,inset:0.12},{key:'prob',label:'// PROBLEMS',of:0,sub:'',a:Q,off:-0.95,inset:0.45}];
+const TV={};
+TVDEF.forEach(d=>{const g=new THREE.Group();g.position.copy(U(d.a).multiplyScalar(A-d.inset).add(T(d.a).multiplyScalar(d.off))).setY(1.95);g.lookAt(0,0.3,CAM.z);
+const body=new THREE.BoxGeometry(1.9,1.12,0.1);g.add(new THREE.Mesh(body,B(0x0C0F12)),new THREE.LineSegments(new THREE.EdgesGeometry(body),new THREE.LineBasicMaterial({color:0x252C32})));
+const s=tex(960,540),scr=new THREE.Mesh(new THREE.PlaneGeometry(1.78,1.0),M(s.t));scr.position.z=0.052;g.add(scr);
+const led=new THREE.Mesh(new THREE.CircleGeometry(0.014,10),B(0xE39B2D));led.position.set(0.88,-0.53,0.052);g.add(led);
+scene.add(g);TV[d.key]={d,ctx:s.c,tex:s.t,val:-1,raised:-1}});
+function tvDraw(k){const t=TV[k],c=t.ctx,d=t.d,col=k==='prob'&&t.val>0?'#FF5A52':'#5CE1E6';
+c.shadowBlur=0;c.fillStyle='#020E11';c.fillRect(0,0,960,540);c.strokeStyle='#14424A';c.lineWidth=4;c.strokeRect(14,14,932,512);
+c.textAlign='left';c.fillStyle='#62B9C1';c.font='44px '+MONO;c.fillText(d.label,44,84);
+const num=String(Math.max(0,t.val)),of=d.of?'/'+d.of:'';c.font='240px '+MONO;const nw=c.measureText(num).width;c.font='96px '+MONO;const x0=480-(nw+c.measureText(of).width)/2;
+c.shadowColor=col;c.shadowBlur=26;c.fillStyle=col;c.font='240px '+MONO;c.fillText(num,x0,340);c.font='96px '+MONO;c.fillText(of,x0+nw,340);
+c.shadowBlur=0;c.textAlign='center';c.fillStyle='#62B9C1';c.font='38px '+MONO;c.fillText(k==='prob'?t.raised+' raised so far · '+(t.val?'waiting on you':'all clear'):d.sub,480,452);t.tex.needsUpdate=true}
+function setTV(k,v,raised){const t=TV[k];const r=raised!==undefined?raised:t.raised;if(t.val===v&&t.raised===r)return;t.val=v;t.raised=r;tvDraw(k)}
+const LOG=['GET /catalogue 200','parse table ok','extract price ok','scroll +400','field upc ok','recipe hit','fetch next page','validate row ok'];
+const REASONS=['wants to submit a form','stuck for 5 minutes','asks you to log in','wants to post a message','page asks for a CAPTCHA'];
+const AW=[-1,1,2,3,-3,-2].map(k=>k*Q),ROWS=[0.95,0,-0.95],S=[];let sel=null;
+for(let i=0;i<N;i++){const a=AW[Math.floor(i/9)],k=i%9,off=(k%3-1)*1.34,y=ROWS[Math.floor(k/3)],s0=tex(512,320);
+const halo=put(new THREE.PlaneGeometry(1.46,1.0),new THREE.MeshBasicMaterial({color:0xD32F2F,transparent:true,opacity:0.35,depthWrite:false}),a,off,y,0.01);halo.visible=false;
+put(new THREE.PlaneGeometry(1.32,0.86),B(0x06080A),a,off,y,0.02);
+const m=put(new THREE.PlaneGeometry(1.22,0.77),M(s0.t),a,off,y,0.035);
+// 46 agents get 19 pages and 7 get 18: exactly 1000
+const s={n:i+1,need:i<46?19:18,speed:0.055+((i*37)%17)/350,ctx:s0.c,tex:s0.t,mesh:m,halo};m.userData=s;S.push(s)}
+let pages,finished,handoffs,raised,hold,lastHand,hist,rate,tick;
+// even-numbered seats get the first 25 windows, so busy and finished screens mix all round the room
+const ORDER=S.map((s,i)=>i).sort((a,b)=>(a%2-b%2)||(a-b));
+const queue=()=>S.filter(s=>s.st==='waiting').sort((p,q)=>p.line-q.line);
+function reset(){pages=0;finished=0;handoffs=0;raised=0;hold=0;lastHand='none yet';hist=[0];rate=0;tick=0;
+ORDER.forEach((i,k)=>{const s=S[i];s.got=0;s.prog=0;s.win=k<WIN;s.st=s.win?'working':'waiting';s.line=s.win?0:k-WIN+1;s.gaveTo=0;s.sig=''})}
+function draw(s){const al=s.st==='alert';s.halo.visible=al||s===sel;s.halo.material.color.set(al?0xD32F2F:0x4FD8E0);
+const sig=[s.st,s.got,s.line,s.gaveTo,s.reason,Math.floor(s.prog*12)].join();if(s.sig===sig)return;s.sig=sig;
+const c=s.ctx;c.textAlign='left';
+if(al){c.fillStyle='#1A0505';c.fillRect(0,0,512,320);c.fillStyle='#D32F2F';c.fillRect(0,0,512,64);c.fillStyle='#FFFFFF';c.font='38px '+MONO;c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText('NEEDS YOU',492,46);c.textAlign='left';
+c.fillStyle='#FF5A52';c.beginPath();c.moveTo(80,96);c.lineTo(140,204);c.lineTo(20,204);c.closePath();c.fill();c.fillStyle='#1A0505';c.font='64px '+MONO;c.fillText('!',64,194);
+c.fillStyle='#FFB3AE';c.font='32px '+MONO;const w=s.reason.split(' ');c.fillText(w.slice(0,2).join(' '),164,130);c.fillText(w.slice(2).join(' '),164,172);
+c.fillStyle='#E08A84';c.font='28px '+MONO;c.fillText('> click to help',164,256);s.tex.needsUpdate=true;return}
+const fin=s.st==='finished',wait=s.st==='waiting';
+c.fillStyle='#021316';c.fillRect(0,0,512,320);c.fillStyle=fin?'#1FA3AD':wait?'#1E262A':'#06262B';c.fillRect(0,0,512,64);
+c.strokeStyle=wait?'#1A2326':'#1F5F66';c.lineWidth=4;c.strokeRect(2,2,508,316);
+c.fillStyle=fin?'#021316':wait?'#B5C3C7':'#7FF0F5';c.font='38px '+MONO;c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText(fin?'FINISHED':wait?'QUEUED':'RUNNING',492,46);c.textAlign='left';
+if(wait){c.fillStyle='#B5C3C7';c.font='64px '+MONO;c.fillText('#'+s.line+' in line',24,166);c.fillStyle='#7C8C90';c.font='28px '+MONO;c.fillText('waiting for a browser window',24,232)}
+else{const txt=s.got+'/'+s.need;c.fillStyle='#5CE1E6';c.font='84px '+MONO;const tw=c.measureText(txt).width;c.fillText(txt,24,160);c.fillStyle='#62B9C1';c.font='30px '+MONO;c.fillText('pages',40+tw,160);
+c.font='26px '+MONO;c.fillStyle=fin?'#62B9C1':'#3FB8C0';c.fillText(fin?(s.gaveTo?'window passed to #'+s.gaveTo:'window closed: no one waiting'):'> '+LOG[(s.n+s.got)%LOG.length],24,218)}
+c.fillStyle='#0A2226';c.fillRect(24,252,464,18);c.fillStyle=wait?'#3A4A4E':'#3FC8D0';c.fillRect(24,252,464*s.got/s.need,18);
+if(s.st==='working'){c.fillStyle='#0A2226';c.fillRect(24,282,464,8);c.fillStyle='#1F7F87';c.fillRect(24,282,464*Math.min(1,s.prog),8)}
+s.tex.needsUpdate=true}
+function bigDraw(){const c=big.c;c.shadowBlur=0;c.fillStyle='#020C0F';c.fillRect(0,0,1024,394);c.strokeStyle='rgba(79,216,224,0.12)';c.lineWidth=2;c.beginPath();
+for(let k=0;k<=16;k++){const x=k/16*1024;c.moveTo(512,197);c.lineTo(x,0);c.moveTo(512,197);c.lineTo(x,394)}c.stroke();
+for(let k=1;k<6;k++){const f=k*k/30;c.strokeRect(512-512*f,197-197*f,1024*f,394*f)}
+c.fillStyle='rgba(2,12,15,0.88)';c.fillRect(100,62,824,276);c.strokeStyle='#1F5F66';c.strokeRect(100,62,824,276);
+c.textAlign='left';c.fillStyle='#62B9C1';c.font='28px '+MONO;c.fillText('// MISSION · 1000 PAGES · ONE PROMPT',24,42);
+c.textAlign='center';c.shadowColor='#5CE1E6';c.shadowBlur=20;c.fillStyle='#5CE1E6';c.font='120px '+MONO;c.fillText(pages+' / '+TOTAL,512,198);c.shadowBlur=0;
+c.fillStyle='#0A2226';c.fillRect(162,226,700,18);c.fillStyle='#3FC8D0';c.fillRect(162,226,700*pages/TOTAL,18);
+const sec=rate?Math.ceil((TOTAL-pages)/rate/10)*10:0;c.fillStyle='#62B9C1';c.font='32px '+MONO;
+c.fillText(finished===N?'MISSION COMPLETE · all '+TOTAL+' pages done':rate?rate.toFixed(1)+' pages a second · about '+(sec>=60?Math.floor(sec/60)+' min ':'')+(sec%60)+' s left':'measuring speed...',512,300);big.t.needsUpdate=true}
+function deskDraw(i,label,value,sub){const d=deskMons[i],c=d.c;c.shadowBlur=0;c.fillStyle='#021316';c.fillRect(0,0,512,300);c.strokeStyle='#1F5F66';c.lineWidth=4;c.strokeRect(3,3,506,294);
+c.textAlign='left';c.fillStyle='#62B9C1';c.font='32px '+MONO;c.fillText(label,24,56);c.shadowColor='#5CE1E6';c.shadowBlur=14;c.fillStyle='#5CE1E6';c.font='84px '+MONO;c.fillText(value,24,168);c.shadowBlur=0;c.fillStyle='#62B9C1';c.font='28px '+MONO;c.fillText(sub,24,246);d.t.needsUpdate=true}
+function paint(){S.forEach(draw);
+const q=queue(),open=S.filter(s=>s.st==='alert').length;
+setTV('done',finished);setTV('hand',handoffs);setTV('prob',open,raised);bigDraw();
+deskDraw(0,'WINDOWS IN USE',S.filter(s=>s.win).length+'/'+WIN,'private browser windows');
+deskDraw(1,'BRAINS ONLINE',N+'/'+N,'all thinking at once');
+deskDraw(2,'QUEUED FOR A WINDOW',String(q.length),q.length?'next: '+q.slice(0,3).map(s=>'#'+s.n).join(' '):'nobody waiting');
+deskDraw(3,'LAST HAND-OFF',lastHand,'clean wipe in 0.15 s');
+deskDraw(4,'SPEED',rate?rate.toFixed(1)+' p/s':'...','pages per second')}
+const beams=[];
+function beam(f,t){const p0=f.mesh.position.clone(),p2=t.mesh.position.clone(),p1=p0.clone().add(p2).multiplyScalar(0.35);p1.y+=1.2;
+const curve=new THREE.QuadraticBezierCurve3(p0,p1,p2),line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(40)),new THREE.LineBasicMaterial({color:0x4FD8E0,transparent:true,opacity:0.45}));
+const ball=new THREE.Mesh(new THREE.SphereGeometry(0.05,10,8),new THREE.MeshBasicMaterial({color:0x7FF0F5,transparent:true,opacity:0.8}));scene.add(line);scene.add(ball);beams.push({curve,line,ball,t:0})}
+function toast(msg){toastEl.textContent=msg;toastEl.style.opacity=1;setTimeout(()=>toastEl.style.opacity=0,2200)}
+// silent = fast-forward at load: no beams, no drawing, and problems get handled as if you approved them
+function sim(silent){
+if(finished===N){if(++hold>16){reset();beams.forEach(b=>{scene.remove(b.line);scene.remove(b.ball)});beams.length=0}paint();return}
+S.forEach(s=>{
+if(s.st==='working'){s.prog+=s.speed;
+if(s.prog>=1){s.prog=0;s.got++;pages++;
+if(s.got>=s.need){s.st='finished';finished++;s.win=false;const w=queue()[0];
+if(w){w.win=true;w.st='working';queue().forEach((x,j)=>x.line=j+1);handoffs++;s.gaveTo=w.n;lastHand='#'+s.n+' > #'+w.n;if(!silent)beam(s,w)}}}
+else if(Math.random()<0.0008){s.st='alert';s.age=0;s.reason=REASONS[(s.n+raised)%REASONS.length];raised++}}
+else if(s.st==='alert'&&silent&&++s.age>20)s.st='working'});
+hist.push(pages);if(hist.length>9)hist.shift();
+if(++tick%8===0||!rate)rate=hist.length>1?(hist[hist.length-1]-hist[0])/((hist.length-1)*STEP):0;
+if(!silent)paint()}
+reset();while(pages<612)sim(true);
+const busy=S.filter(s=>s.st==='working');[busy[2],busy[9]].forEach(s=>{if(s){s.st='alert';s.reason=REASONS[(s.n+raised)%REASONS.length];raised++}});
+const PITCH=0.04,FOV=66;let yaw=0,pitch=PITCH,fov=FOV,tYaw=null,tPitch=null,tFov=FOV,drag=false,lx=0,ly=0,moved=0;
+el.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;drag=true;moved=0;lx=e.clientX;ly=e.clientY;el.style.cursor='grabbing'});
+window.addEventListener('pointerup',e=>{if(drag&&moved<5)pick(e);drag=false;el.style.cursor='grab'});
+window.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;moved+=Math.abs(dx)+Math.abs(dy);yaw+=dx*0.005;pitch=Math.max(-0.6,Math.min(0.9,pitch+dy*0.004));lx=e.clientX;ly=e.clientY;tYaw=null;tPitch=null});
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
+function flyTo(s){const prev=sel;sel=s;if(prev)draw(prev);draw(s);const d=s.mesh.position.clone().sub(CAM);tYaw=Math.atan2(-d.x,-d.z);tPitch=Math.atan2(d.y,Math.hypot(d.x,d.z));tFov=2*Math.atan(0.9/d.length())*180/Math.PI;
+fixBtn.style.display=s.st==='alert'?'':'none';
+selEl.textContent='> agent #'+s.n+(s.st==='alert'?' needs your attention: it '+s.reason+'.':s.st==='waiting'?' · queued, #'+s.line+' in line for a browser window':s.st==='finished'?' · finished all '+s.need+' pages · '+(s.gaveTo?'passed its window to #'+s.gaveTo:'closed its window'):' · running · page '+(s.got+1)+' of '+s.need+' · has a private browser window')}
+function pick(e){const b=el.getBoundingClientRect();mv.x=(e.clientX-b.left)/b.width*2-1;mv.y=-(e.clientY-b.top)/b.height*2+1;ray.setFromCamera(mv,cam);const h=ray.intersectObjects(S.map(s=>s.mesh))[0];if(h)flyTo(h.object.userData)}
+fixBtn.onclick=()=>{if(sel&&sel.st==='alert'){sel.st='working';fixBtn.style.display='none';selEl.textContent='> agent #'+sel.n+' is back to work.';toast('agent #'+sel.n+' is back to work');paint()}};
+let ni=0;document.getElementById('cr-next').onclick=()=>{const n=S.filter(s=>s.st==='alert');if(!n.length){toast('no problems right now');return}flyTo(n[ni++%n.length])};
+document.getElementById('cr-back').onclick=()=>{tFov=FOV;tYaw=0;tPitch=PITCH;const prev=sel;sel=null;if(prev)draw(prev);fixBtn.style.display='none';selEl.textContent=HINT};
+const clock=new THREE.Clock();let t=0;function loop(){requestAnimationFrame(loop);t++;aurora.uniforms.t.value=clock.getElapsedTime();
+if(tYaw!==null){let d=tYaw-yaw;d=Math.atan2(Math.sin(d),Math.cos(d));yaw+=d*0.06}if(tPitch!==null)pitch+=(tPitch-pitch)*0.06;fov+=(tFov-fov)*0.06;cam.fov=fov;cam.updateProjectionMatrix();cam.rotation.set(pitch,yaw,0,'YXZ');
+if(t%45===0)sim(false);
+for(let i=beams.length-1;i>=0;i--){const b=beams[i];b.t+=0.008;if(b.t<=1)b.ball.position.copy(b.curve.getPoint(b.t));else{b.line.material.opacity-=0.015;b.ball.material.opacity-=0.03;if(b.line.material.opacity<=0){scene.remove(b.line);scene.remove(b.ball);beams.splice(i,1)}}}
+ren.render(scene,cam)}
+document.fonts.load('124px "Share Tech Mono"').finally(()=>{S.forEach(s=>s.sig='');Object.keys(TV).forEach(tvDraw);paint()});
+paint();loop();
+</script>
+</div></body></html>

@@ -422,6 +422,8 @@ Steps for each URL, in order, stopping at the first that works:
 
 **Purpose:** see what every one of the 53 agents is doing, step in when one needs you, and see results arrive, on the laptop or the phone.
 
+**3D room:** the main view is now a walkable 3D command-center room with a "chief's computer" that runs Claude Code. See `2026-10-19-mission-control-room-design.md`. The flat layout below stays as the **list view**.
+
 ### Layout (laptop, about 1440 px wide)
 
 ```
