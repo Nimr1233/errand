@@ -24,6 +24,8 @@ def test_token_needed(client):
     assert client.get('/api/status').status_code == 401
     assert client.get('/api/status', headers={'Authorization': 'Bearer wrong'}).status_code == 401
     assert client.get('/api/status', headers=AUTH).status_code == 200
+    assert client.get('/api/board').status_code == 401
+    assert client.get('/api/board', headers=AUTH).status_code == 200
 
 
 def test_room_page_has_the_token_and_cannot_be_framed(client):

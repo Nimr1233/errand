@@ -249,6 +249,14 @@ From `reports/Full feature free Errand plan.md`:
 - `errand/term.py` now drops every `CLAUDE*`, `ANTHROPIC*` and `MCP_*` variable when Errand was started from inside a Claude session. Otherwise the room's Claude Code would run on the desktop app's proxy and login.
 - The user asked for agents without a window to each get an Android phone driven by google/artemis. We checked it and decided against it (spec `2026-10-20-no-wait-line-design.md`, section 1). Instead we built the **no-wait line**: pages wait on a shelf for a window, agents never wait. It's in the demo engine, room and connector, with tests.
 
+- **The huddle (agents consult each other), built directly at the user's request, without a spec doc.** The user's choices: a growing huddle, try-then-vote, and fix-then-tell-me.
+  - Problems agents can fix (recipe broken, checker disagrees, page keeps failing, stuck 5 min) go on a problem board, one huddle at a time.
+  - Round 1 has 3 agents, round 2 has 9, round 3 everyone. Finished agents and agents without a window join first. Their tasks go back to the queue front, so nothing is lost.
+  - Each agent suggests a fix, and every fix is tried on 5 saved pages. The best wins (a vote breaks ties) and is used if it reads all 5. After round 3 fails, it goes to you, and that site's pages are set aside until you answer.
+  - Problems only you can solve (send, post, log in, CAPTCHA) never start a huddle.
+  - Room: amber huddle screens, the PROBLEMS TV's small line, a main-screen line. Connector: `list_problems` and `problem_detail` (look-only). API: `/api/board`, `/api/board/{id}`.
+  - Demo only: fixes and scores are random. The real engine will run the same rounds with real brains.
+
 **Known limits (marked `shortcut:` in the code where it applies):**
 - With two pages open at once, both answer the terminal's live queries (Claude Code would get each answer twice). One room tab is fine.
 - The TV digits reach 2/3 of the screen height only for short numbers; `23/53` is width-limited to about half the height. Readable at 700 px (checked).

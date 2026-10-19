@@ -55,7 +55,7 @@ async def broadcast(msg):
 @asynccontextmanager
 async def lifespan(app):
     write_token()
-    engine.fast_forward(612, problems=2)  # demo: open mid-job with 2 problems, like the approved mockup
+    engine.fast_forward(612, problems=2, huddles=1)  # demo: open mid-job with problems, like the mockup
     task = asyncio.create_task(clock())
     yield
     task.cancel()
@@ -118,6 +118,19 @@ def agent(n: int):
     if d is None:
         raise HTTPException(404, f'no agent #{n}')
     return d
+
+
+@app.get('/api/board', dependencies=[api])
+def board():
+    return engine.board_view()
+
+
+@app.get('/api/board/{pid}', dependencies=[api])
+def board_problem(pid: str):
+    p = engine.problem_detail(pid)
+    if p is None:
+        raise HTTPException(404, f'no problem {pid}')
+    return p
 
 
 @app.get('/api/updates', dependencies=[api])

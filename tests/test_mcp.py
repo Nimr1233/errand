@@ -10,25 +10,41 @@ from errand import demo, mcp_server as m, server
 @pytest.fixture
 def engine(monkeypatch):
     eng = demo.DemoEngine(seed=7, loop_jobs=False)
-    eng.fast_forward(300, problems=2)
+    eng.fast_forward(300, problems=2, huddles=1)
+    eng.step()  # the huddle starts
     monkeypatch.setattr(server, 'engine', eng)
     monkeypatch.setattr(m, '_client', lambda: TestClient(
         server.app, base_url='http://127.0.0.1:8765', headers={'Authorization': f'Bearer {server.TOKEN}'}))
     return eng
 
 
-def test_all_nine_tools_are_registered():
+def test_all_eleven_tools_are_registered():
     names = {t.name for t in asyncio.run(m.mcp.list_tools())}
     assert names == {'start_job', 'job_status', 'list_agents', 'agent_detail', 'answer_problem',
-                     'stop_agent', 'pause_all', 'resume_all', 'get_updates'}
+                     'stop_agent', 'pause_all', 'resume_all', 'get_updates', 'list_problems', 'problem_detail'}
 
 
 def test_every_reply_is_at_most_1500_characters(engine):
     for out in (m.job_status(), m.list_agents(), m.list_agents('running'), m.agent_detail(1),
-                m.get_updates(), m.get_updates(0)):
+                m.get_updates(), m.get_updates(0), m.list_problems(), m.problem_detail('P-1')):
         assert 0 < len(out) <= m.CAP
     assert '… and' in m.list_agents()  # 53 agents don't fit: it says how many were left out
     assert 'get_updates(since=' in m.get_updates(0)  # and how to read the rest
+
+
+def test_problems_are_shared_with_you(engine, monkeypatch):
+    board = m.list_problems()
+    assert 'Huddle now: P-1 · recipe stopped working' in board and 'round 1 of 3 · 3 agents' in board
+    assert 'Waiting on you: #' in board  # the 2 problems only you can solve
+    assert 'in a huddle on P-1' in m.list_agents()  # listed near the top, so the cap never hides it
+    assert m.list_agents('huddle').startswith('3 agents: 3 in a huddle')
+    monkeypatch.setattr(demo, 'FIX_CHANCE', (1, 1, 1))
+    for _ in range(12):
+        engine.step()
+    detail = m.problem_detail('p-1')
+    assert 'fixed by the huddle' in detail and 'Round 1 (3 agents): best fix read' in detail
+    assert 'best fix read 5/5, winner #' in detail  # round 1 was drawn before the patch, so 1 or 2 fixed it
+    assert m.problem_detail('P-99').startswith('Errand said no')
 
 
 def test_page_text_is_wrapped_as_data(engine, monkeypatch):

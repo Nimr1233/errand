@@ -4,7 +4,7 @@ import asyncio
 import pathlib
 import sys
 
-LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates')
+LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates', 'list_problems', 'problem_detail')
 
 
 def start():
@@ -29,7 +29,7 @@ def setup():
     project = pathlib.Path(__file__).resolve().parent.parent
     print('1. Run this once in PowerShell to give Claude Code the Errand connector:\n')
     print(f'   & "{claude}" mcp add -s user errand -e "PYTHONPATH={project}" -- "{sys.executable}" -m errand mcp\n')
-    print('2. Optional: let Claude Code use the four look-only tools without asking each time.')
+    print(f'2. Optional: let Claude Code use the {len(LOOK_ONLY)} look-only tools without asking each time.')
     print('   Add these lines to "permissions" -> "allow" in your Claude Code settings (~/.claude/settings.json):\n')
     for name in LOOK_ONLY:
         print(f'   "mcp__errand__{name}",')

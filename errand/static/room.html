@@ -37,6 +37,7 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 #uplist li{padding:6px 0;border-bottom:1px solid #0E2A2F;font-size:13px;line-height:1.4;color:#CFF6F8;animation:slide .4s ease-out}
 #uplist li.old{animation:none}
 #uplist li.problem{color:#FFB3AE}
+#uplist li.huddle{color:#F2C77A}
 #uplist time{color:var(--dim);margin-right:6px}
 #uplist li button{display:block;margin-top:4px;font-size:12px;padding:3px 10px}
 @keyframes slide{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
@@ -182,7 +183,7 @@ TVDEF.forEach(d=>{const g=new THREE.Group();g.position.copy(U(d.a).multiplyScala
 const body=new THREE.BoxGeometry(2.28,1.34,0.1);g.add(new THREE.Mesh(body,B(0x0C0F12)),new THREE.LineSegments(new THREE.EdgesGeometry(body),new THREE.LineBasicMaterial({color:0x252C32})));
 const s=tex(960,540),scr=new THREE.Mesh(new THREE.PlaneGeometry(2.14,1.2),M(s.t));scr.position.z=0.052;g.add(scr);
 const led=new THREE.Mesh(new THREE.CircleGeometry(0.016,10),B(0xE39B2D));led.position.set(1.06,-0.63,0.052);g.add(led);
-scene.add(g);TV[d.key]={d,c:s.c,t:s.t,val:null,of:'',raised:null};tvDraw(d.key)});
+scene.add(g);TV[d.key]={d,c:s.c,t:s.t,val:null,of:'',sub:d.sub};tvDraw(d.key)});
 function tvDraw(k){const t=TV[k],c=t.c,W=960,H=540,val=t.val,red=k==='prob'&&val>0,col=red?'#FF5A52':'#8FF7FB';
 c.shadowBlur=0;c.fillStyle='#000000';c.fillRect(0,0,W,H);c.strokeStyle=red?'#4A1A18':'#0E3A40';c.lineWidth=4;c.strokeRect(10,10,W-20,H-20);
 c.textAlign='left';c.fillStyle='#62B9C1';c.font=mono(48);c.fillText(t.d.label,40,76);
@@ -192,14 +193,13 @@ c.font=num(100);const per=(c.measureText('0').actualBoundingBoxAscent||72)/100,w
 let F=H*0.66/per;const w0=width(F);if(w0>W-70)F*=(W-70)/w0;
 c.font=num(F);const nw=c.measureText(main).width;c.font=num(F*0.4);const x0=(W-nw-c.measureText(of).width)/2,base=98+(372+F*per)/2;
 c.shadowColor=col;c.shadowBlur=24;c.fillStyle=col;c.font=num(F);c.fillText(main,x0,base);c.font=num(F*0.4);c.fillText(of,x0+nw,base);
-c.shadowBlur=0;c.textAlign='center';c.fillStyle='#62B9C1';c.font=mono(42);
-c.fillText(k==='prob'?(t.raised==null?'':t.raised+' raised so far · '+(val?'waiting on you':'all clear')):t.d.sub,W/2,H-34);
-t.t.needsUpdate=true;R.tv[k]={val,text:main+of,color:col}}
-function setTV(k,val,of,raised){const t=TV[k];if(t.val===val&&t.of===of&&t.raised===raised)return;t.val=val;t.of=of;t.raised=raised;tvDraw(k)}
+c.shadowBlur=0;c.textAlign='center';c.fillStyle='#62B9C1';c.font=mono(42);c.fillText(fit(c,t.sub,W-60),W/2,H-34);
+t.t.needsUpdate=true;R.tv[k]={val,text:main+of,color:col,sub:t.sub}}
+function setTV(k,val,of,sub){const t=TV[k];if(t.val===val&&t.of===of&&t.sub===sub)return;t.val=val;t.of=of;t.sub=sub;tvDraw(k)}
 
 // ---- the 53 agent screens: 9 per wall on six walls ----
 const AW=[-1,1,2,3,-3,-2].map(k=>k*Q),ROWS=[0.85,-0.1,-1.05],S=[];let sel=null;
-const LABEL={working:'RUNNING',finished:'FINISHED',needs_you:'NEEDS YOU',stopped:'STOPPED',idle:'STARTING'};
+const LABEL={working:'RUNNING',huddle:'HUDDLE',finished:'FINISHED',needs_you:'NEEDS YOU',stopped:'STOPPED',idle:'STARTING'};
 for(let i=0;i<53;i++){const a=AW[Math.floor(i/9)],k=i%9,off=(k%3-1)*1.34,y=ROWS[Math.floor(k/3)],s0=tex(512,320);
 const hl=put(new THREE.PlaneGeometry(1.46,1.0),new THREE.MeshBasicMaterial({color:0xD32F2F,transparent:true,opacity:0.35,depthWrite:false}),a,off,y,0.01);hl.visible=false;
 put(new THREE.PlaneGeometry(1.32,0.86),B(0x06080A),a,off,y,0.02);
@@ -207,8 +207,15 @@ const m=put(new THREE.PlaneGeometry(1.22,0.77),M(s0.t),a,off,y,0.035);
 const s={n:i+1,a,off,c:s0.c,t:s0.t,mesh:m,halo:hl,d:null,sig:''};m.userData=s;S.push(s);draw(s)}
 function halo(s){const al=!!s.d&&s.d.state==='needs_you';s.halo.visible=al||s===sel;s.halo.material.color.set(al?0xD32F2F:0x4FD8E0)}
 function draw(s){halo(s);const d=s.d||{state:'idle'},st=d.state;
-const sig=[st,d.pages,d.passes,d.used_window,d.reason,d.task,d.site,d.log,Math.floor((d.prog||0)*12)].join('|');if(s.sig===sig)return;s.sig=sig;
+const h=st==='huddle'&&ST&&ST.huddle;
+const sig=[st,d.pages,d.passes,d.used_window,d.reason,d.task,d.site,d.log,Math.floor((d.prog||0)*12),d.huddle,d.fix_ok,d.fix_tried,h&&h.round+'.'+h.size].join('|');if(s.sig===sig)return;s.sig=sig;
 const c=s.c;c.textAlign='left';c.shadowBlur=0;
+// a huddle is steady amber: red stays only for problems that need you
+if(st==='huddle'){c.fillStyle='#140F05';c.fillRect(0,0,512,320);c.fillStyle='#E39B2D';c.fillRect(0,0,512,64);c.fillStyle='#140F05';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText('HUDDLE '+(d.huddle||''),492,46);c.textAlign='left';
+c.fillStyle='#F2C77A';c.font=mono(30);wrap(c,h?h.kind:'',464).slice(0,2).forEach((l,i)=>c.fillText(fit(c,l,464),24,110+i*36));
+c.fillStyle='#D9A55A';c.font=mono(26);if(h)c.fillText('round '+h.round+' of 3 · '+h.size+' agents',24,198);
+c.fillStyle='#F2C77A';c.fillText('testing my fix: '+d.fix_ok+'/5 pages ok',24,236);
+c.fillStyle='#2A1E08';c.fillRect(24,262,464,18);c.fillStyle='#E39B2D';c.fillRect(24,262,464*Math.min(1,(d.fix_tried||0)/5),18);s.t.needsUpdate=true;return}
 if(st==='needs_you'){c.fillStyle='#1A0505';c.fillRect(0,0,512,320);c.fillStyle='#D32F2F';c.fillRect(0,0,512,64);c.fillStyle='#FFFFFF';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText('NEEDS YOU',492,46);c.textAlign='left';
 c.fillStyle='#FF5A52';c.beginPath();c.moveTo(80,96);c.lineTo(140,204);c.lineTo(20,204);c.closePath();c.fill();c.fillStyle='#1A0505';c.font=mono(64);c.fillText('!',64,194);
 const w=(d.reason||'').split(' '),h=Math.ceil(w.length/2);c.fillStyle='#FFB3AE';c.font=mono(32);c.fillText(fit(c,w.slice(0,h).join(' '),330),164,130);c.fillText(fit(c,w.slice(h).join(' '),330),164,172);
@@ -238,12 +245,14 @@ if(!st){c.fillStyle='#62B9C1';c.font=mono(40);c.fillText('connecting to Errand..
 const txt=st.pages_done+' / '+st.total;c.shadowColor='#8FF7FB';c.shadowBlur=20;c.fillStyle='#8FF7FB';fitFont(c,txt,760,104,num);c.fillText(txt,512,196);c.shadowBlur=0;
 c.fillStyle='#0A2226';c.fillRect(162,226,700,18);c.fillStyle='#3FC8D0';c.fillRect(162,226,700*st.pages_done/st.total,18);
 const sec=st.seconds_left?Math.ceil(st.seconds_left/10)*10:0;c.fillStyle='#62B9C1';c.font=mono(32);
-c.fillText(st.complete?'MISSION COMPLETE · all '+st.total+' pages done':st.paused?'PAUSED · all agents waiting for you':st.speed?st.speed.toFixed(1)+' pages a second · about '+(sec>=60?Math.floor(sec/60)+' min ':'')+(sec%60)+' s left':st.problems?'stalled · '+st.problems+' waiting on you':'measuring speed...',512,300);big.t.needsUpdate=true}
+c.fillText(st.complete?'MISSION COMPLETE · all '+st.total+' pages done':st.paused?'PAUSED · all agents waiting for you':st.speed?st.speed.toFixed(1)+' pages a second · about '+(sec>=60?Math.floor(sec/60)+' min ':'')+(sec%60)+' s left':st.problems?'stalled · '+st.problems+' waiting on you':'measuring speed...',512,300);
+const h=st.huddle;if(h){c.fillStyle='#E39B2D';c.font=mono(22);c.fillText(fit(c,'HUDDLE '+h.id+' · '+h.kind+' on '+h.site+' · round '+h.round+' · '+h.size+' agents',800),512,330)}
+big.t.needsUpdate=true}
 function deskDraw(i,label,value,sub){const d=deskMons[i],c=d.c;c.shadowBlur=0;c.fillStyle='#021316';c.fillRect(0,0,512,300);c.strokeStyle='#1F5F66';c.lineWidth=4;c.strokeRect(3,3,506,294);
 c.textAlign='left';c.fillStyle='#62B9C1';c.font=mono(32);c.fillText(label,24,56);c.shadowColor='#8FF7FB';c.shadowBlur=14;c.fillStyle='#8FF7FB';fitFont(c,value,464,72,num);c.fillText(value,24,166);c.shadowBlur=0;c.fillStyle='#62B9C1';c.font=mono(28);c.fillText(fit(c,sub,464),24,246);d.t.needsUpdate=true}
 function desks(){const st=ST;if(!st)return;
 deskDraw(0,'WINDOWS IN USE',st.windows_in_use+'/'+st.windows,'private browser windows');
-deskDraw(1,'BRAINS ONLINE',st.brains+'/'+st.brains,st.paused?'paused':'all thinking at once');
+deskDraw(1,'BRAINS ONLINE',st.brains+'/'+st.brains,st.huddle?st.huddle.size+' in the huddle on '+st.huddle.id:st.paused?'paused':'all thinking at once');
 deskDraw(2,'PAGES WAITING FOR A WINDOW',String(st.shelf),st.shelf?'next: '+st.next_on_shelf.map(p=>p.split('/').pop()).join(' '):'none waiting');
 deskDraw(3,'LAST HAND-OFF',st.last_handoff||'none yet','clean wipe in 0.15 s');
 deskDraw(4,'SPEED',st.speed?st.speed.toFixed(1)+' p/s':'...','pages per second')}
@@ -252,7 +261,7 @@ function compDraw(){const last=upList.slice(-3).reverse(),sig=seated+'|'+last.ma
 const c=comp.c;c.shadowBlur=0;c.fillStyle='#020E11';c.fillRect(0,0,512,320);c.strokeStyle='#1F5F66';c.lineWidth=4;c.strokeRect(2,2,508,316);
 c.fillStyle='#06262B';c.fillRect(4,4,504,52);c.textAlign='left';c.fillStyle='#7FF0F5';c.font=mono(26);c.fillText("CHIEF'S TERMINAL",16,40);
 c.textAlign='right';c.fillStyle='#62B9C1';c.font=mono(22);c.fillText(seated?'in use':'sit down to use',496,40);c.textAlign='left';
-let y=96;for(const u of last){c.fillStyle=u.kind==='problem'?'#FFB3AE':'#CFF6F8';c.font=mono(25);for(const l of wrap(c,u.time.slice(0,5)+' '+u.text,480).slice(0,2)){c.fillText(fit(c,l,480),16,y);y+=30}y+=14}
+let y=96;for(const u of last){c.fillStyle=u.kind==='problem'?'#FFB3AE':u.kind==='huddle'?'#F2C77A':'#CFF6F8';c.font=mono(25);for(const l of wrap(c,u.time.slice(0,5)+' '+u.text,480).slice(0,2)){c.fillText(fit(c,l,480),16,y);y+=30}y+=14}
 comp.t.needsUpdate=true}
 
 // ---- you: walking, looking, gliding ----
@@ -328,6 +337,7 @@ if(!s){selEl.textContent=PHONE?'> thumb stick to walk · drag to look · tap a s
 let t='> agent #'+s.n;
 if(!d)t+=' · waiting for data';
 else if(al)t+=' needs you: it '+d.reason+'.';
+else if(d.state==='huddle'){const h=ST&&ST.huddle;t+=' is in the huddle on '+d.huddle+(h?': '+h.kind+' on '+h.site+' · round '+h.round+' of 3 · '+h.size+' agents':'')+' · its fix read '+d.fix_ok+' of '+d.fix_tried+' test pages so far'}
 else if(d.state==='finished')t+=' · finished · '+d.pages+' pages · '+(d.used_window?(d.passes?'took '+d.passes+' pages from the shelf, then ':'')+'closed its window: no pages waiting':'used no window');
 else if(d.state==='working')t+=' · running · '+d.task+' on '+d.site+' · '+d.pages+' pages done · '+(d.window?'has a private browser window':'no window needed');
 else t+=' · '+(LABEL[d.state]||d.state).toLowerCase();
@@ -338,19 +348,25 @@ function api(path,body){return fetch(path,{method:body?'POST':'GET',headers:{Aut
 function answer(approve){const s=sel;if(!s)return;okBtn.hidden=skipBtn.hidden=true;
 api('/api/problems/'+s.n,{approve}).then(r=>toast(r.ok?'agent #'+s.n+(approve?' is back to work':' skipped that page'):r.error),e=>toast("couldn't reach Errand: "+e.message))}
 okBtn.onclick=()=>answer(true);skipBtn.onclick=()=>answer(false);
-let ni=0;$('next').onclick=()=>{const p=S.filter(s=>s.d&&s.d.state==='needs_you');if(!p.length){toast('no problems right now');return}goTo(p[ni++%p.length])};
+// your problems first, then the huddle
+let ni=0;$('next').onclick=()=>{let p=S.filter(s=>s.d&&s.d.state==='needs_you');if(!p.length)p=S.filter(s=>s.d&&s.d.state==='huddle');if(!p.length){toast('no problems right now');return}goTo(p[ni++%p.length])};
 $('home').onclick=faceTVs;
 
 // ---- live data: /ws sends the whole state every 0.75 s; numbers change at most that often ----
 function addUpdate(u,live){upList.push(u);if(upList.length>200)upList.shift();
-const li=document.createElement('li');if(!live)li.className='old';if(u.kind==='problem')li.classList.add('problem');
+const li=document.createElement('li');if(!live)li.className='old';if(u.kind==='problem'||u.kind==='huddle')li.classList.add(u.kind);
 const tm=document.createElement('time');tm.textContent=u.time;li.append(tm,document.createTextNode(u.text));
 if(u.kind==='problem'&&u.agent){const b=document.createElement('button');b.textContent='Go to it';b.onclick=()=>goTo(S[u.agent-1]);li.append(b)}
 upEl.prepend(li);while(upEl.children.length>200)upEl.lastChild.remove()}
 function apply(m){const st=m.status;ST=st;R.status=st;
 if(m.initial){upList.length=0;upEl.textContent=''}
 for(const d of m.agents){const s=S[d.n-1];if(s){s.d=d;draw(s)}}
-setTV('done',st.finished,'/'+st.agents);setTV('hand',st.handoffs,'/'+(st.handoffs+st.shelf));setTV('prob',st.problems,'',st.raised);
+const hd=st.huddle,fx=st.fixed_by_huddles;
+setTV('done',st.finished,'/'+st.agents,TV.done.d.sub);setTV('hand',st.handoffs,'/'+(st.handoffs+st.shelf),TV.hand.d.sub);
+// the small line holds about 38 characters at this size
+setTV('prob',st.problems,'',hd?'huddle on '+hd.id+' · '+st.problems+' for you'
+:fx?(st.problems?st.problems+' waiting on you':'all clear')+' · '+fx+' fixed by huddles'
+:st.raised+' raised so far · '+(st.problems?'waiting on you':'all clear'));
 bigDraw();desks();for(const u of m.updates)addUpdate(u,!m.initial);compDraw();info()}
 let pending=null,lastApply=-1e9;
 function connect(){const ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws?token='+encodeURIComponent(TOKEN));let first=true;
