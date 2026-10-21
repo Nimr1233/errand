@@ -1,5 +1,7 @@
 """The page reader (errand/extract.py): numbered view, snapping, the round 1 fixes and the vote
 across pages, on small made-up pages, with a fake brain. No model, no network."""
+import re
+
 from errand import extract as x
 
 WORD = {1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five'}
@@ -80,8 +82,8 @@ def test_answer_form_and_prompt():
 def fake_brain(answers, calls):
     """Answers per page, found by the page's title in the view; counts its calls."""
     def brain(view, fields):
-        calls.append(view)
-        return next(a for t, a in answers.items() if f'h1: {t}' in view)
+        calls.append(view)  # the whole title line: "Book 1" must not match "Book 12"
+        return next(a for t, a in answers.items() if re.search(rf'^\[\d+\] h1: {re.escape(t)}$', view, re.M))
     return brain
 
 

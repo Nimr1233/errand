@@ -296,9 +296,16 @@ From `reports/Full feature free Errand plan.md`:
   - **What Errand saves:** after each job, `errand/memory.py` saves one fact (pages, sites, fields, results file) plus one per site that blocked. Never page text.
   - **Tests:** `tests/conftest.py` keeps every test away from the real brain.
   - **Found on the way:** the desktop app moved Claude Code to `%APPDATA%\Claude\claude-code\...`. `term.find_claude` now looks there too; without it the room's Claude couldn't start.
+- **The Gemini helper** (`errand/gemini.py`):
+  - **What it does:** a page left without a field that 4 in 5 samples of its kind have is re-read by Gemini, which only fills the missing fields.
+  - **Privacy:** public jobs only. `private=True` on `start_job` (API and connector) keeps Gemini away.
+  - **Models and budget:** `gemini-3.8-flash`, then `gemini-3.5-flash-lite` on a 429, then the 2B alone until midnight Pacific. The daily budget is `ERRAND_GEMINI_DAILY` (default 200), and usage is kept in `~/.errand/gemini_usage.json`.
+  - **The key:** the user pastes it into `~/.errand/gemini_key`, and it is sent only to Google. `python -m errand gemini` checks it without spending any allowance.
+  - **Tests:** `tests/conftest.py` keeps every test off the real key.
+  - **Not measured live yet:** there is no key yet.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
-  2. Gemini helper for public pages (the user is getting an AI Studio key)
+  2. Gemini helper for public pages (done; waiting for the user's key)
   3. saved data
   4. browser windows with the stealth and JavaScript steps
   5. checker, fixer and huddles

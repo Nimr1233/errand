@@ -8,6 +8,8 @@ room and the Errand connector work with either.
   site, same path depth) are samples.
 - learn: the vote across pages learns a recipe from the samples' answers. Later pages of that kind
   are read by code, with a brain only for the fields no recipe covers (bench/results.md sections 7-8).
+- fix: a page left without a field that most pages of its kind have (4 in 5 samples) is read again
+  by Gemini (errand/gemini.py), only for public jobs and only within the daily budget.
 Results go to jobs/<job>.csv: one row per link, with its status ("ok", "blocked: bot check", ...).
 A finished job leaves a short note in the chief's memory (errand/memory.py, gbrain) when gbrain is installed.
 Not built yet: browser windows (the stealth and JavaScript fetch steps), checker brains, huddles.
@@ -16,6 +18,7 @@ import csv, pathlib, re, threading, time, urllib.parse
 from collections import deque
 
 from . import extract as x, memory
+from .gemini import Gemini
 from .brains import URL as BRAIN_URL, BrainServer
 from .demo import N, STEP, slug
 from .fetch import Polite, site
@@ -66,7 +69,7 @@ class Agent:
 
 class Engine:
     def __init__(self, brain=None, fetcher=None, results=RESULTS, samples=SAMPLES, log_path=None, server_log=None,
-                 remember=True):
+                 remember=True, gemini=None):
         self.lock = threading.Condition()
         self.agents = [Agent(i + 1) for i in range(N)]
         self.updates = UpdateLog(log_path)
@@ -75,6 +78,8 @@ class Engine:
         self.server = None if brain else BrainServer(server_log)
         self.brains = 'ready' if brain else 'off'  # off | starting | ready | failed: why
         self.results, self.samples, self.remember = results, samples, remember
+        self.gemini = gemini or Gemini()
+        self.private, self.gemini_calls, self.gemini_fixed = False, 0, 0
         self.threads, self.closed, self.paused = [], False, False
         self.job, self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = None, 0, 0, 0, 0, 0, 0
         self.tasks, self.rows, self.html, self.groups = deque(), {}, {}, {}
@@ -82,7 +87,7 @@ class Engine:
         self.out = None
 
     # ---- commands (the local API and the Errand connector call these) ----
-    def start_job(self, prompt, urls, fields, focus=None):
+    def start_job(self, prompt, urls, fields, focus=None, private=False):
         fields = parse_fields(fields)
         if not fields:
             raise ValueError('say which fields to read, like {"price": "the price", "stock": "number: copies in stock"}')
@@ -93,6 +98,7 @@ class Engine:
             if self.job and not self.complete():
                 raise ValueError(f"job '{self.job}' is still running")
             self.job, self.fields, self.focus = prompt.strip()[:60] or 'Untitled job', fields, focus or None
+            self.private, self.gemini_calls, self.gemini_fixed = bool(private), 0, 0  # private: Gemini never sees it
             self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = len(urls), 0, 0, 0, 0, 0
             self.tasks = deque(('fetch', u) for u in urls)
             self.rows, self.html, self.groups = {u: None for u in urls}, {}, {}
@@ -158,7 +164,9 @@ class Engine:
                 'huddle': None, 'board': 0, 'fixed_by_huddles': 0, 'set_aside': 0,
                 'results': str(self.out) if self.out else 'no job yet',
                 'mode': 'real', 'brains_state': self.brains, 'fetched': fetched, 'recipes': len(recipes),
-                'brain_calls': calls, 'by_code': by_code,
+                'brain_calls': calls, 'by_code': by_code, 'private': self.private,
+                'gemini': 'off: private job' if self.private else self.gemini.state(),
+                'gemini_calls': self.gemini_calls, 'gemini_fixed': self.gemini_fixed,
                 # the room's middle TV and desk monitors (no browser windows yet, so no hand-offs to show)
                 'tv_hand': {'label': '// PAGES READ BY CODE', 'val': by_code, 'of': f'/{self.done}',
                             'sub': f'{len(recipes)} recipe{"s" * (len(recipes) != 1)} learned from the brains'},
@@ -166,7 +174,7 @@ class Engine:
                           ['BRAINS', self.brains.split(':')[0].upper(), self.brains if ':' in self.brains else
                            f'{N} slots on the GPU'],
                           ['RECIPES LEARNED', str(len(recipes)), ', '.join(recipes)[:40] or 'from 10 sample pages each'],
-                          ['BRAIN CALLS', str(calls), f'{by_code} pages needed none'],
+                          ['BRAIN CALLS', str(calls), f'{by_code} pages needed none · Gemini {self.gemini_calls}'],
                           ['SPEED', f'{self.rate:.1f} p/s' if self.rate else '...', 'pages per second']]}
 
     def agents_view(self, state=None):
@@ -288,12 +296,14 @@ class Engine:
             return {'recipe': x.learn_recipe([(self.html[u], ans) for u, ans in g['samples'].items()],
                                              self.fields, focus=self.focus)}
         g, used = self.groups[kind_of_page(key)], []
+        helper = self.gemini.brain if kind == 'fix' else self.brain
 
         def brain(view, fields):  # counts brain calls and keeps what the agent is reading, for the room
             a.excerpt = view
             used.append(1)
-            return self.brain(view, fields)
-        return {'answers': x.read_page(self.html[key], self.fields, brain, g['recipe'], focus=self.focus),
+            return helper(view, fields)
+        recipe = None if kind == 'fix' else g['recipe']  # Gemini reads the whole page afresh
+        return {'answers': x.read_page(self.html[key], self.fields, brain, recipe, focus=self.focus),
                 'brain': bool(used)}
 
     def _record(self, a, t, r):
@@ -325,9 +335,12 @@ class Engine:
         elif kind == 'learn':
             g = self.groups[key]
             g['recipe'], g['learning'] = r.get('recipe', {}), False
+            g['filled'] = {f: sum(ans.get(f) not in (None, '') for ans in g['samples'].values()) / len(g['samples'])
+                           for f in self.fields}
             for u, ans in g['samples'].items():  # the vote also corrects the samples' slips
                 self.rows[u] = {'status': 'ok', **ans, **x.replay(self.html[u], g['recipe'], self.fields)}
-                self.html.pop(u, None)
+                if not self._maybe_fix(g, u):
+                    self.html.pop(u, None)
             self.tasks.extendleft(('read', u) for u in reversed(g['waiting']))
             g['waiting'] = []
             covered = len(g['recipe'])
@@ -337,7 +350,16 @@ class Engine:
             self._save()
         else:
             g = self.groups[kind_of_page(key)]
-            if 'answers' not in r:
+            if kind == 'fix':  # Gemini only fills what was missing; a failed fix changes nothing
+                filled = {f: v for f, v in r.get('answers', {}).items()
+                          if v not in (None, '') and self.rows[key].get(f) in (None, '')}
+                self.rows[key].update(filled)
+                self.gemini_calls += r.get('brain', False)
+                self.gemini_fixed += len(filled)
+                self.html.pop(key, None)
+                if filled:
+                    self.updates.add('fixed', f"#{a.n} Gemini filled {', '.join(filled)} on {key[-70:]}", a.n)
+            elif 'answers' not in r:
                 self._row(key, {'status': r['status']}, by_brain=False)
                 g['sampling'].discard(key)
             elif key in g['sampling']:
@@ -346,8 +368,9 @@ class Engine:
                 self._row(key, {'status': 'ok', **r['answers']}, by_brain=True)  # html kept for the vote
             else:
                 self._row(key, {'status': 'ok', **r['answers']}, by_brain=r['brain'])
-                self.html.pop(key, None)
-            a.pages += 1
+                if not self._maybe_fix(g, key):
+                    self.html.pop(key, None)
+            a.pages += kind != 'fix'
             a.steps.append(f"read {key[-60:]}: {'brain' if r.get('brain') else 'code'}")
             self._maybe_learn(g, kind_of_page(key))
         self._finish_check()
@@ -361,6 +384,15 @@ class Engine:
             if self.remember:  # the chief's memory (gbrain): what ran, which sites blocked, where results are
                 memory.save_job(self.job, time.strftime('%Y-%m-%d %H:%M'), self.done, list(self.fields),
                                 self.by_code, self.brain_calls, self.out, dict(self.rows))
+
+    def _maybe_fix(self, g, url):
+        """Queue a Gemini fix when a field most pages of this kind have came back empty here."""
+        if self.private or 'filled' not in g or self.gemini.state() != 'ready':
+            return False
+        if any(self.rows[url].get(f) in (None, '') and share >= 0.8 for f, share in g['filled'].items()):
+            self.tasks.appendleft(('fix', url))
+            return True
+        return False
 
     def _maybe_learn(self, g, key):
         if g['recipe'] is None and not g['learning'] and not g['sampling'] and g['samples'] and \

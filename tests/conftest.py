@@ -9,7 +9,10 @@ os.environ.setdefault('ERRAND_DEMO', '1')
 
 
 @pytest.fixture(autouse=True)
-def no_real_memory(monkeypatch):
-    """No test ever writes into your real gbrain: test_memory.py brings its own stand-in."""
-    from errand import memory
+def no_real_memory_or_gemini(monkeypatch, tmp_path):
+    """No test ever writes into your real gbrain or spends your real Gemini allowance: test_memory.py
+    and test_gemini.py bring their own stand-ins."""
+    from errand import gemini, memory
     monkeypatch.setattr(memory, 'CMD', [])
+    monkeypatch.setattr(gemini, 'load_key', lambda: None)
+    monkeypatch.setattr(gemini, 'USAGE_FILE', tmp_path / 'gemini_usage.json')

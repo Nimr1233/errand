@@ -156,7 +156,7 @@ def start_job(body: dict = Body(...)):
     if DEMO:
         return engine.start_job(body.get('prompt', ''), len(urls))
     try:
-        return engine.start_job(body.get('prompt', ''), urls, body.get('fields'), body.get('focus'))
+        return engine.start_job(body.get('prompt', ''), urls, body.get('fields'), body.get('focus'), bool(body.get('private')))
     except ValueError as e:
         raise HTTPException(400, str(e))
 
