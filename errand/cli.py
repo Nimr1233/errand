@@ -5,7 +5,7 @@ import pathlib
 import sys
 
 LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates', 'list_problems', 'problem_detail', 'past_jobs',
-             'list_skills', 'list_schedules')
+             'list_skills', 'list_schedules', 'for_you')
 
 
 def start(demo=False, phone=False):

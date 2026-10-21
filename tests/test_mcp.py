@@ -18,12 +18,12 @@ def engine(monkeypatch):
     return eng
 
 
-def test_all_eighteen_tools_are_registered():
+def test_all_nineteen_tools_are_registered():
     names = {t.name for t in asyncio.run(m.mcp.list_tools())}
     assert names == {'start_job', 'job_status', 'list_agents', 'agent_detail', 'answer_problem',
                      'stop_agent', 'pause_all', 'resume_all', 'get_updates', 'list_problems', 'problem_detail',
                      'past_jobs', 'list_skills', 'save_skill', 'run_skill', 'schedule_skill', 'list_schedules',
-                     'remove_schedule'}
+                     'remove_schedule', 'for_you'}
 
 
 def test_every_reply_is_at_most_1500_characters(engine):

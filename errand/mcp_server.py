@@ -318,6 +318,14 @@ def remove_schedule(schedule: int) -> str:
 
 
 @tool
+def for_you() -> str:
+    """Suggestions from this laptop's own history: skills worth scheduling, jobs worth repeating or saving,
+    sites that keep blocking. Each says which tool would do it."""
+    tips = _call('GET', '/api/foryou')
+    return '\n'.join(f"- {t['text']} ({t['action']['tool']})" for t in tips) or 'Nothing to suggest yet: run a few jobs first.'
+
+
+@tool
 def get_updates(since: int | None = None) -> str:
     """Agent updates after update number `since` (the newest 50 if left out), oldest first."""
     ups = _call('GET', '/api/updates', params={'since': since} if since is not None else None)

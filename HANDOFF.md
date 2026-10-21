@@ -351,6 +351,15 @@ From `reports/Full feature free Errand plan.md`:
   - **Settings:** `~/.errand/exports.json`; `python -m errand exports` says how to get them.
   - **Not built:** Google Sheets (it needs the user's own OAuth client; the CSV opens in Sheets).
   - **Tests:** 3, with stand-ins.
+- **Piece 12, For You** (`errand/foryou.py`): plain rules on this laptop's own history (no AI, nothing leaves the laptop). It suggests scheduling a skill run by hand 3+ times, re-running a repeated job unseen for a week, saving a repeated job as a skill, and dropping links that keep getting blocked. It shows in `/api/foryou`, the `for_you` tool (19 tools) and the phone list view.
+- **All 12 pieces are built; 95 tests pass.** What waits on the user:
+  - a Gemini key in `~/.errand/gemini_key`
+  - a Telegram bot token, then `errand telegram` to pair
+  - Tailscale on the laptop and phone, then `errand start --phone`
+  - a Cloudflare account for `cloud/`: `errand inbox`, and the helper's `wrangler.toml`
+  - Slack and Notion tokens in `~/.errand/exports.json`
+  - running the `errand autostart` command, if wanted
+  - **Not possible at $0:** running while the laptop is off, CAPTCHA solving (never), WhatsApp. **Left out:** Google Sheets.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
@@ -363,7 +372,7 @@ From `reports/Full feature free Errand plan.md`:
   9. phone over Tailscale (done; needs Tailscale installed)
   10. Cloudflare inbox and website helper (done; needs the user's Cloudflare account to deploy)
   11. Slack and Notion (done; Sheets left out)
-  12. "For You"
+  12. "For You" (done)
 - **Next (needs the user's go-ahead):**
   - the stealth and JavaScript browser steps, and the windows
   - why prompt caching dropped in the 600-question run

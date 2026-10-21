@@ -237,6 +237,12 @@ def start_job(body: dict = Body(...)):
         raise HTTPException(400, str(e))
 
 
+@app.get('/api/foryou', dependencies=[api])
+def for_you():
+    from .foryou import suggestions
+    return [] if DEMO else suggestions(engine.store)
+
+
 @app.get('/api/schedules', dependencies=[api])
 def schedules():
     return [] if DEMO else engine.store.schedules()

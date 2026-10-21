@@ -43,6 +43,7 @@
   </section>
   <section class="card you" aria-labelledby="youh"><h2 id="youh">Needs you</h2><ul id="needs"></ul></section>
   <section class="card" aria-labelledby="probh"><h2 id="probh">Problems</h2><p id="huddle" class="huddle"></p><ul id="board"></ul></section>
+  <section class="card" aria-labelledby="fyh"><h2 id="fyh">For you</h2><ul id="foryou"></ul></section>
   <section class="card" aria-labelledby="uph"><h2 id="uph">Updates</h2><ol id="updates" aria-live="polite"></ol></section>
 </main>
 <script>
@@ -86,9 +87,11 @@ function render(s, needs, board, ups) {
 
 async function refresh() {
   try {
-    const [s, needs, board, ups] = await Promise.all([api('/api/status'), api('/api/agents?state=needs_you'),
-                                                      api('/api/board'), api('/api/updates')]);
+    const [s, needs, board, ups, tips] = await Promise.all([api('/api/status'), api('/api/agents?state=needs_you'),
+                                                            api('/api/board'), api('/api/updates'), api('/api/foryou')]);
     render(s, needs, board, ups);
+    document.getElementById('foryou').replaceChildren(...(tips.length ? tips.map(t => el('li', t.text))
+      : [el('li', 'Suggestions appear after a few jobs.', 'small')]));
     document.getElementById('conn').textContent = 'live';
   } catch (e) {
     document.getElementById('conn').textContent = e.message === '401' ? 'signed out: reload to enter your PIN' : 'offline';
