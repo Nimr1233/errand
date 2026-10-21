@@ -1,0 +1,440 @@
+{
+ "books": [
+  {
+   "page": "books/00.html",
+   "url": "000.html",
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 3
+   }
+  },
+  {
+   "page": "books/01.html",
+   "url": "010.html",
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   }
+  },
+  {
+   "page": "books/02.html",
+   "url": "020.html",
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   }
+  },
+  {
+   "page": "books/03.html",
+   "url": "030.html",
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   }
+  },
+  {
+   "page": "books/04.html",
+   "url": "040.html",
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   }
+  },
+  {
+   "page": "books/05.html",
+   "url": "050.html",
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   }
+  },
+  {
+   "page": "books/06.html",
+   "url": "060.html",
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   }
+  },
+  {
+   "page": "books/07.html",
+   "url": "070.html",
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   }
+  },
+  {
+   "page": "books/08.html",
+   "url": "080.html",
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   }
+  },
+  {
+   "page": "books/09.html",
+   "url": "090.html",
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   }
+  }
+ ],
+ "quotes": [
+  {
+   "page": "quotes/00.html",
+   "url": "https://quotes.toscrape.com/author/Albert-Einstein",
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   }
+  },
+  {
+   "page": "quotes/01.html",
+   "url": "https://quotes.toscrape.com/author/J-K-Rowling",
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate, South Gloucestershire, England, The United Kingdom"
+   }
+  },
+  {
+   "page": "quotes/02.html",
+   "url": "https://quotes.toscrape.com/author/Jane-Austen",
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   }
+  },
+  {
+   "page": "quotes/03.html",
+   "url": "https://quotes.toscrape.com/author/Marilyn-Monroe",
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "page": "quotes/04.html",
+   "url": "https://quotes.toscrape.com/author/Andre-Gide",
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris, France"
+   }
+  },
+  {
+   "page": "quotes/05.html",
+   "url": "https://quotes.toscrape.com/author/Thomas-A-Edison",
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   }
+  },
+  {
+   "page": "quotes/06.html",
+   "url": "https://quotes.toscrape.com/author/Eleanor-Roosevelt",
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "page": "quotes/07.html",
+   "url": "https://quotes.toscrape.com/author/Steve-Martin",
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   }
+  },
+  {
+   "page": "quotes/08.html",
+   "url": "https://quotes.toscrape.com/author/Bob-Marley",
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   }
+  },
+  {
+   "page": "quotes/09.html",
+   "url": "https://quotes.toscrape.com/author/Dr-Seuss",
+   "answers": {
+    "name": "Dr. Seuss",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA, The United States"
+   }
+  }
+ ],
+ "webscraper": [
+  {
+   "page": "webscraper/00.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/60",
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   }
+  },
+  {
+   "page": "webscraper/01.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/61",
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   }
+  },
+  {
+   "page": "webscraper/02.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/62",
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   }
+  },
+  {
+   "page": "webscraper/03.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/32",
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   }
+  },
+  {
+   "page": "webscraper/04.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/63",
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "page": "webscraper/05.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/64",
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   }
+  },
+  {
+   "page": "webscraper/06.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/65",
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 1
+   }
+  },
+  {
+   "page": "webscraper/07.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/66",
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "page": "webscraper/08.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/67",
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 2
+   }
+  },
+  {
+   "page": "webscraper/09.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/68",
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   }
+  }
+ ],
+ "wikipedia": [
+  {
+   "page": "wikipedia/00.html",
+   "url": "https://en.wikipedia.org/wiki/Pride_and_Prejudice",
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": null,
+    "oclc": "38659585"
+   }
+  },
+  {
+   "page": "wikipedia/01.html",
+   "url": "https://en.wikipedia.org/wiki/Nineteen_Eighty-Four",
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   }
+  },
+  {
+   "page": "wikipedia/02.html",
+   "url": "https://en.wikipedia.org/wiki/The_Hobbit",
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   }
+  },
+  {
+   "page": "wikipedia/03.html",
+   "url": "https://en.wikipedia.org/wiki/To_Kill_a_Mockingbird",
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/04.html",
+   "url": "https://en.wikipedia.org/wiki/The_Great_Gatsby",
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/05.html",
+   "url": "https://en.wikipedia.org/wiki/Moby-Dick",
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851",
+    "pages": 635,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/06.html",
+   "url": "https://en.wikipedia.org/wiki/Frankenstein",
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/07.html",
+   "url": "https://en.wikipedia.org/wiki/Dracula",
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   }
+  },
+  {
+   "page": "wikipedia/08.html",
+   "url": "https://en.wikipedia.org/wiki/The_Catcher_in_the_Rye",
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   }
+  },
+  {
+   "page": "wikipedia/09.html",
+   "url": "https://en.wikipedia.org/wiki/Brave_New_World",
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   }
+  }
+ ]
+}
