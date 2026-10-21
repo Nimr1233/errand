@@ -58,11 +58,12 @@ def clean_piece(el):
 
 def numbered_view(html, focus=None, width=120, limit=9000, skip=SKIP):
     """One numbered line per page piece that holds text or a label, inside the page's main block
-    (`focus`, a CSS selector; the whole page when None). Containers whose text lives in their
-    children are skipped. A run of identical empty pieces, like star icons, becomes one line ending
-    in ×N: code counts, not the brain. Returns (the text a brain reads, the elements in line order)."""
+    (`focus`, a CSS selector; the page's body when None: the <head>'s "<title>Book | Shop</title>"
+    would win the snap over the heading). Containers whose text lives in their children are skipped.
+    A run of identical empty pieces, like star icons, becomes one line ending in ×N: code counts, not
+    the brain. Returns (the text a brain reads, the elements in line order)."""
     s = as_page(html)
-    block = s.css(focus) if focus else None
+    block = s.css(focus or 'body')
     els, lines, last, inside = [], [], None, set()
     for el in (block[0] if block else s).css('*'):
         if id(el._root) in inside:  # part of an inline piece already shown whole
@@ -253,17 +254,21 @@ def read_pages(htmls, fields, brain, samples=10, recipe=None, workers=53, **view
     samples: 10, not 5. On fresh Wikipedia pages, 5 boxes happened to share one row order, the
     recipe trusted it and broke the next pages; 10 pages show the order moving (results.md section 8)."""
     pages = [as_page(h) for h in htmls]
-    views = {}
-
-    def ask(i):
-        views[i] = views.get(i) or numbered_view(pages[i], **view)
-        return finish(fields, brain(views[i][0], fields), *views[i])
-
     with ThreadPoolExecutor(workers) as pool:
         n = 0 if recipe is not None else min(samples, len(pages))
-        first = dict(zip(range(n), pool.map(ask, range(n))))
+        first = dict(zip(range(n), pool.map(lambda i: read_page(pages[i], fields, brain, **view), range(n))))
         recipe = recipe if recipe is not None else learn_recipe([(pages[i], a) for i, a in first.items()], fields, **view)
-        rest = [i for i in range(len(pages)) if i not in first] if set(fields) - set(recipe) else []
-        brained = {**first, **dict(zip(rest, pool.map(ask, rest)))}
-    return [{**{f: brained.get(i, {}).get(f) for f in fields}, **replay(p, recipe, fields)}
-            for i, p in enumerate(pages)], recipe
+        rest = [i for i in range(len(pages)) if i not in first]
+        later = dict(zip(rest, pool.map(lambda i: read_page(pages[i], fields, brain, recipe, **view), rest)))
+    return [{**first[i], **replay(p, recipe, fields)} if i in first else later[i] for i, p in enumerate(pages)], recipe
+
+
+def read_page(html, fields, brain, recipe=None, **view):
+    """One page: code reads the fields the recipe covers, and a brain reads the page only if any
+    field is left. `brain` may be None when the recipe covers every field."""
+    page, recipe = as_page(html), recipe or {}
+    got = {}
+    if set(fields) - set(recipe):
+        text, els = numbered_view(page, **view)
+        got = finish(fields, brain(text, fields), text, els)
+    return {**{f: got.get(f) for f in fields}, **replay(page, recipe, fields)}

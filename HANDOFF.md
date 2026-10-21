@@ -283,9 +283,14 @@ From `reports/Full feature free Errand plan.md`:
   - The bench scripts call it. `tests/test_extract.py` adds 9 offline tests; the suite has 48.
   - A fresh third set (`bench/testset.py --set fresh`) checks it: fresh 94.1% → 97.3%, 6 fixed, 0 broken, with half the brain calls.
   - Two engine bugs were found and fixed: agreeing on missing values counted as evidence, and 5 samples were too few.
-  - Not built: the job loop that fetches pages and runs `read_pages` for real jobs. The demo engine still fakes work.
+- **The real job loop** (`bench/results.md` section 9): `errand start` runs real jobs, and `--demo` keeps the fake agents.
+  - Code: `errand/engine.py` (53 agents, one task list), `errand/fetch.py` (polite fetching) and `errand/brains.py` (llama-server).
+  - Claude in the room starts jobs with `start_job(prompt, urls, fields)`, and results go to `jobs/<job>.csv`.
+  - Live check: 20 books.toscrape pages, 100/100 fields right, 10 brain calls.
+  - The live run found a bug: without `focus`, the `<title>` won the snap. It is fixed: the view is the body.
+  - Tests: `tests/test_engine.py` (fake site, fake brain), plus `tests/conftest.py`, which keeps the other tests on the demo.
 - **Next (needs the user's go-ahead):**
-  - the real job loop (fetch, then `read_pages`, then the room)
+  - the stealth and JavaScript browser steps, and the windows
   - why prompt caching dropped in the 600-question run
   - recipes keyed by row label, for sites like Wikipedia
   - or phase 2, clicking
@@ -319,8 +324,8 @@ From `reports/Full feature free Errand plan.md`:
 | `bench/results.md`, `bench/windows.md`, `bench/*.json` | benchmark results |
 | `reports/*.md` | 4 research reports: $0 agent, 53 free agents, max brains, full-feature plan |
 | `research_notes/**` | raw research notes behind the reports |
-| `errand/` | mission control: room page, server, demo engine, terminal bridge, connector, CLI (section 9); `extract.py`, the page reader (session 4) |
-| `tests/` | pytest suite (48 tests); `pytest.ini` sets the path |
+| `errand/` | mission control: room page, server, demo engine, terminal bridge, connector, CLI (section 9); the real engine (session 4): `engine.py`, `fetch.py`, `brains.py`, `extract.py` |
+| `tests/` | pytest suite (56 tests); `pytest.ini` sets the path; `conftest.py` puts the room tests on the demo engine |
 | `.claude/launch.json` | one preview config: `python -m errand start` |
 | `.gitignore` | ignores `bench/cache/`, `bench/server-*.log`, `__pycache__/`, `tests/out/`, `.pytest_cache/` |
 

@@ -3,3 +3,4 @@ bench/server-*.log
 __pycache__/
 tests/out/
 .pytest_cache/
+jobs/

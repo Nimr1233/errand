@@ -22,10 +22,8 @@ ROOT = pathlib.Path(__file__).parent
 sys.path.insert(0, str(ROOT.parent))
 from errand.extract import inline_only, last_json, numbered_view, own_text, piece_text  # noqa: E402,F401
 from errand import extract  # noqa: E402
+from errand.brains import FLAGS, LLAMA, MODEL, URL  # noqa: E402  the engine's measured settings
 PAGES = sorted((ROOT / 'cache' / 'A').glob('*.html'))
-LLAMA = pathlib.Path.home() / 'AppData/Local/Temp/errand/llama/llama-server.exe'
-MODEL = pathlib.Path.home() / 'AppData/Local/Temp/errand/dl/Qwen3.5-2B-Q4_K_M.gguf'
-URL = 'http://127.0.0.1:8080'
 FOCUS = 'article.product_page'
 FIELDS = ['title', 'price', 'availability', 'upc', 'rating']
 STARS = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
@@ -136,11 +134,6 @@ class GpuSampler(threading.Thread):
             self.vram = max(self.vram, int(v or 0))
             self.shared = max(self.shared, self.shared_mib())
             self.stop.wait(1)
-
-
-# -rea off, not --reasoning-budget 0: same accuracy, about 13% faster (bench/results.md section 5)
-FLAGS = ['-ngl', '99', '-fa', 'on', '-ctk', 'q8_0', '-ctv', 'q8_0', '-ctxcp', '2', '-cram', '2048',
-         '-rea', 'off']
 
 
 def start_server(np_, ctx, log, flags=FLAGS):

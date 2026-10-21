@@ -7,14 +7,18 @@ import sys
 LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates', 'list_problems', 'problem_detail')
 
 
-def start():
-    """Run mission control (8765) and the terminal bridge (8766) together."""
+def start(demo=False):
+    """Run mission control (8765) and the terminal bridge (8766) together. demo: fake agents."""
+    import os
     import uvicorn
+    if demo:
+        os.environ['ERRAND_DEMO'] = '1'  # read when the server module loads, just below
     from . import server, term
     # warnings only: uvicorn's info lines print /ws?token=... and /term?token=..., token included
     servers = [uvicorn.Server(uvicorn.Config(app, host='127.0.0.1', port=port, access_log=False, log_level='warning'))
                for app, port in ((server.app, server.PORT), (term.app, term.PORT))]
-    print(f'Errand is running. Mission control: http://127.0.0.1:{server.PORT}/   (Ctrl+C stops it)', flush=True)
+    print(f"Errand is running{' (demo agents)' if server.DEMO else ''}. Mission control: "
+          f'http://127.0.0.1:{server.PORT}/   (Ctrl+C stops it)', flush=True)
 
     async def both():
         await asyncio.gather(*(s.serve() for s in servers))
@@ -56,9 +60,11 @@ def main(argv=None):
     p.add_argument('command', choices=['start', 'mcp', 'setup', 'login'],
                    help='start: run mission control · mcp: the Claude Code connector · setup: how to connect it'
                         ' · login: log in to Claude Code here')
-    cmd = p.parse_args(argv).command
+    p.add_argument('--demo', action='store_true', help='start: fake agents instead of the real engine')
+    a = p.parse_args(argv)
+    cmd = a.command
     if cmd == 'start':
-        start()
+        start(a.demo)
     elif cmd == 'setup':
         setup()
     elif cmd == 'login':

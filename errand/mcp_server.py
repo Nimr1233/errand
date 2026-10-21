@@ -92,14 +92,24 @@ def _agent_line(a):
 
 
 @tool
-def start_job(prompt: str, urls: list[str] | None = None, file: str | None = None) -> str:
-    """Start a job: one prompt run over many pages. Give `urls` (a list of links) or `file` (a text
-    file on this laptop with one link per line). Returns the job name and its page count."""
+def start_job(prompt: str, urls: list[str] | None = None, file: str | None = None,
+              fields: dict[str, str] | None = None, focus: str | None = None) -> str:
+    """Start a job: read the same fields from many pages. Give `urls` (a list of links) or `file` (a
+    text file on this laptop with one link per line), and `fields`: what to read from each page, as
+    name -> what it is in plain words. Start a description with "number:" or "date:" for numbers and
+    dates, e.g. {"title": "the book title", "price": "the price with currency symbol",
+    "stock": "number: copies in stock"}. Optional `focus`: a CSS selector for the page's main block,
+    when the rest of the page is long. Pages are fetched politely (robots.txt, one request per site
+    every 2-3 s); bot checks and logins are never passed. Returns the job name and its page count."""
     body = {'prompt': prompt}
     if urls:
         body['urls'] = urls
     if file:
         body['file'] = file
+    if fields:
+        body['fields'] = fields
+    if focus:
+        body['focus'] = focus
     j = _call('POST', '/api/jobs', json=body)
     return f"Started job '{j['job']}' · {j['pages']} pages. Follow it with job_status or get_updates."
 
@@ -118,6 +128,8 @@ def job_status(job: str | None = None) -> str:
         f"Job '{s['job']}': {s['pages_done']}/{s['total']} pages · {state}",
         f"Agents finished: {s['finished']}/{s['agents']} · problems waiting: {s['problems']} "
         f"({s['raised']} raised so far) · blocked pages: {s['blocked']}",
+        f"Fetched {s['fetched']}/{s['total']} · brains {s['brains_state']} · recipes learned: {s['recipes']} · "
+        f"brain calls: {s['brain_calls']} · pages read by code: {s['by_code']}" if s.get('mode') == 'real' else
         f"Windows: {s['windows_in_use']}/{s['windows']} in use · {s['shelf']} pages waiting for a window · "
         f"hand-offs so far: {s['handoffs']}",
         f"Results: {s['results']}"])

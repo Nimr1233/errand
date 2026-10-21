@@ -301,7 +301,50 @@ These 80 pages come from 4 sites with fixed layouts, and the recipes are positio
 
 **Seen but not looked into:** this 600-question run reused far fewer cached prompt tokens than the 400-question runs (62 vs 482 a question) and ran at 2.38 pages/s instead of about 4. Accuracy is not affected.
 
-**Not built yet:** the job loop that fetches pages and calls `read_pages` for real jobs. The room's demo engine still fakes the work.
+## 9. The real job loop (2026-10-21, `errand/engine.py`, `errand/fetch.py`, `errand/brains.py`)
+
+`python -m errand start` now runs real jobs; `--demo` keeps the fake agents. A job is links plus fields. Claude in the room starts it through the connector's `start_job(prompt, urls, fields)`.
+
+**How a job runs:**
+- **The agents:** 53 agents share one task list. An agent takes the first task it can do now, and never waits in line.
+- **Fetching:** robots.txt is obeyed, and reading it counts as that site's request. Requests go one at a time per site, with a 2–3 s pause, under an honest name. A 429 gets a 60/120/240 s back-off. Bot checks and login pages stop that page; Errand never solves or logs in. Links to this laptop or a private network are refused.
+- **Reading:** brains read the first 10 pages of each kind of page (same site and path depth), and the vote learns a recipe from their answers. Code reads the rest, with a brain only for fields no recipe covers.
+- **Brains:** llama-server starts with the first job, with the measured settings, and stops with Errand.
+- **Results:** results go to `jobs/<job>.csv`, one row per link with its status, and an earlier job's file is never overwritten.
+- **The room:** the room and connector show real numbers: pages fetched, pages read by code, recipes, brain calls.
+
+**Live check:** 20 real pages from books.toscrape.com, fields title, price, stock, rating and UPC, no `focus` given:
+
+| Run | Fields right | Brain calls | Read by code | Time |
+|---|---|---|---|---|
+| First | 80 / 100: every title came back as "In Her Wake \| Books to Scrape - Sandbox" | 10 | 10 | about 75 s |
+| **After the fix** | **100 / 100** | 10 | 10 | 78 s (the polite pace: 20 pages × 2–3 s) |
+
+**What went wrong in the first run:**
+- With no `focus`, the page view included `<head>`. The tab title starts with the book's name, so the snap copied it, and the recipe learned that spot.
+- The view is now the page's `<body>` when no focus is given, with a test. The bench always passes a focus, so its results don't change.
+
+**Tests:** `tests/test_engine.py` has 7 tests against a fake website served on this laptop, with real HTTP and a fake brain. They cover:
+- robots.txt, and the one-at-a-time pace with pauses
+- the 429 back-off
+- bot check and login pages
+- refused links
+- results never overwritten
+- no brains: the job still ends, with a reason
+- pause
+- the API and the connector
+
+The whole suite: 56 tests.
+
+**Not built yet:**
+- the stealth and JavaScript browser steps (such pages end as blocked)
+- browser windows and hand-offs
+- checker brains
+- real huddles
+- a raw-page cache on disk
+- live tiles of what each brain writes
+
+Idle agents show "picking up the next task" while a site pauses.
 
 ## Against rtrvr's demo
 

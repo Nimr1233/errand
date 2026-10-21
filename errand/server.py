@@ -1,5 +1,6 @@
 """Mission control server (main spec section 17, room spec): serves the 3D room page, streams live
-state over /ws, and offers the local API that the Errand connector (MCP) calls.
+state over /ws, and offers the local API that the Errand connector (MCP) calls. It runs the real
+engine (errand/engine.py); with ERRAND_DEMO=1 (`errand start --demo`, and the tests) the demo engine.
 
 Listens on 127.0.0.1:8765. Every request must carry the right Host (blocks DNS rebinding), and
 /api and /ws also need the token, which is made at each start, embedded in the room page and written
@@ -15,7 +16,7 @@ from contextlib import asynccontextmanager
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket
 from fastapi.responses import HTMLResponse, PlainTextResponse
 
-from . import demo
+from . import demo, engine as real
 
 PORT = 8765
 # shortcut: laptop only for now; the phone (Tailscale Host header + pairing, section 17) comes later
@@ -24,7 +25,8 @@ TOKEN_FILE = pathlib.Path.home() / '.errand' / 'token'
 ROOM = pathlib.Path(__file__).with_name('static') / 'room.html'
 
 TOKEN = secrets.token_urlsafe(32)
-engine = demo.DemoEngine()
+DEMO = os.environ.get('ERRAND_DEMO') == '1'
+engine = demo.DemoEngine() if DEMO else real.Engine(server_log=pathlib.Path.home() / '.errand' / 'llama-server.log')
 clients = set()
 
 
@@ -55,10 +57,13 @@ async def broadcast(msg):
 @asynccontextmanager
 async def lifespan(app):
     write_token()
-    engine.fast_forward(612, problems=2, huddles=1)  # demo: open mid-job with problems, like the mockup
+    if DEMO:
+        engine.fast_forward(612, problems=2, huddles=1)  # demo: open mid-job with problems, like the mockup
     task = asyncio.create_task(clock())
     yield
     task.cancel()
+    if not DEMO:
+        engine.close()  # stops the agents and the brain server it started
 
 
 app = FastAPI(lifespan=lifespan)
@@ -140,16 +145,20 @@ def updates(since: int | None = None):
 
 @app.post('/api/jobs', dependencies=[api])
 def start_job(body: dict = Body(...)):
-    urls = body.get('urls') or []
-    count = len(urls)
+    urls = [u for u in body.get('urls') or [] if isinstance(u, str)]
     if body.get('file'):
         path = pathlib.Path(os.path.expanduser(body['file']))
         if not path.is_file():
             raise HTTPException(400, f'file not found: {path}')
-        count = sum(1 for line in path.read_text(encoding='utf-8', errors='replace').splitlines() if line.strip())
-    if not count:
+        urls += [line.strip() for line in path.read_text(encoding='utf-8', errors='replace').splitlines() if line.strip()]
+    if not urls:
         raise HTTPException(400, 'give urls or a file with one link per line')
-    return engine.start_job(body.get('prompt', ''), count)
+    if DEMO:
+        return engine.start_job(body.get('prompt', ''), len(urls))
+    try:
+        return engine.start_job(body.get('prompt', ''), urls, body.get('fields'), body.get('focus'))
+    except ValueError as e:
+        raise HTTPException(400, str(e))
 
 
 @app.post('/api/problems/{n}', dependencies=[api])

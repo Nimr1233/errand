@@ -245,12 +245,13 @@ if(!st){c.fillStyle='#62B9C1';c.font=mono(40);c.fillText('connecting to Errand..
 const txt=st.pages_done+' / '+st.total;c.shadowColor='#8FF7FB';c.shadowBlur=20;c.fillStyle='#8FF7FB';fitFont(c,txt,760,104,num);c.fillText(txt,512,196);c.shadowBlur=0;
 c.fillStyle='#0A2226';c.fillRect(162,226,700,18);c.fillStyle='#3FC8D0';c.fillRect(162,226,700*st.pages_done/st.total,18);
 const sec=st.seconds_left?Math.ceil(st.seconds_left/10)*10:0;c.fillStyle='#62B9C1';c.font=mono(32);
-c.fillText(st.complete?'MISSION COMPLETE · all '+st.total+' pages done':st.paused?'PAUSED · all agents waiting for you':st.speed?st.speed.toFixed(1)+' pages a second · about '+(sec>=60?Math.floor(sec/60)+' min ':'')+(sec%60)+' s left':st.problems?'stalled · '+st.problems+' waiting on you':'measuring speed...',512,300);
+c.fillText(!st.total?"NO JOB YET · start one at the chief's computer":st.brains_state==='starting'?'starting the brains...':st.complete?'MISSION COMPLETE · all '+st.total+' pages done':st.paused?'PAUSED · all agents waiting for you':st.speed?st.speed.toFixed(1)+' pages a second · about '+(sec>=60?Math.floor(sec/60)+' min ':'')+(sec%60)+' s left':st.problems?'stalled · '+st.problems+' waiting on you':'measuring speed...',512,300);
 const h=st.huddle;if(h){c.fillStyle='#E39B2D';c.font=mono(22);c.fillText(fit(c,'HUDDLE '+h.id+' · '+h.kind+' on '+h.site+' · round '+h.round+' · '+h.size+' agents',800),512,330)}
 big.t.needsUpdate=true}
 function deskDraw(i,label,value,sub){const d=deskMons[i],c=d.c;c.shadowBlur=0;c.fillStyle='#021316';c.fillRect(0,0,512,300);c.strokeStyle='#1F5F66';c.lineWidth=4;c.strokeRect(3,3,506,294);
 c.textAlign='left';c.fillStyle='#62B9C1';c.font=mono(32);c.fillText(label,24,56);c.shadowColor='#8FF7FB';c.shadowBlur=14;c.fillStyle='#8FF7FB';fitFont(c,value,464,72,num);c.fillText(value,24,166);c.shadowBlur=0;c.fillStyle='#62B9C1';c.font=mono(28);c.fillText(fit(c,sub,464),24,246);d.t.needsUpdate=true}
 function desks(){const st=ST;if(!st)return;
+if(st.desks){st.desks.forEach((d,i)=>deskDraw(i,d[0],d[1],d[2]));return}
 deskDraw(0,'WINDOWS IN USE',st.windows_in_use+'/'+st.windows,'private browser windows');
 deskDraw(1,'BRAINS ONLINE',st.brains+'/'+st.brains,st.huddle?st.huddle.size+' in the huddle on '+st.huddle.id:st.paused?'paused':'all thinking at once');
 deskDraw(2,'PAGES WAITING FOR A WINDOW',String(st.shelf),st.shelf?'next: '+st.next_on_shelf.map(p=>p.split('/').pop()).join(' '):'none waiting');
@@ -362,7 +363,7 @@ function apply(m){const st=m.status;ST=st;R.status=st;
 if(m.initial){upList.length=0;upEl.textContent=''}
 for(const d of m.agents){const s=S[d.n-1];if(s){s.d=d;draw(s)}}
 const hd=st.huddle,fx=st.fixed_by_huddles;
-setTV('done',st.finished,'/'+st.agents,TV.done.d.sub);setTV('hand',st.handoffs,'/'+(st.handoffs+st.shelf),TV.hand.d.sub);
+setTV('done',st.finished,'/'+st.agents,TV.done.d.sub);if(st.tv_hand){const h=st.tv_hand;TV.hand.d.label=h.label;setTV('hand',h.val,h.of,h.sub)}else setTV('hand',st.handoffs,'/'+(st.handoffs+st.shelf),TV.hand.d.sub);
 // the small line holds about 38 characters at this size
 setTV('prob',st.problems,'',hd?'huddle on '+hd.id+' · '+st.problems+' for you'
 :fx?(st.problems?st.problems+' waiting on you':'all clear')+' · '+fx+' fixed by huddles'

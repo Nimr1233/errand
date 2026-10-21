@@ -11,22 +11,13 @@ from concurrent.futures import ThreadPoolExecutor
 from scrapling.fetchers import Fetcher, StealthyFetcher
 
 ROOT = pathlib.Path(__file__).parent
+sys.path.insert(0, str(ROOT.parent))
+from errand.fetch import CHALLENGE_MARKERS, challenged, text  # noqa: E402,F401  the engine's own checks
 CACHE = ROOT / 'cache'
 OUT = ROOT / 'fetch_results.json'
 SET_B = ['https://www.scrapingcourse.com/cloudflare-challenge',
          'https://www.scrapingcourse.com/antibot-challenge']
 B_TRIES = 10
-CHALLENGE_MARKERS = ('just a moment', 'challenge-platform', 'verify you are human',
-                     'enable javascript and cookies', 'checking your browser')
-
-
-def text(r):
-    b = r.body
-    return b.decode('utf-8', 'replace') if isinstance(b, (bytes, bytearray)) else b
-
-
-def challenged(status, html):
-    return status in (403, 429, 503) or any(m in html.lower() for m in CHALLENGE_MARKERS)
 
 
 def set_a_urls():

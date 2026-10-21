@@ -32,6 +32,13 @@ def test_view_numbers_pieces_hides_style_and_counts_icons():
     assert 'padding' not in view and 'var n' not in x.numbered_view(product('A'))[0]  # style and script never shown
 
 
+def test_without_focus_the_view_is_the_body_so_the_tab_title_never_wins():
+    """Found live on books.toscrape: "In Her Wake" snapped to <title>In Her Wake | Books to Scrape</title>."""
+    page = '<html><head><title>In Her Wake | Books to Scrape</title></head><body><h1>In Her Wake</h1></body></html>'
+    view, els = x.numbered_view(page)
+    assert view == '[1] h1: In Her Wake' and x.snap_text('In Her Wake', els) == 'In Her Wake'
+
+
 def test_view_keeps_a_linked_piece_whole():
     view, _ = x.numbered_view('<table><tr><td><a href="/e">T. Egerton</a>, Whitehall</td></tr></table>')
     assert view == '[1] td: T. Egerton, Whitehall'
