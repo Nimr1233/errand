@@ -83,31 +83,57 @@ def page_text(html, limit=6000):
     return str(body)[:limit]
 
 
+INLINE = {'a', 'abbr', 'b', 'bdi', 'br', 'cite', 'em', 'i', 'img', 'small', 'span', 'strong', 'sub', 'sup', 'time'}
+
+
 def own_text(el):
     return ' '.join(t.strip() for t in el.xpath('text()').getall() if t.strip())
 
 
-def numbered_view(html, width=120):
-    """One numbered line per page piece that holds text or a label. Containers whose text lives in
-    their children are skipped, and so are empty icons, to save the 4,096-token slot.
+def inline_only(el):
+    """Insides are only inline bits that all hold text. An empty icon inside (star icons next to
+    "14 reviews") carries meaning, so such a piece is not flattened and the icons keep their line."""
+    kids = list(el.children)
+    return bool(kids) and bool(el.get_all_text(strip=True)) and \
+        all(c.tag in INLINE and (c.tag == 'br' or c.get_all_text(strip=True)) for c in kids)
+
+
+def piece_text(el):
+    """A piece's text: its own text, or all of it when its insides are only inline bits like links
+    (Wikipedia's "<a>T. Egerton</a>, Whitehall" stays one piece)."""
+    if inline_only(el):
+        return re.sub(r'\s+', ' ', el.get_all_text(separator=' ', strip=True)).replace(' ,', ',')
+    return own_text(el)
+
+
+def numbered_view(html, width=120, focus='article.product_page', limit=9000):
+    """One numbered line per page piece that holds text or a label, inside the page's main block
+    (`focus`). Containers whose text lives in their children are skipped. A run of identical
+    empty pieces, like star icons, becomes one line ending in ×N: code counts, not the brain.
     Returns (the text a brain reads, the elements in line order)."""
     s = Selector(html)
-    block = s.css('article.product_page')
-    els, lines = [], []
+    block = s.css(focus) if focus else None
+    els, lines, last, inside = [], [], None, set()
     for el in (block[0] if block else s).css('*'):
-        own = own_text(el)
-        labels = {k: v for k, v in el.attrib.items() if k in KEEP or k.startswith('data-')}
-        if not own:
-            if el.get_all_text(strip=True):  # a container: its children carry the text
-                continue
-            if not el.children and set(labels) <= {'class'}:  # an empty icon like <i class="icon-star">
-                continue
-            if not labels:
-                continue
-        els.append(el)
+        if id(el._root) in inside:  # part of an inline piece already shown whole
+            continue
+        own = piece_text(el)
+        if inline_only(el):
+            inside.update(id(d) for d in el._root.iterdescendants())
+        labels = {k: re.sub(r'\s+', ' ', v).strip()[:80] for k, v in el.attrib.items()
+                  if k in KEEP or k.startswith('data-')}
+        if not own and (el.get_all_text(strip=True) or not labels):  # a container, or nothing to show
+            continue
         tag = ' '.join([el.tag] + [f'{k}={v}' for k, v in labels.items()])
-        lines.append(f'[{len(els)}] {tag}: {own[:width]}')
-    return '\n'.join(lines), els
+        if not own and not el.children and tag == last:  # same empty icon again
+            count = int(lines[-1].rsplit('×', 1)[1]) + 1 if '×' in lines[-1] else 2
+            lines[-1] = f"{lines[-1].rsplit(' ×', 1)[0]} ×{count}"
+            continue
+        last = tag if not own and not el.children else None
+        els.append(el)
+        lines.append(f'[{len(els)}] {tag}: {own[:width]}'.rstrip(': ') if not own else f'[{len(els)}] {tag}: {own[:width]}')
+    text = '\n'.join(lines)
+    return text[:limit], els  # shortcut: cut at `limit` chars, a page whose answers sit past it fails; prune smarter when that shows up
 
 
 def snap(value, field, els):
@@ -120,9 +146,9 @@ def snap(value, field, els):
             if WORDS.get(value) in el.attrib.get('class', '').split():
                 return n
         elif field == 'availability':  # a whole number, not the ".18" inside a price like £44.18
-            if re.search(rf'(?<![\d.,]){value}(?!\d|[.,]\d)', own_text(el)):
+            if re.search(rf'(?<![\d.,]){value}(?!\d|[.,]\d)', piece_text(el)):
                 return n
-        elif str(value).strip().casefold() in own_text(el).casefold():
+        elif str(value).strip().casefold() in piece_text(el).casefold():
             return n
     return None
 
@@ -132,7 +158,7 @@ def pointed_value(el, field):
     if field == 'rating':
         words = el.attrib.get('class', '').split()
         return STARS.get(words[-1]) if words else None
-    return own_text(el) or str(el.get_all_text(separator=' ', strip=True))
+    return piece_text(el) or str(el.get_all_text(separator=' ', strip=True))
 
 
 def last_json(text):
@@ -177,10 +203,14 @@ class GpuSampler(threading.Thread):
             self.stop.wait(1)
 
 
-def start_server(np_, ctx, log):
-    cmd = [str(LLAMA), '-m', str(MODEL), '-np', str(np_), '-c', str(np_ * ctx), '-ngl', '99',
-           '-fa', 'on', '-ctk', 'q8_0', '-ctv', 'q8_0', '-ctxcp', '2', '-cram', '2048',
-           '--reasoning-budget', '0', '--host', '127.0.0.1', '--port', '8080']
+# -rea off, not --reasoning-budget 0: same accuracy, about 13% faster (bench/results.md section 5)
+FLAGS = ['-ngl', '99', '-fa', 'on', '-ctk', 'q8_0', '-ctv', 'q8_0', '-ctxcp', '2', '-cram', '2048',
+         '-rea', 'off']
+
+
+def start_server(np_, ctx, log, flags=FLAGS):
+    cmd = [str(LLAMA), '-m', str(MODEL), '-np', str(np_), '-c', str(np_ * ctx), *flags,
+           '--host', '127.0.0.1', '--port', '8080']
     proc = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT)
     for _ in range(360):  # up to 3 minutes to load
         try:

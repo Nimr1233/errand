@@ -257,6 +257,17 @@ From `reports/Full feature free Errand plan.md`:
   - Room: amber huddle screens, the PROBLEMS TV's small line, a main-screen line. Connector: `list_problems` and `problem_detail` (look-only). API: `/api/board`, `/api/board/{id}`.
   - Demo only: fixes and scores are random. The real engine will run the same rounds with real brains.
 
+**Session 4 (2026-10-21): making the brains smarter.** Full numbers are in `bench/results.md` sections 4 and 5.
+- **Point, don't write (`bench/brains.py --point`).** The brain reads a numbered list of page pieces with labels kept and fills a fixed answer form. Code then snaps each value to its page piece and builds CSS recipes from the pieces (Scrapling's `generate_css_selector`). Books site: 74% → 95% from brains, 100% from recipes.
+- **Multi-site test set (`bench/testset.py`).** 4 sites × 10 pages, 190 answers. robots.txt was checked, requests are polite and honest, and the pages are cached in `bench/cache/testset/` (git-ignored). The user spot-checked 12 rows against the real pages.
+- **Harness tuner, phase 1 (`bench/score.py`), approved without a spec doc.** The scoreboard runs 5 runs per page with page-bootstrap error bars, counts a wrong "none" as an error, and does paired McNemar comparisons. The answer key was right on all 12 disputed items. A snap bug that copied footnote marks was fixed (93.8% → 95.1%). Of the A/B tests, `-rea off` won (same accuracy, about 13% faster) and is now the default; `-ctxcp 4` and dropping the answer form changed nothing.
+- **The user asked to install google-research/harness2.** It was advised against, and the user agreed to build our own tuner instead. The research behind it is in `reports/Harness tuner for small web agents.md`. The LLM council's plan:
+  - phase 1: scoreboard and free server settings (done)
+  - phase 2: clicking
+  - phase 3: a failure-fix loop with Claude, then a one-knob tuner, then a 4B fallback
+  - cut: successive halving, few-shot examples, voting, quant search
+- **Next:** phase 2 or phase 3 need the user's go-ahead. Phase 3's first list is the 9 items still wrong, in `bench/results.md` section 5.
+
 **Known limits (marked `shortcut:` in the code where it applies):**
 - With two pages open at once, both answer the terminal's live queries (Claude Code would get each answer twice). One room tab is fine.
 - The TV digits reach 2/3 of the screen height only for short numbers; `23/53` is width-limited to about half the height. Readable at 700 px (checked).

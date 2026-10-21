@@ -1,0 +1,3744 @@
+{
+ "variant": "noschema",
+ "runs": 5,
+ "server_cmd": "C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\llama\\llama-server.exe -m C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\dl\\Qwen3.5-2B-Q4_K_M.gguf -np 53 -c 217088 -ngl 99 -fa on -ctk q8_0 -ctv q8_0 -ctxcp 2 -cram 2048 --reasoning-budget 0 --host 127.0.0.1 --port 8080",
+ "scores": {
+  "books": {
+   "accuracy": 0.98,
+   "ci95": [
+    0.94,
+    1.0
+   ],
+   "runs_min_max": [
+    0.98,
+    0.98
+   ]
+  },
+  "quotes": {
+   "accuracy": 0.893,
+   "ci95": [
+    0.753,
+    1.0
+   ],
+   "runs_min_max": [
+    0.867,
+    0.9
+   ]
+  },
+  "webscraper": {
+   "accuracy": 0.96,
+   "ci95": [
+    0.9,
+    1.0
+   ],
+   "runs_min_max": [
+    0.96,
+    0.96
+   ]
+  },
+  "wikipedia": {
+   "accuracy": 0.933,
+   "ci95": [
+    0.877,
+    0.983
+   ],
+   "runs_min_max": [
+    0.933,
+    0.933
+   ]
+  },
+  "all": {
+   "accuracy": 0.946,
+   "ci95": [
+    0.912,
+    0.977
+   ],
+   "unstable_items": 3,
+   "none_items_wrong": 4,
+   "false_none": 0
+  }
+ },
+ "speed": {
+  "pages_per_second": 2.61,
+  "wall_seconds": 76.6,
+  "valid_json": 1.0,
+  "thinking_leaks": 0,
+  "mean_prompt_tokens": 308,
+  "mean_cached_tokens": 342.8,
+  "latency_p50": 17.41
+ },
+ "wrong_most_runs": [
+  {
+   "item": "books/00 rating",
+   "truth": 3,
+   "right_runs": "0/5",
+   "brain": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "item": "quotes/04 born_location",
+   "truth": "Paris, France",
+   "right_runs": "0/5",
+   "brain": [
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris",
+    "Paris"
+   ]
+  },
+  {
+   "item": "quotes/09 born_location",
+   "truth": "Springfield, MA, The United States",
+   "right_runs": "0/5",
+   "brain": [
+    "Springfield, MA",
+    "Springfield, MA",
+    "Springfield, MA",
+    "Springfield, MA",
+    "Springfield, MA"
+   ]
+  },
+  {
+   "item": "quotes/09 name",
+   "truth": "Dr. Seuss",
+   "right_runs": "0/5",
+   "brain": [
+    "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg"
+   ]
+  },
+  {
+   "item": "webscraper/06 rating",
+   "truth": 1,
+   "right_runs": "0/5",
+   "brain": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "item": "webscraper/08 rating",
+   "truth": 2,
+   "right_runs": "0/5",
+   "brain": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "item": "wikipedia/00 pages",
+   "truth": null,
+   "right_runs": "0/5",
+   "brain": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "item": "wikipedia/04 pages",
+   "truth": null,
+   "right_runs": "0/5",
+   "brain": [
+    0,
+    180,
+    180,
+    0,
+    0
+   ]
+  },
+  {
+   "item": "wikipedia/05 published",
+   "truth": "October 18, 1851",
+   "right_runs": "0/5",
+   "brain": [
+    "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "October 18, 1851 (United Kingdom) November 14, 1851 (United States)"
+   ]
+  },
+  {
+   "item": "wikipedia/07 pages",
+   "truth": null,
+   "right_runs": "2/5",
+   "brain": [
+    0,
+    null,
+    null,
+    0,
+    0
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "site": "books",
+   "page": 0,
+   "seconds": 22.3,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"A Light in the Attic\",\n  \"price\": \"£51.77\",\n  \"availability\": 22,\n  \"upc\": \"a897fe39b1053632\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 535,
+   "cached_tokens": 0,
+   "gen_tokens": 76
+  },
+  {
+   "site": "books",
+   "page": 1,
+   "seconds": 24.49,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Starving Hearts (Triangular Trade Trilogy, #1)\",\n  \"price\": \"£13.99\",\n  \"availability\": 19,\n  \"upc\": \"0312262ecafa5a40\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 1345,
+   "cached_tokens": 0,
+   "gen_tokens": 79
+  },
+  {
+   "site": "books",
+   "page": 2,
+   "seconds": 22.62,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"In Her Wake\",\n  \"price\": \"£12.84\",\n  \"availability\": 19,\n  \"upc\": \"23356462d1320d61\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 1330,
+   "cached_tokens": 0,
+   "gen_tokens": 74
+  },
+  {
+   "site": "books",
+   "page": 3,
+   "seconds": 25.56,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"The Four Agreements: A Practical Guide to Personal Freedom\",\n  \"price\": \"£17.66\",\n  \"availability\": 18,\n  \"upc\": \"6258a1f6a6dcfe50\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 1329,
+   "cached_tokens": 0,
+   "gen_tokens": 80
+  },
+  {
+   "site": "books",
+   "page": 4,
+   "seconds": 27.66,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Slow States of Collapse: Poems\",\n  \"price\": \"£57.31\",\n  \"availability\": 17,\n  \"upc\": \"b4fd5943413e089a\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 1348,
+   "cached_tokens": 0,
+   "gen_tokens": 77
+  },
+  {
+   "site": "books",
+   "page": 5,
+   "seconds": 28.89,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink\",\n  \"price\": \"£25.52\",\n  \"availability\": 16,\n  \"upc\": \"9a9d6e9bc555731e\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 1298,
+   "cached_tokens": 0,
+   "gen_tokens": 93
+  },
+  {
+   "site": "books",
+   "page": 6,
+   "seconds": 28.12,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"The Nameless City (The Nameless City #1)\",\n  \"price\": \"£38.16\",\n  \"availability\": 16,\n  \"upc\": \"7d385d34d12e60ff\",\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 1341,
+   "cached_tokens": 0,
+   "gen_tokens": 81
+  },
+  {
+   "site": "books",
+   "page": 7,
+   "seconds": 24.48,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"The Art Forger\",\n  \"price\": \"£40.76\",\n  \"availability\": 16,\n  \"upc\": \"80cfab6bcff3a244\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 1349,
+   "cached_tokens": 0,
+   "gen_tokens": 71
+  },
+  {
+   "site": "books",
+   "page": 8,
+   "seconds": 29.34,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)\",\n  \"price\": \"£13.61\",\n  \"availability\": 16,\n  \"upc\": \"0fa6dceead7ce47a\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 1430,
+   "cached_tokens": 0,
+   "gen_tokens": 97
+  },
+  {
+   "site": "books",
+   "page": 9,
+   "seconds": 24.67,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"My Paris Kitchen: Recipes and Stories\",\n  \"price\": \"£33.37\",\n  \"availability\": 16,\n  \"upc\": \"784bc2279baa878d\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 1361,
+   "cached_tokens": 0,
+   "gen_tokens": 76
+  },
+  {
+   "site": "quotes",
+   "page": 0,
+   "seconds": 18.15,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   },
+   "raw": "```json\n{\n  \"name\": \"Albert Einstein\",\n  \"born_date\": \"March 14, 1879\",\n  \"born_location\": \"Ulm, Germany\"\n}\n```",
+   "prompt_tokens": 209,
+   "cached_tokens": 0,
+   "gen_tokens": 50
+  },
+  {
+   "site": "quotes",
+   "page": 1,
+   "seconds": 20.4,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate, South Gloucestershire, England, The United Kingdom"
+   },
+   "raw": "```json\n{\n  \"name\": \"J.K. Rowling\",\n  \"born_date\": \"July 31, 1965\",\n  \"born_location\": \"Yate, South Gloucestershire, England, The United Kingdom\"\n}\n```",
+   "prompt_tokens": 206,
+   "cached_tokens": 0,
+   "gen_tokens": 61
+  },
+  {
+   "site": "quotes",
+   "page": 2,
+   "seconds": 18.59,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   },
+   "raw": "{\n  \"name\": \"Jane Austen\",\n  \"born_date\": \"December 16, 1775\",\n  \"born_location\": \"Steventon Rectory, Hampshire, The United Kingdom\"\n}",
+   "prompt_tokens": 201,
+   "cached_tokens": 0,
+   "gen_tokens": 53
+  },
+  {
+   "site": "quotes",
+   "page": 3,
+   "seconds": 17.41,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Marilyn Monroe\",\n  \"born_date\": \"June 01, 1926\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 208,
+   "cached_tokens": 0,
+   "gen_tokens": 46
+  },
+  {
+   "site": "quotes",
+   "page": 4,
+   "seconds": 16.89,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   },
+   "raw": "{\n  \"name\": \"André Gide\",\n  \"born_date\": \"November 22, 1869\",\n  \"born_location\": \"Paris\"\n}",
+   "prompt_tokens": 197,
+   "cached_tokens": 0,
+   "gen_tokens": 44
+  },
+  {
+   "site": "quotes",
+   "page": 5,
+   "seconds": 19.25,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Thomas A. Edison\",\n  \"born_date\": \"February 11, 1847\",\n  \"born_location\": \"Milan, Ohio, The United States\"\n}\n```",
+   "prompt_tokens": 192,
+   "cached_tokens": 0,
+   "gen_tokens": 56
+  },
+  {
+   "site": "quotes",
+   "page": 6,
+   "seconds": 17.2,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Eleanor Roosevelt\",\n  \"born_date\": \"October 11, 1884\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 196,
+   "cached_tokens": 0,
+   "gen_tokens": 45
+  },
+  {
+   "site": "quotes",
+   "page": 7,
+   "seconds": 18.59,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Stephen Glenn \"Steve\" Martin is an American actor, comedian, writer, playwright, producer, musician, and composer. He was raised in Southern California in a Baptist family, where his early influences were working at Disneyland and Knott's Berry Farm and working magic and comedy acts at these and other smaller venues in the area. His ascent to fame picked up when he became a writer for the Smothers Brothers Comedy Hour, and later became a frequent guest on the Tonight Show.In the 1970s, Martin performed his offbeat, absurdist comedy routines before packed houses on national tours. In the 1980s, having branched away from stand-up comedy, he became a successful actor, playwright, and juggler, and eventually earned Emmy, Grammy, and American Comedy awards.",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   },
+   "raw": "{\n  \"name\": \"Stephen Glenn \\\"Steve\\\" Martin\",\n  \"born_date\": \"August 14, 1945\",\n  \"born_location\": \"Waco, Texas, The United States\"\n}",
+   "prompt_tokens": 198,
+   "cached_tokens": 0,
+   "gen_tokens": 53
+  },
+  {
+   "site": "quotes",
+   "page": 8,
+   "seconds": 17.87,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   },
+   "raw": "{\n  \"name\": \"Bob Marley\",\n  \"born_date\": \"February 06, 1945\",\n  \"born_location\": \"Nine Mile, Saint Ann, Jamaica\"\n}",
+   "prompt_tokens": 202,
+   "cached_tokens": 0,
+   "gen_tokens": 49
+  },
+  {
+   "site": "quotes",
+   "page": 9,
+   "seconds": 17.88,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   },
+   "raw": "{\n  \"name\": \"Theodor Seuss Geisel\",\n  \"born_date\": \"March 02, 1904\",\n  \"born_location\": \"Springfield, MA\"\n}",
+   "prompt_tokens": 209,
+   "cached_tokens": 0,
+   "gen_tokens": 49
+  },
+  {
+   "site": "webscraper",
+   "page": 0,
+   "seconds": 32.68,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Asus VivoBook X441NA-GA190\",\n  \"price\": \"$295.99\",\n  \"description\": \"Asus VivoBook X441NA-GA190 Chocolate Black, 14\\\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd\",\n  \"reviews\": 14,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 389,
+   "cached_tokens": 0,
+   "gen_tokens": 116
+  },
+  {
+   "site": "webscraper",
+   "page": 1,
+   "seconds": 33.87,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Dark Grey\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Dark Grey, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 8,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 396,
+   "cached_tokens": 0,
+   "gen_tokens": 123
+  },
+  {
+   "site": "webscraper",
+   "page": 2,
+   "seconds": 33.98,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Gold\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Gold, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 12,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 395,
+   "cached_tokens": 0,
+   "gen_tokens": 122
+  },
+  {
+   "site": "webscraper",
+   "page": 3,
+   "seconds": 26.81,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Aspire E1-510\",\n  \"price\": \"$306.99\",\n  \"description\": \"15.6\\\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux\",\n  \"reviews\": 2,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 367,
+   "cached_tokens": 0,
+   "gen_tokens": 91
+  },
+  {
+   "site": "webscraper",
+   "page": 4,
+   "seconds": 32.06,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$321.94\",\n  \"description\": \"Lenovo V110-15IAP, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 5,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 387,
+   "cached_tokens": 0,
+   "gen_tokens": 114
+  },
+  {
+   "site": "webscraper",
+   "page": 5,
+   "seconds": 33.34,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$356.49\",\n  \"description\": \"Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\\\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd\",\n  \"reviews\": 6,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 393,
+   "cached_tokens": 0,
+   "gen_tokens": 120
+  },
+  {
+   "site": "webscraper",
+   "page": 6,
+   "seconds": 33.08,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Hewlett Packard 250 G6 Dark Ash Silver\",\n  \"price\": \"$364.46\",\n  \"description\": \"Hewlett Packard 250 G6 Dark Ash Silver, 15.6\\\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\",\n  \"reviews\": 12,\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 388,
+   "cached_tokens": 0,
+   "gen_tokens": 117
+  },
+  {
+   "site": "webscraper",
+   "page": 7,
+   "seconds": 33.07,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire 3 A315-31 Black\",\n  \"price\": \"$372.7\",\n  \"description\": \"Acer Aspire 3 A315-31 Black, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 2,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 392,
+   "cached_tokens": 0,
+   "gen_tokens": 119
+  },
+  {
+   "site": "webscraper",
+   "page": 8,
+   "seconds": 33.58,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 0
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire A315-31-C33J\",\n  \"price\": \"$379.94\",\n  \"description\": \"Acer Aspire A315-31-C33J Black 15.6\\\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG\",\n  \"reviews\": 0,\n  \"rating\": 0\n}\n```",
+   "prompt_tokens": 394,
+   "cached_tokens": 0,
+   "gen_tokens": 121
+  },
+  {
+   "site": "webscraper",
+   "page": 9,
+   "seconds": 30.58,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire ES1-572 Black\",\n  \"price\": \"$379.95\",\n  \"description\": \"Acer Aspire ES1-572 Black, 15.6\\\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux\",\n  \"reviews\": 9,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 379,
+   "cached_tokens": 0,
+   "gen_tokens": 106
+  },
+  {
+   "site": "wikipedia",
+   "page": 0,
+   "seconds": 24.74,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": 0,
+    "oclc": "38659585"
+   },
+   "raw": "{\n  \"title\": \"Pride and Prejudice\",\n  \"author\": \"Jane Austen\",\n  \"publisher\": \"T. Egerton, Whitehall\",\n  \"published\": \"28 January 1813\",\n  \"pages\": 0,\n  \"oclc\": \"38659585\"\n}",
+   "prompt_tokens": 784,
+   "cached_tokens": 0,
+   "gen_tokens": 82
+  },
+  {
+   "site": "wikipedia",
+   "page": 1,
+   "seconds": 24.9,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   },
+   "raw": "{\n  \"title\": \"Nineteen Eighty-Four\",\n  \"author\": \"George Orwell\",\n  \"publisher\": \"Secker & Warburg\",\n  \"published\": \"8 June 1949\",\n  \"pages\": 328,\n  \"oclc\": \"470015866\"\n}",
+   "prompt_tokens": 845,
+   "cached_tokens": 0,
+   "gen_tokens": 82
+  },
+  {
+   "site": "wikipedia",
+   "page": 2,
+   "seconds": 27.63,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   },
+   "raw": "{\n  \"title\": \"The Hobbit, or There and Back Again\",\n  \"author\": \"J. R. R. Tolkien\",\n  \"publisher\": \"George Allen & Unwin (UK)\",\n  \"published\": \"21 September 1937\",\n  \"pages\": 310,\n  \"oclc\": \"1827184\"\n}",
+   "prompt_tokens": 851,
+   "cached_tokens": 0,
+   "gen_tokens": 90
+  },
+  {
+   "site": "wikipedia",
+   "page": 3,
+   "seconds": 23.06,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"To Kill a Mockingbird\",\n  \"author\": \"Harper Lee\",\n  \"publisher\": \"J. B. Lippincott & Co.\",\n  \"published\": \"July 11, 1960\",\n  \"pages\": 281,\n  \"oclc\": null\n}",
+   "prompt_tokens": 644,
+   "cached_tokens": 0,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 4,
+   "seconds": 21.88,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": 0,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publisher\": \"Charles Scribner's Sons\",\n  \"published\": \"April 10, 1925\",\n  \"pages\": 0,\n  \"oclc\": null\n}",
+   "prompt_tokens": 731,
+   "cached_tokens": 0,
+   "gen_tokens": 73
+  },
+  {
+   "site": "wikipedia",
+   "page": 5,
+   "seconds": 31.29,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "pages": 635,
+    "oclc": null
+   },
+   "raw": "```json\n{\n  \"title\": \"Moby-Dick; or, The Whale\",\n  \"author\": \"Herman Melville\",\n  \"publisher\": \"Richard Bentley (United Kingdom) Harper & Brothers (United States)\",\n  \"published\": \"October 18, 1851 (United Kingdom) November 14, 1851 (United States)\",\n  \"pages\": 635,\n  \"oclc\": null\n}\n```",
+   "prompt_tokens": 877,
+   "cached_tokens": 0,
+   "gen_tokens": 108
+  },
+  {
+   "site": "wikipedia",
+   "page": 6,
+   "seconds": 23.48,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Frankenstein; or, The Modern Prometheus\",\n  \"author\": \"Mary Shelley\",\n  \"publisher\": \"Lackington, Hughes, Harding, Mavor & Jones\",\n  \"published\": \"1 January 1818\",\n  \"pages\": 280,\n  \"oclc\": null\n}",
+   "prompt_tokens": 808,
+   "cached_tokens": 0,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 7,
+   "seconds": 24.86,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": 0,
+    "oclc": "1447002"
+   },
+   "raw": "```json\n{\n  \"title\": \"Dracula\",\n  \"author\": \"Bram Stoker\",\n  \"publisher\": \"Archibald Constable and Company (UK)\",\n  \"published\": \"May 1897\",\n  \"pages\": 0,\n  \"oclc\": \"1447002\"\n}\n```",
+   "prompt_tokens": 642,
+   "cached_tokens": 0,
+   "gen_tokens": 83
+  },
+  {
+   "site": "wikipedia",
+   "page": 8,
+   "seconds": 25.7,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   },
+   "raw": "{\n  \"title\": \"The Catcher in the Rye\",\n  \"author\": \"J. D. Salinger\",\n  \"publisher\": \"Little, Brown and Company\",\n  \"published\": \"July 16, 1951\",\n  \"pages\": 234,\n  \"oclc\": \"287628\"\n}",
+   "prompt_tokens": 681,
+   "cached_tokens": 0,
+   "gen_tokens": 86
+  },
+  {
+   "site": "wikipedia",
+   "page": 9,
+   "seconds": 23.59,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   },
+   "raw": "{\n  \"title\": \"Brave New World\",\n  \"author\": \"Aldous Huxley\",\n  \"publisher\": \"Chatto & Windus\",\n  \"published\": \"February 1932\",\n  \"pages\": 311,\n  \"oclc\": \"20156268\"\n}",
+   "prompt_tokens": 605,
+   "cached_tokens": 0,
+   "gen_tokens": 81
+  },
+  {
+   "site": "books",
+   "page": 0,
+   "seconds": 22.22,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"A Light in the Attic\",\n  \"price\": \"£51.77\",\n  \"availability\": 22,\n  \"upc\": \"a897fe39b1053632\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 535,
+   "cached_tokens": 0,
+   "gen_tokens": 76
+  },
+  {
+   "site": "books",
+   "page": 1,
+   "seconds": 26.47,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Starving Hearts (Triangular Trade Trilogy, #1)\",\n  \"price\": \"£13.99\",\n  \"availability\": 19,\n  \"upc\": \"0312262ecafa5a40\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 1345,
+   "cached_tokens": 0,
+   "gen_tokens": 79
+  },
+  {
+   "site": "books",
+   "page": 2,
+   "seconds": 22.77,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"In Her Wake\",\n  \"price\": \"£12.84\",\n  \"availability\": 19,\n  \"upc\": \"23356462d1320d61\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 1330,
+   "cached_tokens": 0,
+   "gen_tokens": 74
+  },
+  {
+   "site": "books",
+   "page": 3,
+   "seconds": 28.28,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"The Four Agreements: A Practical Guide to Personal Freedom\",\n  \"price\": \"£17.66\",\n  \"availability\": 18,\n  \"upc\": \"6258a1f6a6dcfe50\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 1329,
+   "cached_tokens": 0,
+   "gen_tokens": 80
+  },
+  {
+   "site": "books",
+   "page": 4,
+   "seconds": 24.49,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Slow States of Collapse: Poems\",\n  \"price\": \"£57.31\",\n  \"availability\": 17,\n  \"upc\": \"b4fd5943413e089a\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 1348,
+   "cached_tokens": 0,
+   "gen_tokens": 77
+  },
+  {
+   "site": "books",
+   "page": 5,
+   "seconds": 30.17,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink\",\n  \"price\": \"£25.52\",\n  \"availability\": 16,\n  \"upc\": \"9a9d6e9bc555731e\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 1298,
+   "cached_tokens": 0,
+   "gen_tokens": 93
+  },
+  {
+   "site": "books",
+   "page": 6,
+   "seconds": 25.3,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"The Nameless City\",\n  \"price\": \"£38.16\",\n  \"availability\": 16,\n  \"upc\": \"7d385d34d12e60ff\",\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 1341,
+   "cached_tokens": 0,
+   "gen_tokens": 74
+  },
+  {
+   "site": "books",
+   "page": 7,
+   "seconds": 22.62,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"The Art Forger\",\n  \"price\": \"£40.76\",\n  \"availability\": 16,\n  \"upc\": \"80cfab6bcff3a244\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 1349,
+   "cached_tokens": 0,
+   "gen_tokens": 71
+  },
+  {
+   "site": "books",
+   "page": 8,
+   "seconds": 30.7,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)\",\n  \"price\": \"£13.61\",\n  \"availability\": 16,\n  \"upc\": \"0fa6dceead7ce47a\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 1430,
+   "cached_tokens": 0,
+   "gen_tokens": 97
+  },
+  {
+   "site": "books",
+   "page": 9,
+   "seconds": 26.76,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"My Paris Kitchen: Recipes and Stories\",\n  \"price\": \"£33.37\",\n  \"availability\": 16,\n  \"upc\": \"784bc2279baa878d\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 1361,
+   "cached_tokens": 0,
+   "gen_tokens": 76
+  },
+  {
+   "site": "quotes",
+   "page": 0,
+   "seconds": 18.14,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   },
+   "raw": "```json\n{\n  \"name\": \"Albert Einstein\",\n  \"born_date\": \"March 14, 1879\",\n  \"born_location\": \"Ulm, Germany\"\n}\n```",
+   "prompt_tokens": 209,
+   "cached_tokens": 0,
+   "gen_tokens": 50
+  },
+  {
+   "site": "quotes",
+   "page": 1,
+   "seconds": 19.23,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate, South Gloucestershire, England, The United Kingdom"
+   },
+   "raw": "{\n  \"name\": \"J.K. Rowling\",\n  \"born_date\": \"July 31, 1965\",\n  \"born_location\": \"Yate, South Gloucestershire, England, The United Kingdom\"\n}",
+   "prompt_tokens": 206,
+   "cached_tokens": 0,
+   "gen_tokens": 56
+  },
+  {
+   "site": "quotes",
+   "page": 2,
+   "seconds": 19.79,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   },
+   "raw": "```json\n{\n  \"name\": \"Jane Austen\",\n  \"born_date\": \"December 16, 1775\",\n  \"born_location\": \"Steventon Rectory, Hampshire, The United Kingdom\"\n}\n```",
+   "prompt_tokens": 201,
+   "cached_tokens": 0,
+   "gen_tokens": 58
+  },
+  {
+   "site": "quotes",
+   "page": 3,
+   "seconds": 11.17,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Marilyn Monroe\",\n  \"born_date\": \"June 01, 1926\",\n  \"born_location\": \"The United States\"\n}\n```",
+   "prompt_tokens": 103,
+   "cached_tokens": 105,
+   "gen_tokens": 51
+  },
+  {
+   "site": "quotes",
+   "page": 4,
+   "seconds": 10.3,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   },
+   "raw": "```json\n{\n  \"name\": \"André Gide\",\n  \"born_date\": \"November 22, 1869\",\n  \"born_location\": \"Paris\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 193,
+   "gen_tokens": 49
+  },
+  {
+   "site": "quotes",
+   "page": 5,
+   "seconds": 11.62,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   },
+   "raw": "{\n  \"name\": \"Thomas A. Edison\",\n  \"born_date\": \"February 11, 1847\",\n  \"born_location\": \"Milan, Ohio, The United States\"\n}",
+   "prompt_tokens": 87,
+   "cached_tokens": 105,
+   "gen_tokens": 51
+  },
+  {
+   "site": "quotes",
+   "page": 6,
+   "seconds": 9.63,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Eleanor Roosevelt\",\n  \"born_date\": \"October 11, 1884\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 192,
+   "gen_tokens": 45
+  },
+  {
+   "site": "quotes",
+   "page": 7,
+   "seconds": 12.19,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Steve Martin\",\n  \"born_date\": \"August 14, 1945\",\n  \"born_location\": \"Waco, Texas, The United States\"\n}\n```",
+   "prompt_tokens": 93,
+   "cached_tokens": 105,
+   "gen_tokens": 54
+  },
+  {
+   "site": "quotes",
+   "page": 8,
+   "seconds": 11.91,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   },
+   "raw": "```json\n{\n  \"name\": \"Bob Marley\",\n  \"born_date\": \"February 06, 1945\",\n  \"born_location\": \"Nine Mile, Saint Ann, Jamaica\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 198,
+   "gen_tokens": 54
+  },
+  {
+   "site": "quotes",
+   "page": 9,
+   "seconds": 11.91,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   },
+   "raw": "```json\n{\n  \"name\": \"Theodor Seuss Geisel\",\n  \"born_date\": \"March 02, 1904\",\n  \"born_location\": \"Springfield, MA\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 205,
+   "gen_tokens": 54
+  },
+  {
+   "site": "webscraper",
+   "page": 0,
+   "seconds": 24.36,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Asus VivoBook X441NA-GA190\",\n  \"price\": \"$295.99\",\n  \"description\": \"Asus VivoBook X441NA-GA190 Chocolate Black, 14\\\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd\",\n  \"reviews\": 14,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 389,
+   "cached_tokens": 0,
+   "gen_tokens": 116
+  },
+  {
+   "site": "webscraper",
+   "page": 1,
+   "seconds": 25.88,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Dark Grey\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Dark Grey, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 8,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 396,
+   "cached_tokens": 0,
+   "gen_tokens": 123
+  },
+  {
+   "site": "webscraper",
+   "page": 2,
+   "seconds": 25.61,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Gold\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Gold, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 12,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 395,
+   "cached_tokens": 0,
+   "gen_tokens": 122
+  },
+  {
+   "site": "webscraper",
+   "page": 3,
+   "seconds": 18.25,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Aspire E1-510\",\n  \"price\": \"$306.99\",\n  \"description\": \"15.6\\\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux\",\n  \"reviews\": 2,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 367,
+   "cached_tokens": 0,
+   "gen_tokens": 91
+  },
+  {
+   "site": "webscraper",
+   "page": 4,
+   "seconds": 23.84,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$321.94\",\n  \"description\": \"Lenovo V110-15IAP, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 5,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 387,
+   "cached_tokens": 0,
+   "gen_tokens": 114
+  },
+  {
+   "site": "webscraper",
+   "page": 5,
+   "seconds": 24.87,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$356.49\",\n  \"description\": \"Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\\\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd\",\n  \"reviews\": 6,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 393,
+   "cached_tokens": 0,
+   "gen_tokens": 120
+  },
+  {
+   "site": "webscraper",
+   "page": 6,
+   "seconds": 25.1,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Hewlett Packard 250 G6 Dark Ash Silver\",\n  \"price\": \"$364.46\",\n  \"description\": \"Hewlett Packard 250 G6 Dark Ash Silver, 15.6\\\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\",\n  \"reviews\": 12,\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 388,
+   "cached_tokens": 0,
+   "gen_tokens": 117
+  },
+  {
+   "site": "webscraper",
+   "page": 7,
+   "seconds": 25.35,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire 3 A315-31 Black\",\n  \"price\": \"$372.7\",\n  \"description\": \"Acer Aspire 3 A315-31 Black, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 2,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 392,
+   "cached_tokens": 0,
+   "gen_tokens": 119
+  },
+  {
+   "site": "webscraper",
+   "page": 8,
+   "seconds": 25.66,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 0
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire A315-31-C33J\",\n  \"price\": \"$379.94\",\n  \"description\": \"Acer Aspire A315-31-C33J Black 15.6\\\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG\",\n  \"reviews\": 0,\n  \"rating\": 0\n}\n```",
+   "prompt_tokens": 394,
+   "cached_tokens": 0,
+   "gen_tokens": 121
+  },
+  {
+   "site": "webscraper",
+   "page": 9,
+   "seconds": 22.93,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire ES1-572 Black\",\n  \"price\": \"$379.95\",\n  \"description\": \"Acer Aspire ES1-572 Black, 15.6\\\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux\",\n  \"reviews\": 9,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 379,
+   "cached_tokens": 0,
+   "gen_tokens": 106
+  },
+  {
+   "site": "wikipedia",
+   "page": 0,
+   "seconds": 18.61,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": 0,
+    "oclc": "38659585"
+   },
+   "raw": "{\n  \"title\": \"Pride and Prejudice\",\n  \"author\": \"Jane Austen\",\n  \"publisher\": \"T. Egerton, Whitehall\",\n  \"published\": \"28 January 1813\",\n  \"pages\": 0,\n  \"oclc\": \"38659585\"\n}",
+   "prompt_tokens": 784,
+   "cached_tokens": 0,
+   "gen_tokens": 82
+  },
+  {
+   "site": "wikipedia",
+   "page": 1,
+   "seconds": 20.24,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   },
+   "raw": "```json\n{\n  \"title\": \"Nineteen Eighty-Four\",\n  \"author\": \"George Orwell\",\n  \"publisher\": \"Secker & Warburg\",\n  \"published\": \"8 June 1949\",\n  \"pages\": 328,\n  \"oclc\": \"470015866\"\n}\n```",
+   "prompt_tokens": 845,
+   "cached_tokens": 0,
+   "gen_tokens": 87
+  },
+  {
+   "site": "wikipedia",
+   "page": 2,
+   "seconds": 20.64,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   },
+   "raw": "{\n  \"title\": \"The Hobbit, or There and Back Again\",\n  \"author\": \"J. R. R. Tolkien\",\n  \"publisher\": \"George Allen & Unwin (UK)\",\n  \"published\": \"21 September 1937\",\n  \"pages\": 310,\n  \"oclc\": \"1827184\"\n}",
+   "prompt_tokens": 851,
+   "cached_tokens": 0,
+   "gen_tokens": 90
+  },
+  {
+   "site": "wikipedia",
+   "page": 3,
+   "seconds": 18.98,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   },
+   "raw": "```json\n{\n  \"title\": \"To Kill a Mockingbird\",\n  \"author\": \"Harper Lee\",\n  \"publisher\": \"J. B. Lippincott & Co.\",\n  \"published\": \"July 11, 1960\",\n  \"pages\": 281,\n  \"oclc\": null\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 640,
+   "gen_tokens": 85
+  },
+  {
+   "site": "wikipedia",
+   "page": 4,
+   "seconds": 20.05,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": 180,
+    "oclc": "123456789"
+   },
+   "raw": "```json\n{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publisher\": \"Charles Scribner's Sons\",\n  \"published\": \"April 10, 1925\",\n  \"pages\": 180,\n  \"oclc\": \"123456789\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 727,
+   "gen_tokens": 90
+  },
+  {
+   "site": "wikipedia",
+   "page": 5,
+   "seconds": 21.47,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "pages": 635,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Moby-Dick; or, The Whale\",\n  \"author\": \"Herman Melville\",\n  \"publisher\": \"Richard Bentley (United Kingdom) Harper & Brothers (United States)\",\n  \"published\": \"October 18, 1851 (United Kingdom) November 14, 1851 (United States)\",\n  \"pages\": 635,\n  \"oclc\": null\n}",
+   "prompt_tokens": 877,
+   "cached_tokens": 0,
+   "gen_tokens": 103
+  },
+  {
+   "site": "wikipedia",
+   "page": 6,
+   "seconds": 16.67,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Frankenstein; or, The Modern Prometheus\",\n  \"author\": \"Mary Shelley\",\n  \"publisher\": \"Lackington, Hughes, Harding, Mavor & Jones\",\n  \"published\": \"1 January 1818\",\n  \"pages\": 280,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 804,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 7,
+   "seconds": 15.93,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   },
+   "raw": "{\n  \"title\": \"Dracula\",\n  \"author\": \"Bram Stoker\",\n  \"publisher\": \"Archibald Constable and Company (UK)\",\n  \"published\": \"May 1897\",\n  \"pages\": null,\n  \"oclc\": \"1447002\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 638,
+   "gen_tokens": 77
+  },
+  {
+   "site": "wikipedia",
+   "page": 8,
+   "seconds": 19.14,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   },
+   "raw": "{\n  \"title\": \"The Catcher in the Rye\",\n  \"author\": \"J. D. Salinger\",\n  \"publisher\": \"Little, Brown and Company\",\n  \"published\": \"July 16, 1951\",\n  \"pages\": 234,\n  \"oclc\": \"287628\"\n}",
+   "prompt_tokens": 681,
+   "cached_tokens": 0,
+   "gen_tokens": 86
+  },
+  {
+   "site": "wikipedia",
+   "page": 9,
+   "seconds": 17.19,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   },
+   "raw": "{\n  \"title\": \"Brave New World\",\n  \"author\": \"Aldous Huxley\",\n  \"publisher\": \"Chatto & Windus\",\n  \"published\": \"February 1932\",\n  \"pages\": 311,\n  \"oclc\": \"20156268\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 601,
+   "gen_tokens": 81
+  },
+  {
+   "site": "books",
+   "page": 0,
+   "seconds": 15.7,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"A Light in the Attic\",\n  \"price\": \"£51.77\",\n  \"availability\": 22,\n  \"upc\": \"a897fe39b1053632\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 531,
+   "gen_tokens": 76
+  },
+  {
+   "site": "books",
+   "page": 1,
+   "seconds": 16.43,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Starving Hearts (Triangular Trade Trilogy, #1)\",\n  \"price\": \"£13.99\",\n  \"availability\": 19,\n  \"upc\": \"0312262ecafa5a40\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1341,
+   "gen_tokens": 79
+  },
+  {
+   "site": "books",
+   "page": 2,
+   "seconds": 15.06,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"In Her Wake\",\n  \"price\": \"£12.84\",\n  \"availability\": 19,\n  \"upc\": \"23356462d1320d61\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1326,
+   "gen_tokens": 74
+  },
+  {
+   "site": "books",
+   "page": 3,
+   "seconds": 16.89,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"The Four Agreements: A Practical Guide to Personal Freedom\",\n  \"price\": \"£17.66\",\n  \"availability\": 18,\n  \"upc\": \"6258a1f6a6dcfe50\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1325,
+   "gen_tokens": 80
+  },
+  {
+   "site": "books",
+   "page": 4,
+   "seconds": 15.53,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Slow States of Collapse: Poems\",\n  \"price\": \"£57.31\",\n  \"availability\": 17,\n  \"upc\": \"b4fd5943413e089a\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1344,
+   "gen_tokens": 77
+  },
+  {
+   "site": "books",
+   "page": 5,
+   "seconds": 18.88,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink\",\n  \"price\": \"£25.52\",\n  \"availability\": 16,\n  \"upc\": \"9a9d6e9bc555731e\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 1298,
+   "cached_tokens": 0,
+   "gen_tokens": 93
+  },
+  {
+   "site": "books",
+   "page": 6,
+   "seconds": 14.63,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"The Nameless City\",\n  \"price\": \"£38.16\",\n  \"availability\": 16,\n  \"upc\": \"7d385d34d12e60ff\",\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1337,
+   "gen_tokens": 74
+  },
+  {
+   "site": "books",
+   "page": 7,
+   "seconds": 13.61,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"The Art Forger\",\n  \"price\": \"£40.76\",\n  \"availability\": 16,\n  \"upc\": \"80cfab6bcff3a244\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1345,
+   "gen_tokens": 71
+  },
+  {
+   "site": "books",
+   "page": 8,
+   "seconds": 19.13,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)\",\n  \"price\": \"£13.61\",\n  \"availability\": 16,\n  \"upc\": \"0fa6dceead7ce47a\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 1430,
+   "cached_tokens": 0,
+   "gen_tokens": 97
+  },
+  {
+   "site": "books",
+   "page": 9,
+   "seconds": 14.96,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"My Paris Kitchen: Recipes and Stories\",\n  \"price\": \"£33.37\",\n  \"availability\": 16,\n  \"upc\": \"784bc2279baa878d\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1357,
+   "gen_tokens": 76
+  },
+  {
+   "site": "quotes",
+   "page": 0,
+   "seconds": 8.6,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   },
+   "raw": "```json\n{\n  \"name\": \"Albert Einstein\",\n  \"born_date\": \"March 14, 1879\",\n  \"born_location\": \"Ulm, Germany\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 205,
+   "gen_tokens": 50
+  },
+  {
+   "site": "quotes",
+   "page": 1,
+   "seconds": 11.46,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate, South Gloucestershire, England, The United Kingdom"
+   },
+   "raw": "```json\n{\n  \"name\": \"J.K. Rowling\",\n  \"born_date\": \"July 31, 1965\",\n  \"born_location\": \"Yate, South Gloucestershire, England, The United Kingdom\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 202,
+   "gen_tokens": 61
+  },
+  {
+   "site": "quotes",
+   "page": 2,
+   "seconds": 9.1,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   },
+   "raw": "{\n  \"name\": \"Jane Austen\",\n  \"born_date\": \"December 16, 1775\",\n  \"born_location\": \"Steventon Rectory, Hampshire, The United Kingdom\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 197,
+   "gen_tokens": 53
+  },
+  {
+   "site": "quotes",
+   "page": 3,
+   "seconds": 7.46,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Marilyn Monroe\",\n  \"born_date\": \"June 01, 1926\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 204,
+   "gen_tokens": 46
+  },
+  {
+   "site": "quotes",
+   "page": 4,
+   "seconds": 7.87,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   },
+   "raw": "```json\n{\n  \"name\": \"André Gide\",\n  \"born_date\": \"November 22, 1869\",\n  \"born_location\": \"Paris\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 193,
+   "gen_tokens": 49
+  },
+  {
+   "site": "quotes",
+   "page": 5,
+   "seconds": 9.84,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Thomas A. Edison\",\n  \"born_date\": \"February 11, 1847\",\n  \"born_location\": \"Milan, Ohio, The United States\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 188,
+   "gen_tokens": 56
+  },
+  {
+   "site": "quotes",
+   "page": 6,
+   "seconds": 7.24,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Eleanor Roosevelt\",\n  \"born_date\": \"October 11, 1884\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 192,
+   "gen_tokens": 45
+  },
+  {
+   "site": "quotes",
+   "page": 7,
+   "seconds": 9.67,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Steve Martin\",\n  \"born_date\": \"August 14, 1945\",\n  \"born_location\": \"Waco, Texas, The United States\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 194,
+   "gen_tokens": 54
+  },
+  {
+   "site": "quotes",
+   "page": 8,
+   "seconds": 8.57,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   },
+   "raw": "{\n  \"name\": \"Bob Marley\",\n  \"born_date\": \"February 06, 1945\",\n  \"born_location\": \"Nine Mile, Saint Ann, Jamaica\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 198,
+   "gen_tokens": 49
+  },
+  {
+   "site": "quotes",
+   "page": 9,
+   "seconds": 9.67,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   },
+   "raw": "```json\n{\n  \"name\": \"Theodor Seuss Geisel\",\n  \"born_date\": \"March 02, 1904\",\n  \"born_location\": \"Springfield, MA\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 205,
+   "gen_tokens": 54
+  },
+  {
+   "site": "webscraper",
+   "page": 0,
+   "seconds": 20.68,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Asus VivoBook X441NA-GA190\",\n  \"price\": \"$295.99\",\n  \"description\": \"Asus VivoBook X441NA-GA190 Chocolate Black, 14\\\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd\",\n  \"reviews\": 14,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 269,
+   "cached_tokens": 120,
+   "gen_tokens": 116
+  },
+  {
+   "site": "webscraper",
+   "page": 1,
+   "seconds": 22.42,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Dark Grey\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Dark Grey, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 8,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 276,
+   "cached_tokens": 120,
+   "gen_tokens": 123
+  },
+  {
+   "site": "webscraper",
+   "page": 2,
+   "seconds": 22.42,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Gold\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Gold, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 12,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 275,
+   "cached_tokens": 120,
+   "gen_tokens": 122
+  },
+  {
+   "site": "webscraper",
+   "page": 3,
+   "seconds": 16.97,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Aspire E1-510\",\n  \"price\": \"$306.99\",\n  \"description\": \"15.6\\\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux\",\n  \"reviews\": 2,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 367,
+   "cached_tokens": 0,
+   "gen_tokens": 91
+  },
+  {
+   "site": "webscraper",
+   "page": 4,
+   "seconds": 20.81,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$321.94\",\n  \"description\": \"Lenovo V110-15IAP, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 5,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 387,
+   "cached_tokens": 0,
+   "gen_tokens": 114
+  },
+  {
+   "site": "webscraper",
+   "page": 5,
+   "seconds": 21.79,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$356.49\",\n  \"description\": \"Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\\\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd\",\n  \"reviews\": 6,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 273,
+   "cached_tokens": 120,
+   "gen_tokens": 120
+  },
+  {
+   "site": "webscraper",
+   "page": 6,
+   "seconds": 21.17,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Hewlett Packard 250 G6 Dark Ash Silver\",\n  \"price\": \"$364.46\",\n  \"description\": \"Hewlett Packard 250 G6 Dark Ash Silver, 15.6\\\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\",\n  \"reviews\": 12,\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 268,
+   "cached_tokens": 120,
+   "gen_tokens": 117
+  },
+  {
+   "site": "webscraper",
+   "page": 7,
+   "seconds": 21.61,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire 3 A315-31 Black\",\n  \"price\": \"$372.7\",\n  \"description\": \"Acer Aspire 3 A315-31 Black, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 2,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 388,
+   "gen_tokens": 119
+  },
+  {
+   "site": "webscraper",
+   "page": 8,
+   "seconds": 22.04,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 0
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire A315-31-C33J\",\n  \"price\": \"$379.94\",\n  \"description\": \"Acer Aspire A315-31-C33J Black 15.6\\\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG\",\n  \"reviews\": 0,\n  \"rating\": 0\n}\n```",
+   "prompt_tokens": 274,
+   "cached_tokens": 120,
+   "gen_tokens": 121
+  },
+  {
+   "site": "webscraper",
+   "page": 9,
+   "seconds": 18.36,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire ES1-572 Black\",\n  \"price\": \"$379.95\",\n  \"description\": \"Acer Aspire ES1-572 Black, 15.6\\\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux\",\n  \"reviews\": 9,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 259,
+   "cached_tokens": 120,
+   "gen_tokens": 106
+  },
+  {
+   "site": "wikipedia",
+   "page": 0,
+   "seconds": 15.33,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": 0,
+    "oclc": "38659585"
+   },
+   "raw": "```json\n{\n  \"title\": \"Pride and Prejudice\",\n  \"author\": \"Jane Austen\",\n  \"publisher\": \"T. Egerton, Whitehall\",\n  \"published\": \"28 January 1813\",\n  \"pages\": 0,\n  \"oclc\": \"38659585\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 780,
+   "gen_tokens": 87
+  },
+  {
+   "site": "wikipedia",
+   "page": 1,
+   "seconds": 14.65,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   },
+   "raw": "{\n  \"title\": \"Nineteen Eighty-Four\",\n  \"author\": \"George Orwell\",\n  \"publisher\": \"Secker & Warburg\",\n  \"published\": \"8 June 1949\",\n  \"pages\": 328,\n  \"oclc\": \"470015866\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 841,
+   "gen_tokens": 82
+  },
+  {
+   "site": "wikipedia",
+   "page": 2,
+   "seconds": 15.52,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   },
+   "raw": "{\n  \"title\": \"The Hobbit, or There and Back Again\",\n  \"author\": \"J. R. R. Tolkien\",\n  \"publisher\": \"George Allen & Unwin (UK)\",\n  \"published\": \"21 September 1937\",\n  \"pages\": 310,\n  \"oclc\": \"1827184\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 847,
+   "gen_tokens": 90
+  },
+  {
+   "site": "wikipedia",
+   "page": 3,
+   "seconds": 15.33,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"To Kill a Mockingbird\",\n  \"author\": \"Harper Lee\",\n  \"publisher\": \"J. B. Lippincott & Co.\",\n  \"published\": \"July 11, 1960\",\n  \"pages\": 281,\n  \"oclc\": null\n}",
+   "prompt_tokens": 644,
+   "cached_tokens": 0,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 4,
+   "seconds": 18.24,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": 180,
+    "oclc": "123456789"
+   },
+   "raw": "```json\n{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publisher\": \"Charles Scribner's Sons\",\n  \"published\": \"April 10, 1925\",\n  \"pages\": 180,\n  \"oclc\": \"123456789\"\n}\n```",
+   "prompt_tokens": 731,
+   "cached_tokens": 0,
+   "gen_tokens": 90
+  },
+  {
+   "site": "wikipedia",
+   "page": 5,
+   "seconds": 19.55,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "pages": 635,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Moby-Dick; or, The Whale\",\n  \"author\": \"Herman Melville\",\n  \"publisher\": \"Richard Bentley (United Kingdom) Harper & Brothers (United States)\",\n  \"published\": \"October 18, 1851 (United Kingdom) November 14, 1851 (United States)\",\n  \"pages\": 635,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 873,
+   "gen_tokens": 103
+  },
+  {
+   "site": "wikipedia",
+   "page": 6,
+   "seconds": 15.64,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Frankenstein; or, The Modern Prometheus\",\n  \"author\": \"Mary Shelley\",\n  \"publisher\": \"Lackington, Hughes, Harding, Mavor & Jones\",\n  \"published\": \"1 January 1818\",\n  \"pages\": 280,\n  \"oclc\": null\n}",
+   "prompt_tokens": 808,
+   "cached_tokens": 0,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 7,
+   "seconds": 14.98,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   },
+   "raw": "{\n  \"title\": \"Dracula\",\n  \"author\": \"Bram Stoker\",\n  \"publisher\": \"Archibald Constable and Company (UK)\",\n  \"published\": \"May 1897\",\n  \"pages\": null,\n  \"oclc\": \"1447002\"\n}",
+   "prompt_tokens": 642,
+   "cached_tokens": 0,
+   "gen_tokens": 77
+  },
+  {
+   "site": "wikipedia",
+   "page": 8,
+   "seconds": 16.44,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   },
+   "raw": "{\n  \"title\": \"The Catcher in the Rye\",\n  \"author\": \"J. D. Salinger\",\n  \"publisher\": \"Little, Brown and Company\",\n  \"published\": \"July 16, 1951\",\n  \"pages\": 234,\n  \"oclc\": \"287628\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 677,
+   "gen_tokens": 86
+  },
+  {
+   "site": "wikipedia",
+   "page": 9,
+   "seconds": 15.67,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   },
+   "raw": "{\n  \"title\": \"Brave New World\",\n  \"author\": \"Aldous Huxley\",\n  \"publisher\": \"Chatto & Windus\",\n  \"published\": \"February 1932\",\n  \"pages\": 311,\n  \"oclc\": \"20156268\"\n}",
+   "prompt_tokens": 605,
+   "cached_tokens": 0,
+   "gen_tokens": 81
+  },
+  {
+   "site": "books",
+   "page": 0,
+   "seconds": 14.74,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"A Light in the Attic\",\n  \"price\": \"£51.77\",\n  \"availability\": 22,\n  \"upc\": \"a897fe39b1053632\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 535,
+   "cached_tokens": 0,
+   "gen_tokens": 76
+  },
+  {
+   "site": "books",
+   "page": 1,
+   "seconds": 14.81,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Starving Hearts (Triangular Trade Trilogy, #1)\",\n  \"price\": \"£13.99\",\n  \"availability\": 19,\n  \"upc\": \"0312262ecafa5a40\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1341,
+   "gen_tokens": 79
+  },
+  {
+   "site": "books",
+   "page": 2,
+   "seconds": 14.2,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"In Her Wake\",\n  \"price\": \"£12.84\",\n  \"availability\": 19,\n  \"upc\": \"23356462d1320d61\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 1330,
+   "cached_tokens": 0,
+   "gen_tokens": 74
+  },
+  {
+   "site": "books",
+   "page": 3,
+   "seconds": 14.87,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"The Four Agreements: A Practical Guide to Personal Freedom\",\n  \"price\": \"£17.66\",\n  \"availability\": 18,\n  \"upc\": \"6258a1f6a6dcfe50\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1325,
+   "gen_tokens": 80
+  },
+  {
+   "site": "books",
+   "page": 4,
+   "seconds": 14.21,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Slow States of Collapse: Poems\",\n  \"price\": \"£57.31\",\n  \"availability\": 17,\n  \"upc\": \"b4fd5943413e089a\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1344,
+   "gen_tokens": 77
+  },
+  {
+   "site": "books",
+   "page": 5,
+   "seconds": 16.31,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink\",\n  \"price\": \"£25.52\",\n  \"availability\": 16,\n  \"upc\": \"9a9d6e9bc555731e\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1294,
+   "gen_tokens": 93
+  },
+  {
+   "site": "books",
+   "page": 6,
+   "seconds": 14.76,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"The Nameless City (The Nameless City #1)\",\n  \"price\": \"£38.16\",\n  \"availability\": 16,\n  \"upc\": \"7d385d34d12e60ff\",\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1337,
+   "gen_tokens": 81
+  },
+  {
+   "site": "books",
+   "page": 7,
+   "seconds": 13.06,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"The Art Forger\",\n  \"price\": \"£40.76\",\n  \"availability\": 16,\n  \"upc\": \"80cfab6bcff3a244\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1345,
+   "gen_tokens": 71
+  },
+  {
+   "site": "books",
+   "page": 8,
+   "seconds": 16.42,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)\",\n  \"price\": \"£13.61\",\n  \"availability\": 16,\n  \"upc\": \"0fa6dceead7ce47a\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1426,
+   "gen_tokens": 97
+  },
+  {
+   "site": "books",
+   "page": 9,
+   "seconds": 14.18,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"My Paris Kitchen: Recipes and Stories\",\n  \"price\": \"£33.37\",\n  \"availability\": 16,\n  \"upc\": \"784bc2279baa878d\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 1361,
+   "cached_tokens": 0,
+   "gen_tokens": 76
+  },
+  {
+   "site": "quotes",
+   "page": 0,
+   "seconds": 8.4,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   },
+   "raw": "```json\n{\n  \"name\": \"Albert Einstein\",\n  \"born_date\": \"March 14, 1879\",\n  \"born_location\": \"Ulm, Germany\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 205,
+   "gen_tokens": 50
+  },
+  {
+   "site": "quotes",
+   "page": 1,
+   "seconds": 10.52,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate, South Gloucestershire, England, The United Kingdom"
+   },
+   "raw": "```json\n{\n  \"name\": \"J.K. Rowling\",\n  \"born_date\": \"July 31, 1965\",\n  \"born_location\": \"Yate, South Gloucestershire, England, The United Kingdom\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 202,
+   "gen_tokens": 61
+  },
+  {
+   "site": "quotes",
+   "page": 2,
+   "seconds": 9.01,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   },
+   "raw": "{\n  \"name\": \"Jane Austen\",\n  \"born_date\": \"December 16, 1775\",\n  \"born_location\": \"Steventon Rectory, Hampshire, The United Kingdom\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 197,
+   "gen_tokens": 53
+  },
+  {
+   "site": "quotes",
+   "page": 3,
+   "seconds": 8.22,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Marilyn Monroe\",\n  \"born_date\": \"June 01, 1926\",\n  \"born_location\": \"The United States\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 204,
+   "gen_tokens": 51
+  },
+  {
+   "site": "quotes",
+   "page": 4,
+   "seconds": 7.76,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   },
+   "raw": "```json\n{\n  \"name\": \"André Gide\",\n  \"born_date\": \"November 22, 1869\",\n  \"born_location\": \"Paris\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 193,
+   "gen_tokens": 49
+  },
+  {
+   "site": "quotes",
+   "page": 5,
+   "seconds": 8.75,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Thomas A. Edison\",\n  \"born_date\": \"February 11, 1847\",\n  \"born_location\": \"Milan, Ohio, The United States\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 188,
+   "gen_tokens": 56
+  },
+  {
+   "site": "quotes",
+   "page": 6,
+   "seconds": 6.83,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Eleanor Roosevelt\",\n  \"born_date\": \"October 11, 1884\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 192,
+   "gen_tokens": 45
+  },
+  {
+   "site": "quotes",
+   "page": 7,
+   "seconds": 7.47,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   },
+   "raw": "{\n  \"name\": \"Steve Martin\",\n  \"born_date\": \"August 14, 1945\",\n  \"born_location\": \"Waco, Texas, The United States\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 194,
+   "gen_tokens": 49
+  },
+  {
+   "site": "quotes",
+   "page": 8,
+   "seconds": 8.17,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   },
+   "raw": "```json\n{\n  \"name\": \"Bob Marley\",\n  \"born_date\": \"February 06, 1945\",\n  \"born_location\": \"Nine Mile, Saint Ann, Jamaica\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 198,
+   "gen_tokens": 54
+  },
+  {
+   "site": "quotes",
+   "page": 9,
+   "seconds": 7.5,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   },
+   "raw": "{\n  \"name\": \"Theodor Seuss Geisel\",\n  \"born_date\": \"March 02, 1904\",\n  \"born_location\": \"Springfield, MA\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 205,
+   "gen_tokens": 49
+  },
+  {
+   "site": "webscraper",
+   "page": 0,
+   "seconds": 17.88,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Asus VivoBook X441NA-GA190\",\n  \"price\": \"$295.99\",\n  \"description\": \"Asus VivoBook X441NA-GA190 Chocolate Black, 14\\\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG\",\n  \"reviews\": 14,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 385,
+   "gen_tokens": 114
+  },
+  {
+   "site": "webscraper",
+   "page": 1,
+   "seconds": 19.47,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Dark Grey\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Dark Grey, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 8,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 392,
+   "gen_tokens": 123
+  },
+  {
+   "site": "webscraper",
+   "page": 2,
+   "seconds": 19.22,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Gold\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Gold, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 12,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 391,
+   "gen_tokens": 122
+  },
+  {
+   "site": "webscraper",
+   "page": 3,
+   "seconds": 14.24,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Aspire E1-510\",\n  \"price\": \"$306.99\",\n  \"description\": \"15.6\\\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux\",\n  \"reviews\": 2,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 363,
+   "gen_tokens": 91
+  },
+  {
+   "site": "webscraper",
+   "page": 4,
+   "seconds": 17.58,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$321.94\",\n  \"description\": \"Lenovo V110-15IAP, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 5,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 383,
+   "gen_tokens": 114
+  },
+  {
+   "site": "webscraper",
+   "page": 5,
+   "seconds": 19.39,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$356.49\",\n  \"description\": \"Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\\\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd\",\n  \"reviews\": 6,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 389,
+   "gen_tokens": 120
+  },
+  {
+   "site": "webscraper",
+   "page": 6,
+   "seconds": 19.09,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Hewlett Packard 250 G6 Dark Ash Silver\",\n  \"price\": \"$364.46\",\n  \"description\": \"Hewlett Packard 250 G6 Dark Ash Silver, 15.6\\\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\",\n  \"reviews\": 12,\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 384,
+   "gen_tokens": 117
+  },
+  {
+   "site": "webscraper",
+   "page": 7,
+   "seconds": 19.13,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   },
+   "raw": "{\n  \"title\": \"Acer Aspire 3 A315-31 Black\",\n  \"price\": \"$372.7\",\n  \"description\": \"Acer Aspire 3 A315-31 Black, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 2,\n  \"rating\": 2\n}",
+   "prompt_tokens": 272,
+   "cached_tokens": 120,
+   "gen_tokens": 114
+  },
+  {
+   "site": "webscraper",
+   "page": 8,
+   "seconds": 20.91,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 0
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire A315-31-C33J\",\n  \"price\": \"$379.94\",\n  \"description\": \"Acer Aspire A315-31-C33J Black 15.6\\\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG\",\n  \"reviews\": 0,\n  \"rating\": 0\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 390,
+   "gen_tokens": 121
+  },
+  {
+   "site": "webscraper",
+   "page": 9,
+   "seconds": 17.09,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire ES1-572 Black\",\n  \"price\": \"$379.95\",\n  \"description\": \"Acer Aspire ES1-572 Black, 15.6\\\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux\",\n  \"reviews\": 9,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 375,
+   "gen_tokens": 106
+  },
+  {
+   "site": "wikipedia",
+   "page": 0,
+   "seconds": 13.11,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": 0,
+    "oclc": "38659585"
+   },
+   "raw": "{\n  \"title\": \"Pride and Prejudice\",\n  \"author\": \"Jane Austen\",\n  \"publisher\": \"T. Egerton, Whitehall\",\n  \"published\": \"28 January 1813\",\n  \"pages\": 0,\n  \"oclc\": \"38659585\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 780,
+   "gen_tokens": 82
+  },
+  {
+   "site": "wikipedia",
+   "page": 1,
+   "seconds": 13.79,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   },
+   "raw": "```json\n{\n  \"title\": \"Nineteen Eighty-Four\",\n  \"author\": \"George Orwell\",\n  \"publisher\": \"Secker & Warburg\",\n  \"published\": \"8 June 1949\",\n  \"pages\": 328,\n  \"oclc\": \"470015866\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 841,
+   "gen_tokens": 87
+  },
+  {
+   "site": "wikipedia",
+   "page": 2,
+   "seconds": 14.28,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   },
+   "raw": "{\n  \"title\": \"The Hobbit, or There and Back Again\",\n  \"author\": \"J. R. R. Tolkien\",\n  \"publisher\": \"George Allen & Unwin (UK)\",\n  \"published\": \"21 September 1937\",\n  \"pages\": 310,\n  \"oclc\": \"1827184\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 847,
+   "gen_tokens": 90
+  },
+  {
+   "site": "wikipedia",
+   "page": 3,
+   "seconds": 12.78,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"To Kill a Mockingbird\",\n  \"author\": \"Harper Lee\",\n  \"publisher\": \"J. B. Lippincott & Co.\",\n  \"published\": \"July 11, 1960\",\n  \"pages\": 281,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 640,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 4,
+   "seconds": 11.54,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": 0,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publisher\": \"Charles Scribner's Sons\",\n  \"published\": \"April 10, 1925\",\n  \"pages\": 0,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 727,
+   "gen_tokens": 73
+  },
+  {
+   "site": "wikipedia",
+   "page": 5,
+   "seconds": 18.01,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "pages": 635,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Moby-Dick; or, The Whale\",\n  \"author\": \"Herman Melville\",\n  \"publisher\": \"Richard Bentley (United Kingdom) Harper & Brothers (United States)\",\n  \"published\": \"October 18, 1851 (United Kingdom) November 14, 1851 (United States)\",\n  \"pages\": 635,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 873,
+   "gen_tokens": 103
+  },
+  {
+   "site": "wikipedia",
+   "page": 6,
+   "seconds": 13.13,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Frankenstein; or, The Modern Prometheus\",\n  \"author\": \"Mary Shelley\",\n  \"publisher\": \"Lackington, Hughes, Harding, Mavor & Jones\",\n  \"published\": \"1 January 1818\",\n  \"pages\": 280,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 804,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 7,
+   "seconds": 13.63,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": 0,
+    "oclc": "1447002"
+   },
+   "raw": "```json\n{\n  \"title\": \"Dracula\",\n  \"author\": \"Bram Stoker\",\n  \"publisher\": \"Archibald Constable and Company (UK)\",\n  \"published\": \"May 1897\",\n  \"pages\": 0,\n  \"oclc\": \"1447002\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 638,
+   "gen_tokens": 83
+  },
+  {
+   "site": "wikipedia",
+   "page": 8,
+   "seconds": 14.86,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   },
+   "raw": "{\n  \"title\": \"The Catcher in the Rye\",\n  \"author\": \"J. D. Salinger\",\n  \"publisher\": \"Little, Brown and Company\",\n  \"published\": \"July 16, 1951\",\n  \"pages\": 234,\n  \"oclc\": \"287628\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 677,
+   "gen_tokens": 86
+  },
+  {
+   "site": "wikipedia",
+   "page": 9,
+   "seconds": 13.57,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   },
+   "raw": "{\n  \"title\": \"Brave New World\",\n  \"author\": \"Aldous Huxley\",\n  \"publisher\": \"Chatto & Windus\",\n  \"published\": \"February 1932\",\n  \"pages\": 311,\n  \"oclc\": \"20156268\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 601,
+   "gen_tokens": 81
+  },
+  {
+   "site": "books",
+   "page": 0,
+   "seconds": 12.42,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"A Light in the Attic\",\n  \"price\": \"£51.77\",\n  \"availability\": 22,\n  \"upc\": \"a897fe39b1053632\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 531,
+   "gen_tokens": 76
+  },
+  {
+   "site": "books",
+   "page": 1,
+   "seconds": 12.92,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Starving Hearts (Triangular Trade Trilogy, #1)\",\n  \"price\": \"£13.99\",\n  \"availability\": 19,\n  \"upc\": \"0312262ecafa5a40\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1341,
+   "gen_tokens": 79
+  },
+  {
+   "site": "books",
+   "page": 2,
+   "seconds": 11.87,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"In Her Wake\",\n  \"price\": \"£12.84\",\n  \"availability\": 19,\n  \"upc\": \"23356462d1320d61\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1326,
+   "gen_tokens": 74
+  },
+  {
+   "site": "books",
+   "page": 3,
+   "seconds": 13.34,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"The Four Agreements: A Practical Guide to Personal Freedom\",\n  \"price\": \"£17.66\",\n  \"availability\": 18,\n  \"upc\": \"6258a1f6a6dcfe50\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1325,
+   "gen_tokens": 80
+  },
+  {
+   "site": "books",
+   "page": 4,
+   "seconds": 12.49,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Slow States of Collapse: Poems\",\n  \"price\": \"£57.31\",\n  \"availability\": 17,\n  \"upc\": \"b4fd5943413e089a\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1344,
+   "gen_tokens": 77
+  },
+  {
+   "site": "books",
+   "page": 5,
+   "seconds": 16.96,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   },
+   "raw": "```json\n{\n  \"title\": \"Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink\",\n  \"price\": \"£25.52\",\n  \"availability\": 16,\n  \"upc\": \"9a9d6e9bc555731e\",\n  \"rating\": 1\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1294,
+   "gen_tokens": 93
+  },
+  {
+   "site": "books",
+   "page": 6,
+   "seconds": 14.19,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"The Nameless City (The Nameless City #1)\",\n  \"price\": \"£38.16\",\n  \"availability\": 16,\n  \"upc\": \"7d385d34d12e60ff\",\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1337,
+   "gen_tokens": 81
+  },
+  {
+   "site": "books",
+   "page": 7,
+   "seconds": 12.3,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"The Art Forger\",\n  \"price\": \"£40.76\",\n  \"availability\": 16,\n  \"upc\": \"80cfab6bcff3a244\",\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 1349,
+   "cached_tokens": 0,
+   "gen_tokens": 71
+  },
+  {
+   "site": "books",
+   "page": 8,
+   "seconds": 17.67,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)\",\n  \"price\": \"£13.61\",\n  \"availability\": 16,\n  \"upc\": \"0fa6dceead7ce47a\",\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1426,
+   "gen_tokens": 97
+  },
+  {
+   "site": "books",
+   "page": 9,
+   "seconds": 12.59,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"My Paris Kitchen: Recipes and Stories\",\n  \"price\": \"£33.37\",\n  \"availability\": 16,\n  \"upc\": \"784bc2279baa878d\",\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 1357,
+   "gen_tokens": 76
+  },
+  {
+   "site": "quotes",
+   "page": 0,
+   "seconds": 7.61,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   },
+   "raw": "```json\n{\n  \"name\": \"Albert Einstein\",\n  \"born_date\": \"March 14, 1879\",\n  \"born_location\": \"Ulm, Germany\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 205,
+   "gen_tokens": 50
+  },
+  {
+   "site": "quotes",
+   "page": 1,
+   "seconds": 8.64,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate, South Gloucestershire, England, The United Kingdom"
+   },
+   "raw": "{\n  \"name\": \"J.K. Rowling\",\n  \"born_date\": \"July 31, 1965\",\n  \"born_location\": \"Yate, South Gloucestershire, England, The United Kingdom\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 202,
+   "gen_tokens": 56
+  },
+  {
+   "site": "quotes",
+   "page": 2,
+   "seconds": 8.15,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   },
+   "raw": "{\n  \"name\": \"Jane Austen\",\n  \"born_date\": \"December 16, 1775\",\n  \"born_location\": \"Steventon Rectory, Hampshire, The United Kingdom\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 197,
+   "gen_tokens": 53
+  },
+  {
+   "site": "quotes",
+   "page": 3,
+   "seconds": 6.58,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Marilyn Monroe\",\n  \"born_date\": \"June 01, 1926\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 204,
+   "gen_tokens": 46
+  },
+  {
+   "site": "quotes",
+   "page": 4,
+   "seconds": 7.27,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   },
+   "raw": "```json\n{\n  \"name\": \"André Gide\",\n  \"born_date\": \"November 22, 1869\",\n  \"born_location\": \"Paris\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 193,
+   "gen_tokens": 49
+  },
+  {
+   "site": "quotes",
+   "page": 5,
+   "seconds": 8.34,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Thomas A. Edison\",\n  \"born_date\": \"February 11, 1847\",\n  \"born_location\": \"Milan, Ohio, The United States\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 188,
+   "gen_tokens": 56
+  },
+  {
+   "site": "quotes",
+   "page": 6,
+   "seconds": 6.32,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   },
+   "raw": "{\n  \"name\": \"Eleanor Roosevelt\",\n  \"born_date\": \"October 11, 1884\",\n  \"born_location\": \"The United States\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 192,
+   "gen_tokens": 45
+  },
+  {
+   "site": "quotes",
+   "page": 7,
+   "seconds": 7.81,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   },
+   "raw": "```json\n{\n  \"name\": \"Steve Martin\",\n  \"born_date\": \"August 14, 1945\",\n  \"born_location\": \"Waco, Texas, The United States\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 194,
+   "gen_tokens": 54
+  },
+  {
+   "site": "quotes",
+   "page": 8,
+   "seconds": 7.81,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   },
+   "raw": "```json\n{\n  \"name\": \"Bob Marley\",\n  \"born_date\": \"February 06, 1945\",\n  \"born_location\": \"Nine Mile, Saint Ann, Jamaica\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 198,
+   "gen_tokens": 54
+  },
+  {
+   "site": "quotes",
+   "page": 9,
+   "seconds": 7.11,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "name": "Theodor Seuss Geisel was born 2 March 1904 in Springfield, MA. He graduated Dartmouth College in 1925, and proceeded on to Oxford University with the intent of acquiring a doctorate in literature. At Oxford he met Helen Palmer, who he wed in 1927. He returned from Europe in 1927, and began working for a magazine called Judge, the leading humor magazine in America at the time, submitting both cartoons and humorous articles for them. Additionally, he was submitting cartoons to Life, Vanity Fair and Liberty. In some of his works, he'd made reference to an insecticide called Flit. These references gained notice, and led to a contract to draw comic ads for Flit. This association lasted 17 years, gained him national exposure, and coined the catchphrase \"Quick, Henry, the Flit!\" In 1936 on the way to a vaction in Europe, listening to the rhythm of the ship's engines, he came up with And to Think That I Saw It on Mulberry Street, which was then promptly rejected by the first 43 publishers he showed it to. Eventually in 1937 a friend published the book for him, and it went on to at least moderate success. During WW II, Geisel joined the army and was sent to Hollywood. Captain Geisel would write for Frank Capra's Signal Corps Unit (for which he won the Legion of Merit) and do documentaries (he won Oscar's for Hitler Lives and Design for Death). He also created a cartoon called Gerald McBoing-Boing which also won him an Oscar. In May of 1954, Life published a report concerning illiteracy among school children. The report said, among other things, that children were having trouble to read because their books were boring. This inspired Geisel's publisher, and prompted him to send Geisel a list of 400 words he felt were important, asked him to cut the list to 250 words (the publishers idea of how many words at one time a first grader could absorb), and write a book. Nine months later, Geisel, using 220 of the words given to him published The Cat in the Hat, which went on to instant success. In 1960 Bennett Cerf bet Geisel $50 that he couldn't write an entire book using only fifty words. The result was Green Eggs and Ham. Cerf never paid the $50 from the bet. Helen Palmer Geisel died in 1967. Theodor Geisel married Audrey Stone Diamond in 1968. Theodor Seuss Geisel died 24 September 1991. Also worked under the pen name:Theo Le Sieg",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   },
+   "raw": "{\n  \"name\": \"Theodor Seuss Geisel\",\n  \"born_date\": \"March 02, 1904\",\n  \"born_location\": \"Springfield, MA\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 205,
+   "gen_tokens": 49
+  },
+  {
+   "site": "webscraper",
+   "page": 0,
+   "seconds": 20.36,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Asus VivoBook X441NA-GA190\",\n  \"price\": \"$295.99\",\n  \"description\": \"Asus VivoBook X441NA-GA190 Chocolate Black, 14\\\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd\",\n  \"reviews\": 14,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 385,
+   "gen_tokens": 116
+  },
+  {
+   "site": "webscraper",
+   "page": 1,
+   "seconds": 21.33,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Dark Grey\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Dark Grey, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 8,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 392,
+   "gen_tokens": 123
+  },
+  {
+   "site": "webscraper",
+   "page": 2,
+   "seconds": 21.19,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Prestigio SmartBook 133S Gold\",\n  \"price\": \"$299\",\n  \"description\": \"Prestigio SmartBook 133S Gold, 13.3\\\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam\",\n  \"reviews\": 12,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 391,
+   "gen_tokens": 122
+  },
+  {
+   "site": "webscraper",
+   "page": 3,
+   "seconds": 15.66,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Aspire E1-510\",\n  \"price\": \"$306.99\",\n  \"description\": \"15.6\\\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux\",\n  \"reviews\": 2,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 363,
+   "gen_tokens": 91
+  },
+  {
+   "site": "webscraper",
+   "page": 4,
+   "seconds": 20.06,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$321.94\",\n  \"description\": \"Lenovo V110-15IAP, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 5,\n  \"rating\": 3\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 383,
+   "gen_tokens": 114
+  },
+  {
+   "site": "webscraper",
+   "page": 5,
+   "seconds": 20.74,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Lenovo V110-15IAP\",\n  \"price\": \"$356.49\",\n  \"description\": \"Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\\\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd\",\n  \"reviews\": 6,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 389,
+   "gen_tokens": 120
+  },
+  {
+   "site": "webscraper",
+   "page": 6,
+   "seconds": 20.31,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 5
+   },
+   "raw": "```json\n{\n  \"title\": \"Hewlett Packard 250 G6 Dark Ash Silver\",\n  \"price\": \"$364.46\",\n  \"description\": \"Hewlett Packard 250 G6 Dark Ash Silver, 15.6\\\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\",\n  \"reviews\": 12,\n  \"rating\": 5\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 384,
+   "gen_tokens": 117
+  },
+  {
+   "site": "webscraper",
+   "page": 7,
+   "seconds": 20.49,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire 3 A315-31 Black\",\n  \"price\": \"$372.7\",\n  \"description\": \"Acer Aspire 3 A315-31 Black, 15.6\\\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home\",\n  \"reviews\": 2,\n  \"rating\": 2\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 388,
+   "gen_tokens": 119
+  },
+  {
+   "site": "webscraper",
+   "page": 8,
+   "seconds": 20.2,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 0
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire A315-31-C33J\",\n  \"price\": \"$379.94\",\n  \"description\": \"Acer Aspire A315-31-C33J Black 15.6\\\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG\",\n  \"reviews\": 0,\n  \"rating\": 0\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 390,
+   "gen_tokens": 121
+  },
+  {
+   "site": "webscraper",
+   "page": 9,
+   "seconds": 18.77,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   },
+   "raw": "```json\n{\n  \"title\": \"Acer Aspire ES1-572 Black\",\n  \"price\": \"$379.95\",\n  \"description\": \"Acer Aspire ES1-572 Black, 15.6\\\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux\",\n  \"reviews\": 9,\n  \"rating\": 4\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 375,
+   "gen_tokens": 106
+  },
+  {
+   "site": "wikipedia",
+   "page": 0,
+   "seconds": 14.61,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": 0,
+    "oclc": "38659585"
+   },
+   "raw": "{\n  \"title\": \"Pride and Prejudice\",\n  \"author\": \"Jane Austen\",\n  \"publisher\": \"T. Egerton, Whitehall\",\n  \"published\": \"28 January 1813\",\n  \"pages\": 0,\n  \"oclc\": \"38659585\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 780,
+   "gen_tokens": 82
+  },
+  {
+   "site": "wikipedia",
+   "page": 1,
+   "seconds": 15.23,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   },
+   "raw": "{\n  \"title\": \"Nineteen Eighty-Four\",\n  \"author\": \"George Orwell\",\n  \"publisher\": \"Secker & Warburg\",\n  \"published\": \"8 June 1949\",\n  \"pages\": 328,\n  \"oclc\": \"470015866\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 841,
+   "gen_tokens": 82
+  },
+  {
+   "site": "wikipedia",
+   "page": 2,
+   "seconds": 16.94,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   },
+   "raw": "{\n  \"title\": \"The Hobbit, or There and Back Again\",\n  \"author\": \"J. R. R. Tolkien\",\n  \"publisher\": \"George Allen & Unwin (UK)\",\n  \"published\": \"21 September 1937\",\n  \"pages\": 310,\n  \"oclc\": \"1827184\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 847,
+   "gen_tokens": 90
+  },
+  {
+   "site": "wikipedia",
+   "page": 3,
+   "seconds": 15.41,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"To Kill a Mockingbird\",\n  \"author\": \"Harper Lee\",\n  \"publisher\": \"J. B. Lippincott & Co.\",\n  \"published\": \"July 11, 1960\",\n  \"pages\": 281,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 640,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 4,
+   "seconds": 14.57,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": 0,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publisher\": \"Charles Scribner's Sons\",\n  \"published\": \"April 10, 1925\",\n  \"pages\": 0,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 727,
+   "gen_tokens": 73
+  },
+  {
+   "site": "wikipedia",
+   "page": 5,
+   "seconds": 16.1,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851 (United Kingdom) November 14, 1851 (United States)",
+    "pages": 635,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Moby-Dick; or, The Whale\",\n  \"author\": \"Herman Melville\",\n  \"publisher\": \"Richard Bentley (United Kingdom) Harper & Brothers (United States)\",\n  \"published\": \"October 18, 1851 (United Kingdom) November 14, 1851 (United States)\",\n  \"pages\": 635,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 873,
+   "gen_tokens": 103
+  },
+  {
+   "site": "wikipedia",
+   "page": 6,
+   "seconds": 15.43,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   },
+   "raw": "{\n  \"title\": \"Frankenstein; or, The Modern Prometheus\",\n  \"author\": \"Mary Shelley\",\n  \"publisher\": \"Lackington, Hughes, Harding, Mavor & Jones\",\n  \"published\": \"1 January 1818\",\n  \"pages\": 280,\n  \"oclc\": null\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 804,
+   "gen_tokens": 80
+  },
+  {
+   "site": "wikipedia",
+   "page": 7,
+   "seconds": 15.62,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": 0,
+    "oclc": "1447002"
+   },
+   "raw": "```json\n{\n  \"title\": \"Dracula\",\n  \"author\": \"Bram Stoker\",\n  \"publisher\": \"Archibald Constable and Company (UK)\",\n  \"published\": \"May 1897\",\n  \"pages\": 0,\n  \"oclc\": \"1447002\"\n}\n```",
+   "prompt_tokens": 4,
+   "cached_tokens": 638,
+   "gen_tokens": 83
+  },
+  {
+   "site": "wikipedia",
+   "page": 8,
+   "seconds": 15.53,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   },
+   "raw": "{\n  \"title\": \"The Catcher in the Rye\",\n  \"author\": \"J. D. Salinger\",\n  \"publisher\": \"Little, Brown and Company\",\n  \"published\": \"July 16, 1951\",\n  \"pages\": 234,\n  \"oclc\": \"287628\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 677,
+   "gen_tokens": 86
+  },
+  {
+   "site": "wikipedia",
+   "page": 9,
+   "seconds": 15.34,
+   "valid_json": true,
+   "thinking_leak": false,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   },
+   "raw": "{\n  \"title\": \"Brave New World\",\n  \"author\": \"Aldous Huxley\",\n  \"publisher\": \"Chatto & Windus\",\n  \"published\": \"February 1932\",\n  \"pages\": 311,\n  \"oclc\": \"20156268\"\n}",
+   "prompt_tokens": 4,
+   "cached_tokens": 601,
+   "gen_tokens": 81
+  }
+ ]
+}

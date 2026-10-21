@@ -111,6 +111,56 @@ A 2B brain copies well and counts badly. With "null" allowed, it answered null f
 - **Bug found and fixed while measuring:** the stock number 18 snapped to the price "£44.18". Numbers now snap only as whole numbers.
 - **Still one site and one page layout.** The council's first step, a test set from several different sites, is not built yet.
 
+## 5. Harness tuner, phase 1: the scoreboard and free server settings (2026-10-21, `bench/score.py`)
+
+**Test set:** 4 sites, 10 saved pages each, 190 answers (`bench/testset.py`). The sites are books.toscrape, quotes.toscrape author pages, webscraper.io's test shop and 10 Wikipedia book articles. Each brain run asks every page 5 times in one mixed batch, so 200 questions go to 53 brains.
+
+**Scoring rules:**
+- Writing "none" when the page shows the answer is an error.
+- Writing a value when the page shows nothing is also an error.
+- Error bars resample whole pages, with 2,000 draws.
+- Two settings are compared item by item: majority right or wrong over the 5 runs, with an exact McNemar test.
+- 190 answers can only show differences of about 5 points.
+
+**Answer key check:**
+- The first baseline got 12 items wrong in most runs. Each was checked against its saved page, and the key was right on all 12.
+- One miss was a harness bug, not a brain or key error. On *Brave New World* the brain wrote "February 1932" correctly, then the snap step copied the page's footnote mark and made it "February 1932 [ 1 ]". Snapping now drops footnote marks.
+- That one fix took the baseline from 93.8% to 95.1%. The run from before the fix is kept as `score-base-before-snapfix.json`.
+
+**The A/B tests** (5 runs each, same 190 answers):
+
+| Setting | All sites | books | quotes | webscraper | wikipedia | Gap vs base | Pages/s |
+|---|---|---|---|---|---|---|---|
+| base: `--reasoning-budget 0`, `-ctxcp 2`, answer form enforced | 95.1% [91.8, 97.8] | 98% | 89% | 96% | 95% | | 2.69 |
+| **`-rea off`** | **94.9%** [91.5, 97.8] | 97% | 89% | 96% | 95% | −0.1 pts [−1.0, +0.5], p = 1.0 | **3.03** |
+| `-ctxcp 4` | 94.6% [91.1, 97.7] | 96% | 90% | 96% | 94% | −0.4 pts [−1.3, +0.2], p = 1.0 | 2.50 |
+| no answer form (code parses the JSON) | 94.6% [91.2, 97.7] | 98% | 89% | 96% | 93% | −0.4 pts [−1.6, +0.6], p = 1.0 | 2.61 |
+
+- **Accuracy:** none of the three changes moves it. Every gap is under half a point and every p is 1.0.
+- **Speed is noisy between server starts.** base gave 2.12 and 2.69 pages/s on the same settings. So base and `-rea off` ran 2 more times each, taking turns:
+
+| Head-to-head | base | `-rea off` |
+|---|---|---|
+| 1 | 2.69 | 3.03 |
+| 2 | 2.44 | 2.70 |
+| 3 | 2.26 | 2.59 |
+
+- **`-rea off` was faster in 3 of 3, by about 13%, at the same accuracy.** It is now the default in `bench/brains.py` (`FLAGS`). Cause: `--reasoning-budget 0` turns GPU sampling off; `-rea off` keeps it on.
+- **`-ctxcp 4` is not needed.** Every setting already reuses about 340 prompt tokens per question from the cache: the shared start of the prompt was never being thrown away at these prompt sizes.
+- **The answer form stays.** Dropping it didn't make answers faster here (they are short), and the form guarantees valid JSON.
+
+**What the brains still get wrong** (9 items wrong in most runs, the same in every setting):
+
+| Kind | Items | What happens |
+|---|---|---|
+| Counting stars | books/00, books/09, webscraper/06, webscraper/08 | Books always draws 5 star icons and names the count in a class ("star-rating Three"); the brain reads the icons. On webscraper it reads 1 star as 5, and 2 stars next to "0 reviews" as 0. |
+| Place cut short | quotes/04, quotes/09 | "Paris" for "Paris, France". The line starts "Born: November 22, 1869 in ...", so snapping can't make it whole. |
+| Wrong name | quotes/09 | The real name "Theodor Seuss Geisel" from the description instead of the page's "Dr. Seuss"; snapping then copies the whole description sentence. |
+| 0 for none | wikipedia/00, wikipedia/04 | No page count on the page; the brain writes 0. |
+| Two dates in one | wikipedia/05 | Moby-Dick lists a UK and a US date; the brain writes both. |
+
+These are the starting list for phase 3's fix loop. Fixing them is harness work, with a risk of tuning to these 40 pages, so each fix has to be checked on pages it wasn't made from.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:
@@ -130,6 +180,9 @@ python -X utf8 bench/brains.py --np 53 --point
 python -X utf8 bench/brains.py --np 8
 python -X utf8 bench/brains.py --np 1 --recipe
 python -X utf8 bench/brains.py --np 1
+python -X utf8 bench/testset.py
+python -X utf8 bench/score.py --variant base --runs 5
+python -X utf8 bench/score.py --compare base rea-off
 ```
 
 The server command is recorded in each `bench/brains-*.json` (`server_cmd`).
