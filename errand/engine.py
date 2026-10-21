@@ -8,6 +8,8 @@ room and the Errand connector work with either.
   site, same path depth) are samples.
 - learn: the vote across pages learns a recipe from the samples' answers. Later pages of that kind
   are read by code, with a brain only for the fields no recipe covers (bench/results.md sections 7-8).
+- reuse: a recipe saved by an earlier job for this kind of page (errand/store.py) is checked on 3
+  pages instead of learned from 10; if the site changed and it no longer holds, it is learned afresh.
 - fix: a page left without a field that most pages of its kind have (4 in 5 samples) is read again
   by Gemini (errand/gemini.py), only for public jobs and only within the daily budget.
 Results go to jobs/<job>.csv: one row per link, with its status ("ok", "blocked: bot check", ...).
@@ -19,6 +21,7 @@ from collections import deque
 
 from . import extract as x, memory
 from .gemini import Gemini
+from .store import Store
 from .brains import URL as BRAIN_URL, BrainServer
 from .demo import N, STEP, slug
 from .fetch import Polite, site
@@ -27,6 +30,7 @@ from .updates import UpdateLog
 RESULTS = pathlib.Path(__file__).resolve().parent.parent / 'jobs'
 SAMPLES = 10  # bench/results.md section 8: 5 samples broke fresh Wikipedia pages, 10 didn't
 SAVE_EVERY = 20  # rows between rewrites of the results file
+CHECK = 3  # pages a saved recipe is checked on before it is trusted again
 
 
 def parse_fields(fields):
@@ -69,7 +73,7 @@ class Agent:
 
 class Engine:
     def __init__(self, brain=None, fetcher=None, results=RESULTS, samples=SAMPLES, log_path=None, server_log=None,
-                 remember=True, gemini=None):
+                 remember=True, gemini=None, store=None):
         self.lock = threading.Condition()
         self.agents = [Agent(i + 1) for i in range(N)]
         self.updates = UpdateLog(log_path)
@@ -79,6 +83,8 @@ class Engine:
         self.brains = 'ready' if brain else 'off'  # off | starting | ready | failed: why
         self.results, self.samples, self.remember = results, samples, remember
         self.gemini = gemini or Gemini()
+        self.store = store or Store()
+        self.job_id, self.reused = None, 0
         self.private, self.gemini_calls, self.gemini_fixed = False, 0, 0
         self.threads, self.closed, self.paused = [], False, False
         self.job, self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = None, 0, 0, 0, 0, 0, 0
@@ -106,6 +112,11 @@ class Engine:
                 g = self.groups.setdefault(kind_of_page(u), {'recipe': None, 'samples': {}, 'sampling': set(),
                                                             'waiting': [], 'unfetched': 0, 'learning': False})
                 g['unfetched'] += 1
+            for kind, g in self.groups.items():  # a saved recipe for every field: check it on 3 pages, not 10
+                saved = self.store.recipes(kind, fields)
+                g['saved'] = saved if set(saved) == set(fields) else None
+                g['target'] = CHECK if g['saved'] else self.samples
+            self.job_id, self.reused = self.store.start_job(self.job, self.total, fields, self.private), 0
             self.out, self.announced, self.saved_at = self._free_name(slug(self.job)), False, 0
             self.hist, self.rate = [0], 0.0
             for a in self.agents:
@@ -164,7 +175,7 @@ class Engine:
                 'huddle': None, 'board': 0, 'fixed_by_huddles': 0, 'set_aside': 0,
                 'results': str(self.out) if self.out else 'no job yet',
                 'mode': 'real', 'brains_state': self.brains, 'fetched': fetched, 'recipes': len(recipes),
-                'brain_calls': calls, 'by_code': by_code, 'private': self.private,
+                'brain_calls': calls, 'by_code': by_code, 'private': self.private, 'recipes_reused': self.reused,
                 'gemini': 'off: private job' if self.private else self.gemini.state(),
                 'gemini_calls': self.gemini_calls, 'gemini_fixed': self.gemini_fixed,
                 # the room's middle TV and desk monitors (no browser windows yet, so no hand-offs to show)
@@ -190,6 +201,9 @@ class Engine:
 
     def board_view(self):
         return {'huddle': None, 'waiting': [], 'recent': []}
+
+    def history(self, limit=20):
+        return self.store.jobs(limit)
 
     def problem_detail(self, pid):
         return None
@@ -293,8 +307,11 @@ class Engine:
             return self.fetcher.fetch(key)
         if kind == 'learn':
             g = self.groups[key]
-            return {'recipe': x.learn_recipe([(self.html[u], ans) for u, ans in g['samples'].items()],
-                                             self.fields, focus=self.focus)}
+            pages = [(self.html[u], ans) for u, ans in g['samples'].items()]
+            if g['saved']:  # a recipe from an earlier job: does it still read this site right?
+                ok = all(x.holds(pages, self.fields, f, k) for f, k in g['saved'].items())
+                return {'recipe': g['saved'], 'reused': True} if ok else {'changed': True}
+            return {'recipe': x.learn_recipe(pages, self.fields, focus=self.focus)}
         g, used = self.groups[kind_of_page(key)], []
         helper = self.gemini.brain if kind == 'fix' else self.brain
 
@@ -324,17 +341,34 @@ class Engine:
                     self.updates.add('blocked', f'#{a.n} {r["status"]}: {key[-80:]}', a.n)
             else:
                 self.html[key] = r['html']
+                if not self.private:
+                    self.store.cache_page(key, r['html'])
                 if g['recipe'] is not None:
                     self.tasks.appendleft(('read', key))  # reads go first: brains work while sites pause
-                elif len(g['samples']) + len(g['sampling']) < self.samples:
+                elif len(g['samples']) + len(g['sampling']) < g['target']:
                     g['sampling'].add(key)
                     self.tasks.appendleft(('read', key))
                 else:
                     g['waiting'].append(key)  # waits for its kind's recipe
             self._maybe_learn(g, kind_of_page(key))
+        elif kind == 'learn' and r.get('changed'):  # the saved recipe no longer holds: learn from 10 pages
+            g = self.groups[key]
+            g['saved'], g['target'], g['learning'] = None, self.samples, False
+            self.store.forget_recipe(key, self.fields)
+            while g['waiting'] and len(g['samples']) + len(g['sampling']) < g['target']:
+                u = g['waiting'].pop(0)
+                g['sampling'].add(u)
+                self.tasks.appendleft(('read', u))
+            self.updates.add('recipe', f'#{a.n} the saved recipe for {key} no longer reads it right '
+                                       f'(the site changed?): learning a new one from {self.samples} pages', a.n)
+            self._maybe_learn(g, key)
         elif kind == 'learn':
             g = self.groups[key]
             g['recipe'], g['learning'] = r.get('recipe', {}), False
+            if r.get('reused'):
+                self.reused += 1
+            elif g['recipe'] and not self.private:
+                self.store.save_recipe(key, g['recipe'], self.fields, self.job_id)
             g['filled'] = {f: sum(ans.get(f) not in (None, '') for ans in g['samples'].values()) / len(g['samples'])
                            for f in self.fields}
             for u, ans in g['samples'].items():  # the vote also corrects the samples' slips
@@ -345,7 +379,8 @@ class Engine:
             g['waiting'] = []
             covered = len(g['recipe'])
             a.steps.append(f'learn {key}: {covered}/{len(self.fields)} fields by code')
-            self.updates.add('recipe', f"#{a.n} learned a recipe for {key} from {len(g['samples'])} pages: "
+            self.updates.add('recipe', f"#{a.n} {'reused the saved recipe' if r.get('reused') else 'learned a recipe'} "
+                                       f"for {key}, checked on {len(g['samples'])} pages: "
                                        f'{covered} of {len(self.fields)} fields now read by code', a.n)
             self._save()
         else:
@@ -381,6 +416,8 @@ class Engine:
             self._save()
             self.updates.add('job', f"Job '{self.job}' finished · {self.done} pages · {self.blocked} blocked · "
                                     f'{self.by_code} read by code · results: {self.out}')
+            self.store.finish_job(self.job_id, self.rows, done=self.done, blocked=self.blocked, by_code=self.by_code,
+                                  brain_calls=self.brain_calls, gemini_calls=self.gemini_calls, results=self.out)
             if self.remember:  # the chief's memory (gbrain): what ran, which sites blocked, where results are
                 memory.save_job(self.job, time.strftime('%Y-%m-%d %H:%M'), self.done, list(self.fields),
                                 self.by_code, self.brain_calls, self.out, dict(self.rows))
@@ -396,7 +433,7 @@ class Engine:
 
     def _maybe_learn(self, g, key):
         if g['recipe'] is None and not g['learning'] and not g['sampling'] and g['samples'] and \
-                (len(g['samples']) >= self.samples or g['unfetched'] == 0):
+                (len(g['samples']) >= g['target'] or g['unfetched'] == 0):
             g['learning'] = True
             self.tasks.appendleft(('learn', key))
 

@@ -252,6 +252,18 @@ def resume_all() -> str:
 
 
 @tool
+def past_jobs(limit: int = 10) -> str:
+    """Jobs run before, newest first: pages done, how many were blocked or read by code, and the
+    results file of each."""
+    jobs = _call('GET', '/api/history', params={'limit': limit})
+    if not jobs:
+        return 'No past jobs yet.'
+    return '\n'.join(f"{j['started'][:16]} '{j['name']}': {j['done'] or 0}/{j['total']} pages · {j['blocked'] or 0} blocked"
+                     f" · {j['by_code'] or 0} by code · {j['brain_calls'] or 0} brain calls"
+                     + (f" · results: {j['results']}" if j['results'] else ' · not finished') for j in jobs)
+
+
+@tool
 def get_updates(since: int | None = None) -> str:
     """Agent updates after update number `since` (the newest 50 if left out), oldest first."""
     ups = _call('GET', '/api/updates', params={'since': since} if since is not None else None)

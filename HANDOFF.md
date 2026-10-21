@@ -303,10 +303,15 @@ From `reports/Full feature free Errand plan.md`:
   - **The key:** the user pastes it into `~/.errand/gemini_key`, and it is sent only to Google. `python -m errand gemini` checks it without spending any allowance.
   - **Tests:** `tests/conftest.py` keeps every test off the real key.
   - **Not measured live yet:** there is no key yet.
+- **Saved data** (`errand/store.py`, SQLite `~/.errand/errand.db` and a page cache in `~/.errand/cache/`):
+  - **What is kept:** jobs, results and recipes. Public pages are cached; private jobs are never cached.
+  - **Reuse:** a later job on the same kind of page checks the saved recipe on 3 pages (`engine.CHECK`) instead of learning from 10. If the site changed, the check fails and a new recipe is learned.
+  - **Past jobs:** `GET /api/history`, and the `past_jobs` connector tool (now 12 tools).
+  - **Tests:** a temporary database (conftest).
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
-  3. saved data
+  3. saved data (done)
   4. browser windows with the stealth and JavaScript steps
   5. checker, fixer and huddles
   6. safe clicking, record and replay

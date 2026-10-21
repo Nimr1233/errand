@@ -138,6 +138,11 @@ def board_problem(pid: str):
     return p
 
 
+@app.get('/api/history', dependencies=[api])
+def history(limit: int = 20):
+    return [] if DEMO else engine.history(limit)  # past jobs, newest first
+
+
 @app.get('/api/updates', dependencies=[api])
 def updates(since: int | None = None):
     return engine.updates.since(since)

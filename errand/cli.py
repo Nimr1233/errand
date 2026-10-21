@@ -4,7 +4,7 @@ import asyncio
 import pathlib
 import sys
 
-LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates', 'list_problems', 'problem_detail')
+LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates', 'list_problems', 'problem_detail', 'past_jobs')
 
 
 def start(demo=False):

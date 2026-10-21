@@ -234,15 +234,23 @@ def learn_recipe(pages, fields, share=VOTE_SHARE, **view):
                     if got not in (None, '') and same(kind, got, want):
                         key = (name, el.generate_css_selector)
                         votes[key] = votes.get(key, 0) + 1
-        shown = sum(a.get(f) not in (None, '') for _, a in parsed)
         for key in sorted(votes, key=votes.get, reverse=True)[:10]:
-            got = [(replay(p, {f: key}, fields)[f], a.get(f)) for p, a in parsed]
-            agree = sum(same(kind, g, w) for g, w in got)
-            hits = sum(w not in (None, '') and same(kind, g, w) for g, w in got)
-            if agree >= share * len(parsed) and hits >= max(MIN_HITS, share * shown):
+            if holds(parsed, fields, f, key, share):
                 recipe[f] = key
                 break
     return recipe
+
+
+def holds(pages, fields, f, key, share=VOTE_SHARE):
+    """Does one field's (reader, selector) give back the brains' answers on these pages? It must agree
+    on `share` of them and read a real value right on at least MIN_HITS, and on `share` of the pages
+    where the brains saw one. pages: [(page, answers)]. Also used to check a saved recipe on a new job."""
+    kind = fields[f][1]
+    got = [(replay(as_page(p), {f: key}, fields)[f], a.get(f)) for p, a in pages]
+    agree = sum(same(kind, g, w) for g, w in got)
+    hits = sum(w not in (None, '') and same(kind, g, w) for g, w in got)
+    shown = sum(w not in (None, '') for _, w in got)
+    return agree >= share * len(pages) and hits >= max(MIN_HITS, share * shown)
 
 
 def read_pages(htmls, fields, brain, samples=10, recipe=None, workers=53, **view):

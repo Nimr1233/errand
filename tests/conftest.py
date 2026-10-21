@@ -12,7 +12,9 @@ os.environ.setdefault('ERRAND_DEMO', '1')
 def no_real_memory_or_gemini(monkeypatch, tmp_path):
     """No test ever writes into your real gbrain or spends your real Gemini allowance: test_memory.py
     and test_gemini.py bring their own stand-ins."""
-    from errand import gemini, memory
+    from errand import gemini, memory, store
     monkeypatch.setattr(memory, 'CMD', [])
+    monkeypatch.setattr(store, 'DB', tmp_path / 'errand.db')  # and never touches your saved jobs
+    monkeypatch.setattr(store, 'CACHE', tmp_path / 'cache')
     monkeypatch.setattr(gemini, 'load_key', lambda: None)
     monkeypatch.setattr(gemini, 'USAGE_FILE', tmp_path / 'gemini_usage.json')
