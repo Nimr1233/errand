@@ -13,16 +13,20 @@ Run:  python -X utf8 bench/brains.py --np 53
       python -X utf8 bench/brains.py --np 53 --point
       python -X utf8 bench/brains.py --np 1 --recipe
 """
-import argparse, json, pathlib, re, statistics, subprocess, threading, time, urllib.request
+import argparse, json, pathlib, re, statistics, subprocess, sys, threading, time, urllib.request
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from scrapling.parser import Selector
 
 ROOT = pathlib.Path(__file__).parent
+sys.path.insert(0, str(ROOT.parent))
+from errand.extract import inline_only, last_json, numbered_view, own_text, piece_text  # noqa: E402,F401
+from errand import extract  # noqa: E402
 PAGES = sorted((ROOT / 'cache' / 'A').glob('*.html'))
 LLAMA = pathlib.Path.home() / 'AppData/Local/Temp/errand/llama/llama-server.exe'
 MODEL = pathlib.Path.home() / 'AppData/Local/Temp/errand/dl/Qwen3.5-2B-Q4_K_M.gguf'
 URL = 'http://127.0.0.1:8080'
+FOCUS = 'article.product_page'
 FIELDS = ['title', 'price', 'availability', 'upc', 'rating']
 STARS = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
 SYSTEM = ('You read one product page and fill in a form. Think in at most two short sentences, '
@@ -41,7 +45,6 @@ POINT_SCHEMA = {'type': 'object', 'properties': {'title': {'type': 'string'}, 'p
                 'rating': {'type': 'integer', 'enum': [1, 2, 3, 4, 5]}},
                 'required': FIELDS, 'additionalProperties': False}
 WORDS = {v: k for k, v in STARS.items()}
-KEEP = ('class', 'title', 'alt', 'itemprop', 'content', 'aria-label')  # labels that can hold an answer
 RECIPE_SYSTEM = ('You write a scraping recipe. Given the HTML of one product page, output ONE JSON object '
                  'mapping each key to a CSS selector that selects the element holding that value on pages '
                  'with this layout. Keys: "title", "price", "availability", "upc", "rating". '
@@ -83,63 +86,6 @@ def page_text(html, limit=6000):
     return str(body)[:limit]
 
 
-INLINE = {'a', 'abbr', 'b', 'bdi', 'br', 'cite', 'em', 'i', 'img', 'small', 'span', 'strong', 'sub', 'sup', 'time'}
-
-
-def own_text(el):
-    return ' '.join(t.strip() for t in el.xpath('text()').getall() if t.strip())
-
-
-def inline_only(el):
-    """Insides are only inline bits that all hold text. An empty icon inside (star icons next to
-    "14 reviews") carries meaning, so such a piece is not flattened and the icons keep their line."""
-    kids = list(el.children)
-    return bool(kids) and bool(el.get_all_text(strip=True)) and \
-        all(c.tag in INLINE and (c.tag == 'br' or c.get_all_text(strip=True)) for c in kids)
-
-
-def piece_text(el):
-    """A piece's text: its own text, or all of it when its insides are only inline bits like links
-    (Wikipedia's "<a>T. Egerton</a>, Whitehall" stays one piece)."""
-    if inline_only(el):
-        return re.sub(r'\s+', ' ', el.get_all_text(separator=' ', strip=True)).replace(' ,', ',')
-    return own_text(el)
-
-
-def numbered_view(html, width=120, focus='article.product_page', limit=9000, skip=()):
-    """One numbered line per page piece that holds text or a label, inside the page's main block
-    (`focus`). Containers whose text lives in their children are skipped. A run of identical
-    empty pieces, like star icons, becomes one line ending in ×N: code counts, not the brain.
-    `skip`: tags never shown, like style and script (Wikipedia puts CSS inside its infobox).
-    Returns (the text a brain reads, the elements in line order)."""
-    s = Selector(html)
-    block = s.css(focus) if focus else None
-    els, lines, last, inside = [], [], None, set()
-    for el in (block[0] if block else s).css('*'):
-        if id(el._root) in inside:  # part of an inline piece already shown whole
-            continue
-        if el.tag in skip:
-            inside.update(id(d) for d in el._root.iterdescendants())
-            continue
-        own = piece_text(el)
-        if inline_only(el):
-            inside.update(id(d) for d in el._root.iterdescendants())
-        labels = {k: re.sub(r'\s+', ' ', v).strip()[:80] for k, v in el.attrib.items()
-                  if k in KEEP or k.startswith('data-')}
-        if not own and (el.get_all_text(strip=True) or not labels):  # a container, or nothing to show
-            continue
-        tag = ' '.join([el.tag] + [f'{k}={v}' for k, v in labels.items()])
-        if not own and not el.children and tag == last:  # same empty icon again
-            count = int(lines[-1].rsplit('×', 1)[1]) + 1 if '×' in lines[-1] else 2
-            lines[-1] = f"{lines[-1].rsplit(' ×', 1)[0]} ×{count}"
-            continue
-        last = tag if not own and not el.children else None
-        els.append(el)
-        lines.append(f'[{len(els)}] {tag}: {own[:width]}'.rstrip(': ') if not own else f'[{len(els)}] {tag}: {own[:width]}')
-    text = '\n'.join(lines)
-    return text[:limit], els  # shortcut: cut at `limit` chars, a page whose answers sit past it fails; prune smarter when that shows up
-
-
 def snap(value, field, els):
     """Write, then snap: the line number (1-based) of the first page piece holding the brain's
     value, or None. Code then copies that whole piece, so a shortened title comes back in full."""
@@ -165,23 +111,8 @@ def pointed_value(el, field):
     return piece_text(el) or str(el.get_all_text(separator=' ', strip=True))
 
 
-def last_json(text):
-    for m in reversed(list(re.finditer(r'\{[^{}]*\}', text or '', re.S))):
-        try:
-            return json.loads(m.group())
-        except ValueError:
-            continue
-    return None
-
-
 def chat(system, user, max_tokens=300, **extra):
-    body = json.dumps({'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}],
-                       'max_tokens': max_tokens, 'temperature': 0, **extra}).encode()
-    req = urllib.request.Request(URL + '/v1/chat/completions', body, {'Content-Type': 'application/json'})
-    t = time.perf_counter()
-    with urllib.request.urlopen(req, timeout=900) as r:
-        data = json.loads(r.read())
-    return data, time.perf_counter() - t
+    return extract.chat(URL, system, user, max_tokens, **extra)
 
 
 class GpuSampler(threading.Thread):
@@ -238,7 +169,7 @@ def run_extract(np_, point=False):
         i = k % len(htmls)  # with more slots than pages, pages repeat so every slot is busy at once
         points = None
         if point:  # the brain writes values in a fixed form; code snaps each to its page piece and copies it
-            view, els = numbered_view(htmls[i])
+            view, els = numbered_view(htmls[i], focus=FOCUS)
             data, secs = chat(POINT_SYSTEM, view, max_tokens=200,
                               response_format={'type': 'json_schema', 'json_schema': {'schema': POINT_SCHEMA}})
             written = last_json(data['choices'][0]['message'].get('content')) or {}
@@ -292,7 +223,7 @@ def recipe_from_points(rows, samples=5):
     for f in FIELDS:
         votes = Counter()
         for i in ids:
-            n, els = first[i]['points'].get(f), numbered_view(htmls[i])[1]
+            n, els = first[i]['points'].get(f), numbered_view(htmls[i], focus=FOCUS)[1]
             if isinstance(n, int) and 1 <= n <= len(els):
                 votes[els[n - 1].generate_css_selector] += 1
         for sel, _ in votes.most_common():

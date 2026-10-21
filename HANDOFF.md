@@ -278,10 +278,16 @@ From `reports/Full feature free Errand plan.md`:
   - Phase 3 so far: held-out 94.9% → 99.4%, 9 fixed, 0 broken, p = 0.004.
   - Books and webscraper need no brain on new pages. Wikipedia gets no recipe (its row order changes) and stays with the brain.
   - The winner is `p3-r2-vote`.
+- **The page reader is now part of Errand: `errand/extract.py`** (`bench/results.md` section 8). It holds the numbered view, the answer form, snap, the round 1 fixes (always on), the vote, and `read_pages()`.
+  - `read_pages()`: brains read 10 sample pages, a recipe is learned from their answers, and code reads every page. A brain reads only the fields no recipe covers, and a recipe can be reused.
+  - The bench scripts call it. `tests/test_extract.py` adds 9 offline tests; the suite has 48.
+  - A fresh third set (`bench/testset.py --set fresh`) checks it: fresh 94.1% → 97.3%, 6 fixed, 0 broken, with half the brain calls.
+  - Two engine bugs were found and fixed: agreeing on missing values counted as evidence, and 5 samples were too few.
+  - Not built: the job loop that fetches pages and runs `read_pages` for real jobs. The demo engine still fakes work.
 - **Next (needs the user's go-ahead):**
-  - the 3 items left
+  - the real job loop (fetch, then `read_pages`, then the room)
+  - why prompt caching dropped in the 600-question run
   - recipes keyed by row label, for sites like Wikipedia
-  - moving the vote into the real engine
   - or phase 2, clicking
 
 **Known limits (marked `shortcut:` in the code where it applies):**
@@ -313,8 +319,8 @@ From `reports/Full feature free Errand plan.md`:
 | `bench/results.md`, `bench/windows.md`, `bench/*.json` | benchmark results |
 | `reports/*.md` | 4 research reports: $0 agent, 53 free agents, max brains, full-feature plan |
 | `research_notes/**` | raw research notes behind the reports |
-| `errand/` | mission control: room page, server, demo engine, terminal bridge, connector, CLI (section 9) |
-| `tests/` | pytest suite (31 tests); `pytest.ini` sets the path |
+| `errand/` | mission control: room page, server, demo engine, terminal bridge, connector, CLI (section 9); `extract.py`, the page reader (session 4) |
+| `tests/` | pytest suite (48 tests); `pytest.ini` sets the path |
 | `.claude/launch.json` | one preview config: `python -m errand start` |
 | `.gitignore` | ignores `bench/cache/`, `bench/server-*.log`, `__pycache__/`, `tests/out/`, `.pytest_cache/` |
 

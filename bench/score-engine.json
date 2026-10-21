@@ -1,0 +1,7549 @@
+{
+ "variant": "engine",
+ "runs": 5,
+ "server_cmd": "C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\llama\\llama-server.exe -m C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\dl\\Qwen3.5-2B-Q4_K_M.gguf -np 53 -c 217088 -ngl 99 -fa on -ctk q8_0 -ctv q8_0 -ctxcp 2 -cram 2048 -rea off --host 127.0.0.1 --port 8080",
+ "fixes": [
+  "engine"
+ ],
+ "recipes": null,
+ "sets": {
+  "testset": {
+   "scores": {
+    "books": {
+     "accuracy": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "runs_min_max": [
+      1.0,
+      1.0
+     ]
+    },
+    "quotes": {
+     "accuracy": 0.907,
+     "ci95": [
+      0.813,
+      1.0
+     ],
+     "runs_min_max": [
+      0.9,
+      0.933
+     ]
+    },
+    "webscraper": {
+     "accuracy": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "runs_min_max": [
+      1.0,
+      1.0
+     ]
+    },
+    "wikipedia": {
+     "accuracy": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "runs_min_max": [
+      1.0,
+      1.0
+     ]
+    },
+    "all": {
+     "accuracy": 0.985,
+     "ci95": [
+      0.965,
+      1.0
+     ],
+     "unstable_items": 1,
+     "none_items_wrong": 0,
+     "false_none": 0
+    }
+   },
+   "wrong_most_runs": [
+    {
+     "item": "quotes/01 born_location",
+     "truth": "Yate, South Gloucestershire, England, The United Kingdom",
+     "right_runs": "1/5",
+     "brain": [
+      "Yate, South Gloucestershire, England, The United Kingdom",
+      "Yate",
+      "Yate",
+      "Yate",
+      "Yate"
+     ]
+    },
+    {
+     "item": "quotes/04 born_location",
+     "truth": "Paris, France",
+     "right_runs": "0/5",
+     "brain": [
+      "Paris",
+      "Paris",
+      "Paris",
+      "Paris",
+      "Paris"
+     ]
+    },
+    {
+     "item": "quotes/09 born_location",
+     "truth": "Springfield, MA, The United States",
+     "right_runs": "0/5",
+     "brain": [
+      "Springfield, MA",
+      "Springfield, MA",
+      "Springfield, MA",
+      "Springfield, MA",
+      "Springfield, MA"
+     ]
+    }
+   ]
+  },
+  "holdout": {
+   "scores": {
+    "books": {
+     "accuracy": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "runs_min_max": [
+      1.0,
+      1.0
+     ]
+    },
+    "quotes": {
+     "accuracy": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "runs_min_max": [
+      1.0,
+      1.0
+     ]
+    },
+    "webscraper": {
+     "accuracy": 0.96,
+     "ci95": [
+      0.9,
+      1.0
+     ],
+     "runs_min_max": [
+      0.96,
+      0.96
+     ]
+    },
+    "wikipedia": {
+     "accuracy": 0.98,
+     "ci95": [
+      0.947,
+      1.0
+     ],
+     "runs_min_max": [
+      0.967,
+      0.983
+     ]
+    },
+    "all": {
+     "accuracy": 0.983,
+     "ci95": [
+      0.963,
+      0.999
+     ],
+     "unstable_items": 1,
+     "none_items_wrong": 0,
+     "false_none": 15
+    }
+   },
+   "wrong_most_runs": [
+    {
+     "item": "webscraper/02 rating",
+     "truth": 1,
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "webscraper/04 rating",
+     "truth": 1,
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/09 pages",
+     "truth": 335,
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    }
+   ]
+  },
+  "fresh": {
+   "scores": {
+    "books": {
+     "accuracy": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "runs_min_max": [
+      1.0,
+      1.0
+     ]
+    },
+    "quotes": {
+     "accuracy": 0.893,
+     "ci95": [
+      0.8,
+      0.973
+     ],
+     "runs_min_max": [
+      0.867,
+      0.933
+     ]
+    },
+    "webscraper": {
+     "accuracy": 0.9,
+     "ci95": [
+      0.84,
+      0.96
+     ],
+     "runs_min_max": [
+      0.9,
+      0.9
+     ]
+    },
+    "wikipedia": {
+     "accuracy": 0.833,
+     "ci95": [
+      0.717,
+      0.95
+     ],
+     "runs_min_max": [
+      0.833,
+      0.833
+     ]
+    },
+    "all": {
+     "accuracy": 0.904,
+     "ci95": [
+      0.857,
+      0.95
+     ],
+     "unstable_items": 2,
+     "none_items_wrong": 0,
+     "false_none": 61
+    }
+   },
+   "wrong_most_runs": [
+    {
+     "item": "quotes/02 born_location",
+     "truth": "Buenos Aires, Argentina",
+     "right_runs": "0/5",
+     "brain": [
+      "Buenos Aires",
+      "Buenos Aires",
+      "Buenos Aires",
+      "Buenos Aires",
+      "Buenos Aires"
+     ]
+    },
+    {
+     "item": "quotes/05 born_location",
+     "truth": "Belfast, Ireland",
+     "right_runs": "0/5",
+     "brain": [
+      "Belfast",
+      "Belfast",
+      "Belfast",
+      "Belfast",
+      "Belfast"
+     ]
+    },
+    {
+     "item": "quotes/09 born_location",
+     "truth": "Paris, France",
+     "right_runs": "1/5",
+     "brain": [
+      "Paris",
+      "Paris",
+      "Paris, France",
+      "Paris",
+      "Paris"
+     ]
+    },
+    {
+     "item": "webscraper/00 rating",
+     "truth": 1,
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "webscraper/01 rating",
+     "truth": 1,
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "webscraper/02 rating",
+     "truth": 1,
+     "right_runs": "0/5",
+     "brain": [
+      2,
+      2,
+      2,
+      null,
+      2
+     ]
+    },
+    {
+     "item": "webscraper/04 rating",
+     "truth": 1,
+     "right_runs": "0/5",
+     "brain": [
+      5,
+      5,
+      5,
+      5,
+      5
+     ]
+    },
+    {
+     "item": "webscraper/07 rating",
+     "truth": 1,
+     "right_runs": "0/5",
+     "brain": [
+      5,
+      5,
+      5,
+      5,
+      5
+     ]
+    },
+    {
+     "item": "wikipedia/00 pages",
+     "truth": 1036,
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/06 author",
+     "truth": "James Joyce",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/06 title",
+     "truth": "Ulysses",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/07 author",
+     "truth": "Joseph Heller",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/07 title",
+     "truth": "Catch-22",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/08 author",
+     "truth": "Kurt Vonnegut",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/08 title",
+     "truth": "Slaughterhouse-Five, or the Children's Crusade",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/09 author",
+     "truth": "Margaret Mitchell",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/09 pages",
+     "truth": 1037,
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "item": "wikipedia/09 title",
+     "truth": "Gone with the Wind",
+     "right_runs": "0/5",
+     "brain": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ]
+    }
+   ]
+  }
+ },
+ "speed": {
+  "pages_per_second": 2.38,
+  "wall_seconds": 251.8,
+  "valid_json": 1.0,
+  "thinking_leaks": 0,
+  "mean_prompt_tokens": 587,
+  "mean_cached_tokens": 62.3,
+  "latency_p50": 22.5
+ },
+ "rows": [
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate, South Gloucestershire, England, The United Kingdom"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Dr. Seuss",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": null,
+    "oclc": "38659585"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851",
+    "pages": 635,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "The Requiem Red",
+    "price": "£22.65",
+    "availability": 19,
+    "upc": "f77dbf2323deb740",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+    "price": "£57.25",
+    "availability": 19,
+    "upc": "deda3e61b9514b83",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Birdsong: A Story in Pictures",
+    "price": "£54.64",
+    "availability": 19,
+    "upc": "9528d0948525bf5f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "Penny Maybe",
+    "price": "£33.29",
+    "availability": 18,
+    "upc": "668fe56b17cfcd4f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "When We Collided",
+    "price": "£31.77",
+    "availability": 16,
+    "upc": "3ecb690d1542c568",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "The Torch Is Passed: A Harding Family Story",
+    "price": "£19.09",
+    "availability": 16,
+    "upc": "4eed62cf5f8d8edf",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer",
+    "price": "£20.59",
+    "availability": 16,
+    "upc": "8c9e6bf2467d740d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "Security",
+    "price": "£39.25",
+    "availability": 16,
+    "upc": "6f78a0d744c35456",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)",
+    "price": "£15.44",
+    "availability": 16,
+    "upc": "889139b8e9c4cb36",
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)",
+    "price": "£19.92",
+    "availability": 16,
+    "upc": "57e5a4d515c8ce44",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Douglas Adams",
+    "born_date": "March 11, 1952",
+    "born_location": "Cambridge, England, The United Kingdom"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "Elie Wiesel",
+    "born_date": "September 30, 1928",
+    "born_location": "Sighet, Romania"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Friedrich Nietzsche",
+    "born_date": "October 15, 1844",
+    "born_location": "Röcken bei Lützen, Prussian Province of Saxony, Germany"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Mark Twain",
+    "born_date": "November 30, 1835",
+    "born_location": "Florida, Missouri, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "Allen Saunders",
+    "born_date": "April 24, 1899",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Pablo Neruda",
+    "born_date": "July 12, 1904",
+    "born_location": "Parral, Chile"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Ralph Waldo Emerson",
+    "born_date": "May 25, 1803",
+    "born_location": "Boston, Massachusetts, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Mother Teresa",
+    "born_date": "August 26, 1910",
+    "born_location": "Skopje, Macedonia, the Former Yugoslav Republic of"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Garrison Keillor",
+    "born_date": "August 07, 1942",
+    "born_location": "Anoka, Minnesota, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Jim Henson",
+    "born_date": "September 24, 1936",
+    "born_location": "Greenville, Mississippi, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$391.48",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-21",
+    "price": "$393.88",
+    "description": "Acer Aspire 3 A315-21, 15.6\", AMD A4-9120. 4GB. 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Asus VivoBook Max",
+    "price": "$399",
+    "description": "Asus VivoBook Max X541NA-GQ041 Black Chocolate, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 500GB, Windows 10 Home",
+    "reviews": 4,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Asus VivoBook E502NA-GO022T Dark Blue",
+    "price": "$399.99",
+    "description": "Asus VivoBook E502NA-GO022T Dark Blue, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 3,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo ThinkPad E31-80",
+    "price": "$404.23",
+    "description": "Lenovo ThinkPad E31-80, 13.3\" HD, Celeron 3855U 1.6GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 12,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$408.98",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$409.63",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 8GB, 128GB SSD, Windows 10 Home",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire ES1-732 Black",
+    "price": "$410.46",
+    "description": "Acer Aspire ES1-732 Black, 17.3\" HD+, Celeron, N3350, 4GB, 1TB, Windows 10 Home",
+    "reviews": 14,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540NA-GQ026T",
+    "price": "$410.66",
+    "description": "Asus VivoBook 15 X540NA-GQ026T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 4,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Packard 255 G2",
+    "price": "$416.99",
+    "description": "15.6\", AMD E2-3800 1.3GHz, 4GB, 500GB, Windows 8.1",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Jane Eyre",
+    "author": "Charlotte Brontë",
+    "publisher": "Smith, Elder & Co.",
+    "published": "19 October 1847",
+    "pages": null,
+    "oclc": "3163777"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Wuthering Heights",
+    "author": "Emily Brontë",
+    "publisher": "Thomas Cautley Newby",
+    "published": "24 November 1847",
+    "pages": null,
+    "oclc": "71126926"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Great Expectations",
+    "author": "Charles Dickens",
+    "publisher": "Chapman & Hall",
+    "published": "1860",
+    "pages": 544,
+    "oclc": "1269308353"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "The Picture of Dorian Gray",
+    "author": "Oscar Wilde",
+    "publisher": "Lippincott's Monthly Magazine",
+    "published": "July 1890",
+    "pages": null,
+    "oclc": "53071567"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "Animal Farm",
+    "author": "George Orwell",
+    "publisher": "Secker and Warburg, London, England",
+    "published": "17 August 1945",
+    "pages": 92,
+    "oclc": "3655473"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Lord of the Flies",
+    "author": "William Golding",
+    "publisher": "Faber and Faber",
+    "published": "17 September 1954",
+    "pages": 224,
+    "oclc": "47677622"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Of Mice and Men",
+    "author": "John Steinbeck",
+    "publisher": "Covici Friede",
+    "published": "1937",
+    "pages": 107,
+    "oclc": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "The Grapes of Wrath",
+    "author": "John Steinbeck",
+    "publisher": "The Viking Press -James Lloyd",
+    "published": "April 14, 1939",
+    "pages": 464,
+    "oclc": "289946"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "publisher": "Ballantine Books",
+    "published": "1953-10-19",
+    "pages": 156,
+    "oclc": "53101079"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Little Women",
+    "author": "Louisa May Alcott",
+    "publisher": "Roberts Brothers",
+    "published": "September 30, 1868",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "Soumission",
+    "price": "£50.10",
+    "availability": 20,
+    "upc": "6957f44c3847a760",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Set Me Free",
+    "price": "£17.46",
+    "availability": 19,
+    "upc": "ce6396b0f23f6ecc",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+    "price": "£30.52",
+    "availability": 19,
+    "upc": "5674a18a29a43ced",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Elephant Tree",
+    "price": "£23.82",
+    "availability": 18,
+    "upc": "5dada2b7be26bd03",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Private Paris (Private #10)",
+    "price": "£47.61",
+    "availability": 17,
+    "upc": "b12b89017878a60d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+    "price": "£31.12",
+    "availability": 16,
+    "upc": "7858914fad68493c",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+    "price": "£42.96",
+    "availability": 16,
+    "upc": "aadee1c326d286e3",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+    "price": "£32.24",
+    "availability": 16,
+    "upc": "7d6d2a6c0276f81b",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Pop Gun War, Volume 1: Gift",
+    "price": "£18.97",
+    "availability": 16,
+    "upc": "e80f8e518b300dfe",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+    "price": "£14.02",
+    "availability": 16,
+    "upc": "72f9d5be3472d34e",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Charles M. Schulz",
+    "born_date": "November 26, 1922",
+    "born_location": "Minneapolis, MN, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "William Nicholson",
+    "born_date": "January 12, 1948",
+    "born_location": "Lewes, Sussex, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jorge Luis Borges",
+    "born_date": "August 24, 1899",
+    "born_location": "Buenos Aires"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "George Eliot",
+    "born_date": "November 22, 1819",
+    "born_location": "South Farm, Arbury Hall, Nuneaton, Warwickshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "George R.R. Martin",
+    "born_date": "September 20, 1948",
+    "born_location": "Bayonne, New Jersey, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "C.S. Lewis",
+    "born_date": "November 29, 1898",
+    "born_location": "Belfast"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Martin Luther King Jr.",
+    "born_date": "January 15, 1929",
+    "born_location": "Atlanta, Georgia, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "James Baldwin",
+    "born_date": "August 02, 1924",
+    "born_location": "Harlem, New York, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Haruki Murakami",
+    "born_date": "January 12, 1949",
+    "born_location": "Kyoto"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Alexandre Dumas-fils",
+    "born_date": "July 27, 1824",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus EeeBook R416NA-FA014T",
+    "price": "$433.3",
+    "description": "Asus EeeBook R416NA-FA014T, 14\" FHD, Pentium N4200, 4GB, 128GB eMMC, Windows 10 Home, Eng kbd",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-51",
+    "price": "$436.29",
+    "description": "Acer Aspire 3 A315-51, 15.6\" HD, Core i3-6006U, 4GB, 1TB, Windows 10 Home",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$436.29",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 500GB, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Acer Extensa 15 (2540) Black",
+    "price": "$439.73",
+    "description": "Acer Extensa 15 (2540) Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 6,
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$454.62",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 9,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$454.73",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Pro",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Acer Aspire A315-51-33TG",
+    "price": "$457.38",
+    "description": "Acer Aspire A315-51-33TG, Black 15.6\" HD, Core i3-7100U, 4GB DDR4, 128GB SSD, Windows 10 Home, ENG",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Lenovo V110-15IKB",
+    "price": "$465.95",
+    "description": "Lenovo V110-15IKB, 15.6\" HD, Core i5-7200U, 4GB, 500GB, DOS",
+    "reviews": 7,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540UA-DM260 Chocolate Black",
+    "price": "$468.56",
+    "description": "Asus VivoBook 15 X540UA-DM260 Chocolate Black, 15.6\" FHD, Core i3-6006U, 4GB, 256GB SSD, Endless OS, En kbd",
+    "reviews": 1,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$469.1",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Emma",
+    "author": "Jane Austen",
+    "publisher": "John Murray",
+    "published": "1816",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Sense and Sensibility",
+    "author": "Jane Austen",
+    "publisher": "Thomas Egerton, Military Library (Whitehall, London)",
+    "published": "30 October 1811",
+    "pages": null,
+    "oclc": "44961362"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Treasure Island",
+    "author": "Robert Louis Stevenson (Captain George North)",
+    "publisher": "Cassell and Company",
+    "published": "14 November 1883",
+    "pages": 292,
+    "oclc": "610014604"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "Heart of Darkness",
+    "author": "Joseph Conrad",
+    "publisher": "Blackwood's Magazine",
+    "published": "1899",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Time Machine",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Henry Holt (US)",
+    "published": "1895",
+    "pages": 84,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "The War of the Worlds",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Harper & Bros (US)",
+    "published": "January 19, 1898",
+    "pages": 319,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Shakespeare and Company",
+    "published": "2 February 1922",
+    "pages": 732,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Simon & Schuster",
+    "published": "October 10, 1961",
+    "pages": 453,
+    "oclc": "35231812"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Delacorte",
+    "published": "March 31, 1969",
+    "pages": 190,
+    "oclc": "29960763"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Macmillan",
+    "published": "June 30, 1936",
+    "pages": null,
+    "oclc": "28491920"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Dr. Seuss",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": null,
+    "oclc": "38659585"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851",
+    "pages": 635,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "The Requiem Red",
+    "price": "£22.65",
+    "availability": 19,
+    "upc": "f77dbf2323deb740",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+    "price": "£57.25",
+    "availability": 19,
+    "upc": "deda3e61b9514b83",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Birdsong: A Story in Pictures",
+    "price": "£54.64",
+    "availability": 19,
+    "upc": "9528d0948525bf5f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "Penny Maybe",
+    "price": "£33.29",
+    "availability": 18,
+    "upc": "668fe56b17cfcd4f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "When We Collided",
+    "price": "£31.77",
+    "availability": 16,
+    "upc": "3ecb690d1542c568",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "The Torch Is Passed: A Harding Family Story",
+    "price": "£19.09",
+    "availability": 16,
+    "upc": "4eed62cf5f8d8edf",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer",
+    "price": "£20.59",
+    "availability": 16,
+    "upc": "8c9e6bf2467d740d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "Security",
+    "price": "£39.25",
+    "availability": 16,
+    "upc": "6f78a0d744c35456",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)",
+    "price": "£15.44",
+    "availability": 16,
+    "upc": "889139b8e9c4cb36",
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)",
+    "price": "£19.92",
+    "availability": 16,
+    "upc": "57e5a4d515c8ce44",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Douglas Adams",
+    "born_date": "March 11, 1952",
+    "born_location": "Cambridge, England, The United Kingdom"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "Elie Wiesel",
+    "born_date": "September 30, 1928",
+    "born_location": "Sighet, Romania"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Friedrich Nietzsche",
+    "born_date": "October 15, 1844",
+    "born_location": "Röcken bei Lützen, Prussian Province of Saxony, Germany"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Mark Twain",
+    "born_date": "November 30, 1835",
+    "born_location": "Florida, Missouri, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "Allen Saunders",
+    "born_date": "April 24, 1899",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Pablo Neruda",
+    "born_date": "July 12, 1904",
+    "born_location": "Parral, Chile"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Ralph Waldo Emerson",
+    "born_date": "May 25, 1803",
+    "born_location": "Boston, Massachusetts, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Mother Teresa",
+    "born_date": "August 26, 1910",
+    "born_location": "Skopje, Macedonia, the Former Yugoslav Republic of"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Garrison Keillor",
+    "born_date": "August 07, 1942",
+    "born_location": "Anoka, Minnesota, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Jim Henson",
+    "born_date": "September 24, 1936",
+    "born_location": "Greenville, Mississippi, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$391.48",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-21",
+    "price": "$393.88",
+    "description": "Acer Aspire 3 A315-21, 15.6\", AMD A4-9120. 4GB. 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Asus VivoBook Max",
+    "price": "$399",
+    "description": "Asus VivoBook Max X541NA-GQ041 Black Chocolate, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 500GB, Windows 10 Home",
+    "reviews": 4,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Asus VivoBook E502NA-GO022T Dark Blue",
+    "price": "$399.99",
+    "description": "Asus VivoBook E502NA-GO022T Dark Blue, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 3,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo ThinkPad E31-80",
+    "price": "$404.23",
+    "description": "Lenovo ThinkPad E31-80, 13.3\" HD, Celeron 3855U 1.6GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 12,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$408.98",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$409.63",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 8GB, 128GB SSD, Windows 10 Home",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire ES1-732 Black",
+    "price": "$410.46",
+    "description": "Acer Aspire ES1-732 Black, 17.3\" HD+, Celeron, N3350, 4GB, 1TB, Windows 10 Home",
+    "reviews": 14,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540NA-GQ026T",
+    "price": "$410.66",
+    "description": "Asus VivoBook 15 X540NA-GQ026T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 4,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Packard 255 G2",
+    "price": "$416.99",
+    "description": "15.6\", AMD E2-3800 1.3GHz, 4GB, 500GB, Windows 8.1",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Jane Eyre",
+    "author": "Charlotte Brontë",
+    "publisher": "Smith, Elder & Co.",
+    "published": "19 October 1847",
+    "pages": null,
+    "oclc": "3163777"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Wuthering Heights",
+    "author": "Emily Brontë",
+    "publisher": "Thomas Cautley Newby",
+    "published": "24 November 1847",
+    "pages": null,
+    "oclc": "71126926"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Great Expectations",
+    "author": "Charles Dickens",
+    "publisher": "Chapman & Hall",
+    "published": "1860",
+    "pages": 544,
+    "oclc": "1269308353"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "The Picture of Dorian Gray",
+    "author": "Oscar Wilde",
+    "publisher": "Lippincott's Monthly Magazine",
+    "published": "July 1890",
+    "pages": null,
+    "oclc": "53071567"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "Animal Farm",
+    "author": "George Orwell",
+    "publisher": "Secker and Warburg",
+    "published": "17 August 1945",
+    "pages": 92,
+    "oclc": "3655473"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Lord of the Flies",
+    "author": "William Golding",
+    "publisher": "Faber and Faber",
+    "published": "17 September 1954",
+    "pages": 224,
+    "oclc": "47677622"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Of Mice and Men",
+    "author": "John Steinbeck",
+    "publisher": "Covici Friede",
+    "published": "1937",
+    "pages": 107,
+    "oclc": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "The Grapes of Wrath",
+    "author": "John Steinbeck",
+    "publisher": "The Viking Press -James Lloyd",
+    "published": "April 14, 1939",
+    "pages": 464,
+    "oclc": "289946"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "publisher": "Ballantine Books",
+    "published": "1953-10-19",
+    "pages": 156,
+    "oclc": "53101079"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Little Women",
+    "author": "Louisa May Alcott",
+    "publisher": "Roberts Brothers",
+    "published": "September 30, 1868",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "Soumission",
+    "price": "£50.10",
+    "availability": 20,
+    "upc": "6957f44c3847a760",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Set Me Free",
+    "price": "£17.46",
+    "availability": 19,
+    "upc": "ce6396b0f23f6ecc",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+    "price": "£30.52",
+    "availability": 19,
+    "upc": "5674a18a29a43ced",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Elephant Tree",
+    "price": "£23.82",
+    "availability": 18,
+    "upc": "5dada2b7be26bd03",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Private Paris (Private #10)",
+    "price": "£47.61",
+    "availability": 17,
+    "upc": "b12b89017878a60d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+    "price": "£31.12",
+    "availability": 16,
+    "upc": "7858914fad68493c",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+    "price": "£42.96",
+    "availability": 16,
+    "upc": "aadee1c326d286e3",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+    "price": "£32.24",
+    "availability": 16,
+    "upc": "7d6d2a6c0276f81b",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Pop Gun War, Volume 1: Gift",
+    "price": "£18.97",
+    "availability": 16,
+    "upc": "e80f8e518b300dfe",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+    "price": "£14.02",
+    "availability": 16,
+    "upc": "72f9d5be3472d34e",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Charles M. Schulz",
+    "born_date": "November 26, 1922",
+    "born_location": "Minneapolis, MN, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "William Nicholson",
+    "born_date": "January 12, 1948",
+    "born_location": "Lewes, Sussex, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jorge Luis Borges",
+    "born_date": "August 24, 1899",
+    "born_location": "Buenos Aires"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "George Eliot",
+    "born_date": "November 22, 1819",
+    "born_location": "South Farm, Arbury Hall, Nuneaton, Warwickshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "George R.R. Martin",
+    "born_date": "September 20, 1948",
+    "born_location": "Bayonne, New Jersey, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "C.S. Lewis",
+    "born_date": "November 29, 1898",
+    "born_location": "Belfast"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Martin Luther King Jr.",
+    "born_date": "January 15, 1929",
+    "born_location": "Atlanta, Georgia, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "James Baldwin",
+    "born_date": "August 02, 1924",
+    "born_location": "Harlem, New York, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Haruki Murakami",
+    "born_date": "January 12, 1949",
+    "born_location": "Kyoto, Japan"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Alexandre Dumas-fils",
+    "born_date": "July 27, 1824",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus EeeBook R416NA-FA014T",
+    "price": "$433.3",
+    "description": "Asus EeeBook R416NA-FA014T, 14\" FHD, Pentium N4200, 4GB, 128GB eMMC, Windows 10 Home, Eng kbd",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-51",
+    "price": "$436.29",
+    "description": "Acer Aspire 3 A315-51, 15.6\" HD, Core i3-6006U, 4GB, 1TB, Windows 10 Home",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$436.29",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 500GB, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Acer Extensa 15 (2540) Black",
+    "price": "$439.73",
+    "description": "Acer Extensa 15 (2540) Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 6,
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$454.62",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 9,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$454.73",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Pro",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Acer Aspire A315-51-33TG",
+    "price": "$457.38",
+    "description": "Acer Aspire A315-51-33TG, Black 15.6\" HD, Core i3-7100U, 4GB DDR4, 128GB SSD, Windows 10 Home, ENG",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Lenovo V110-15IKB",
+    "price": "$465.95",
+    "description": "Lenovo V110-15IKB, 15.6\" HD, Core i5-7200U, 4GB, 500GB, DOS",
+    "reviews": 7,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540UA-DM260 Chocolate Black",
+    "price": "$468.56",
+    "description": "Asus VivoBook 15 X540UA-DM260 Chocolate Black, 15.6\" FHD, Core i3-6006U, 4GB, 256GB SSD, Endless OS, En kbd",
+    "reviews": 1,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$469.1",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Emma",
+    "author": "Jane Austen",
+    "publisher": "John Murray",
+    "published": "1816",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Sense and Sensibility",
+    "author": "Jane Austen",
+    "publisher": "Thomas Egerton, Military Library (Whitehall, London)",
+    "published": "30 October 1811",
+    "pages": null,
+    "oclc": "44961362"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Treasure Island",
+    "author": "Robert Louis Stevenson (Captain George North)",
+    "publisher": "Cassell and Company",
+    "published": "14 November 1883",
+    "pages": 292,
+    "oclc": "610014604"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "Heart of Darkness",
+    "author": "Joseph Conrad",
+    "publisher": "Blackwood's Magazine",
+    "published": "1899",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Time Machine",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Henry Holt (US)",
+    "published": "1895",
+    "pages": 84,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "The War of the Worlds",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Harper & Bros (US)",
+    "published": "January 19, 1898",
+    "pages": 319,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Shakespeare and Company",
+    "published": "2 February 1922",
+    "pages": 732,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Simon & Schuster",
+    "published": "October 10, 1961",
+    "pages": 453,
+    "oclc": "35231812"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Delacorte",
+    "published": "March 31, 1969",
+    "pages": 190,
+    "oclc": "29960763"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Macmillan",
+    "published": "June 30, 1936",
+    "pages": null,
+    "oclc": "28491920"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Dr. Seuss",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": null,
+    "oclc": "38659585"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851",
+    "pages": 635,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "The Requiem Red",
+    "price": "£22.65",
+    "availability": 19,
+    "upc": "f77dbf2323deb740",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+    "price": "£57.25",
+    "availability": 19,
+    "upc": "deda3e61b9514b83",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Birdsong: A Story in Pictures",
+    "price": "£54.64",
+    "availability": 19,
+    "upc": "9528d0948525bf5f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "Penny Maybe",
+    "price": "£33.29",
+    "availability": 18,
+    "upc": "668fe56b17cfcd4f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "When We Collided",
+    "price": "£31.77",
+    "availability": 16,
+    "upc": "3ecb690d1542c568",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "The Torch Is Passed: A Harding Family Story",
+    "price": "£19.09",
+    "availability": 16,
+    "upc": "4eed62cf5f8d8edf",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer",
+    "price": "£20.59",
+    "availability": 16,
+    "upc": "8c9e6bf2467d740d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "Security",
+    "price": "£39.25",
+    "availability": 16,
+    "upc": "6f78a0d744c35456",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)",
+    "price": "£15.44",
+    "availability": 16,
+    "upc": "889139b8e9c4cb36",
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)",
+    "price": "£19.92",
+    "availability": 16,
+    "upc": "57e5a4d515c8ce44",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Douglas Adams",
+    "born_date": "March 11, 1952",
+    "born_location": "Cambridge, England, The United Kingdom"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "Elie Wiesel",
+    "born_date": "September 30, 1928",
+    "born_location": "Sighet, Romania"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Friedrich Nietzsche",
+    "born_date": "October 15, 1844",
+    "born_location": "Röcken bei Lützen, Prussian Province of Saxony, Germany"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Mark Twain",
+    "born_date": "November 30, 1835",
+    "born_location": "Florida, Missouri, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "Allen Saunders",
+    "born_date": "April 24, 1899",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Pablo Neruda",
+    "born_date": "July 12, 1904",
+    "born_location": "Parral, Chile"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Ralph Waldo Emerson",
+    "born_date": "May 25, 1803",
+    "born_location": "Boston, Massachusetts, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Mother Teresa",
+    "born_date": "August 26, 1910",
+    "born_location": "Skopje, Macedonia, the Former Yugoslav Republic of"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Garrison Keillor",
+    "born_date": "August 07, 1942",
+    "born_location": "Anoka, Minnesota, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Jim Henson",
+    "born_date": "September 24, 1936",
+    "born_location": "Greenville, Mississippi, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$391.48",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-21",
+    "price": "$393.88",
+    "description": "Acer Aspire 3 A315-21, 15.6\", AMD A4-9120. 4GB. 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Asus VivoBook Max",
+    "price": "$399",
+    "description": "Asus VivoBook Max X541NA-GQ041 Black Chocolate, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 500GB, Windows 10 Home",
+    "reviews": 4,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Asus VivoBook E502NA-GO022T Dark Blue",
+    "price": "$399.99",
+    "description": "Asus VivoBook E502NA-GO022T Dark Blue, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 3,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo ThinkPad E31-80",
+    "price": "$404.23",
+    "description": "Lenovo ThinkPad E31-80, 13.3\" HD, Celeron 3855U 1.6GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 12,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$408.98",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$409.63",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 8GB, 128GB SSD, Windows 10 Home",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire ES1-732 Black",
+    "price": "$410.46",
+    "description": "Acer Aspire ES1-732 Black, 17.3\" HD+, Celeron, N3350, 4GB, 1TB, Windows 10 Home",
+    "reviews": 14,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540NA-GQ026T",
+    "price": "$410.66",
+    "description": "Asus VivoBook 15 X540NA-GQ026T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 4,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Packard 255 G2",
+    "price": "$416.99",
+    "description": "15.6\", AMD E2-3800 1.3GHz, 4GB, 500GB, Windows 8.1",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Jane Eyre",
+    "author": "Charlotte Brontë",
+    "publisher": "Smith, Elder & Co.",
+    "published": "19 October 1847",
+    "pages": null,
+    "oclc": "3163777"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Wuthering Heights",
+    "author": "Emily Brontë",
+    "publisher": "Thomas Cautley Newby",
+    "published": "24 November 1847",
+    "pages": null,
+    "oclc": "71126926"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Great Expectations",
+    "author": "Charles Dickens",
+    "publisher": "Chapman & Hall",
+    "published": "1860",
+    "pages": 544,
+    "oclc": "1269308353"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "The Picture of Dorian Gray",
+    "author": "Oscar Wilde",
+    "publisher": "Lippincott's Monthly Magazine",
+    "published": "July 1890",
+    "pages": null,
+    "oclc": "53071567"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "Animal Farm",
+    "author": "George Orwell",
+    "publisher": "Secker and Warburg",
+    "published": "17 August 1945",
+    "pages": 92,
+    "oclc": "3655473"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Lord of the Flies",
+    "author": "William Golding",
+    "publisher": "Faber and Faber",
+    "published": "17 September 1954",
+    "pages": 224,
+    "oclc": "47677622"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Of Mice and Men",
+    "author": "John Steinbeck",
+    "publisher": "Covici Friede",
+    "published": "1937",
+    "pages": 107,
+    "oclc": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "The Grapes of Wrath",
+    "author": "John Steinbeck",
+    "publisher": "The Viking Press -James Lloyd",
+    "published": "April 14, 1939",
+    "pages": 464,
+    "oclc": "289946"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "publisher": "Ballantine Books",
+    "published": "1953-10-19",
+    "pages": 156,
+    "oclc": "53101079"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Little Women",
+    "author": "Louisa May Alcott",
+    "publisher": "Roberts Brothers",
+    "published": "September 30, 1868",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "Soumission",
+    "price": "£50.10",
+    "availability": 20,
+    "upc": "6957f44c3847a760",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Set Me Free",
+    "price": "£17.46",
+    "availability": 19,
+    "upc": "ce6396b0f23f6ecc",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+    "price": "£30.52",
+    "availability": 19,
+    "upc": "5674a18a29a43ced",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Elephant Tree",
+    "price": "£23.82",
+    "availability": 18,
+    "upc": "5dada2b7be26bd03",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Private Paris (Private #10)",
+    "price": "£47.61",
+    "availability": 17,
+    "upc": "b12b89017878a60d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+    "price": "£31.12",
+    "availability": 16,
+    "upc": "7858914fad68493c",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+    "price": "£42.96",
+    "availability": 16,
+    "upc": "aadee1c326d286e3",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+    "price": "£32.24",
+    "availability": 16,
+    "upc": "7d6d2a6c0276f81b",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Pop Gun War, Volume 1: Gift",
+    "price": "£18.97",
+    "availability": 16,
+    "upc": "e80f8e518b300dfe",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+    "price": "£14.02",
+    "availability": 16,
+    "upc": "72f9d5be3472d34e",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Charles M. Schulz",
+    "born_date": "November 26, 1922",
+    "born_location": "Minneapolis, MN, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "William Nicholson",
+    "born_date": "January 12, 1948",
+    "born_location": "Lewes, Sussex, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jorge Luis Borges",
+    "born_date": "August 24, 1899",
+    "born_location": "Buenos Aires"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "George Eliot",
+    "born_date": "November 22, 1819",
+    "born_location": "South Farm, Arbury Hall, Nuneaton, Warwickshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "George R.R. Martin",
+    "born_date": "September 20, 1948",
+    "born_location": "Bayonne, New Jersey, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "C.S. Lewis",
+    "born_date": "November 29, 1898",
+    "born_location": "Belfast"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Martin Luther King Jr.",
+    "born_date": "January 15, 1929",
+    "born_location": "Atlanta, Georgia, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "James Baldwin",
+    "born_date": "August 02, 1924",
+    "born_location": "Harlem, New York, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Haruki Murakami",
+    "born_date": "January 12, 1949",
+    "born_location": "Kyoto, Japan"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Alexandre Dumas-fils",
+    "born_date": "July 27, 1824",
+    "born_location": "Paris, France"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus EeeBook R416NA-FA014T",
+    "price": "$433.3",
+    "description": "Asus EeeBook R416NA-FA014T, 14\" FHD, Pentium N4200, 4GB, 128GB eMMC, Windows 10 Home, Eng kbd",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-51",
+    "price": "$436.29",
+    "description": "Acer Aspire 3 A315-51, 15.6\" HD, Core i3-6006U, 4GB, 1TB, Windows 10 Home",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$436.29",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 500GB, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Acer Extensa 15 (2540) Black",
+    "price": "$439.73",
+    "description": "Acer Extensa 15 (2540) Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 6,
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$454.62",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 9,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$454.73",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Pro",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Acer Aspire A315-51-33TG",
+    "price": "$457.38",
+    "description": "Acer Aspire A315-51-33TG, Black 15.6\" HD, Core i3-7100U, 4GB DDR4, 128GB SSD, Windows 10 Home, ENG",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Lenovo V110-15IKB",
+    "price": "$465.95",
+    "description": "Lenovo V110-15IKB, 15.6\" HD, Core i5-7200U, 4GB, 500GB, DOS",
+    "reviews": 7,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540UA-DM260 Chocolate Black",
+    "price": "$468.56",
+    "description": "Asus VivoBook 15 X540UA-DM260 Chocolate Black, 15.6\" FHD, Core i3-6006U, 4GB, 256GB SSD, Endless OS, En kbd",
+    "reviews": 1,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$469.1",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Emma",
+    "author": "Jane Austen",
+    "publisher": "John Murray",
+    "published": "1816",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Sense and Sensibility",
+    "author": "Jane Austen",
+    "publisher": "Thomas Egerton, Military Library (Whitehall, London)",
+    "published": "30 October 1811",
+    "pages": null,
+    "oclc": "44961362"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Treasure Island",
+    "author": "Robert Louis Stevenson (Captain George North)",
+    "publisher": "Cassell and Company",
+    "published": "14 November 1883",
+    "pages": 292,
+    "oclc": "610014604"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "Heart of Darkness",
+    "author": "Joseph Conrad",
+    "publisher": "Blackwood's Magazine",
+    "published": "1899",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Time Machine",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Henry Holt (US)",
+    "published": "1895",
+    "pages": 84,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "The War of the Worlds",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Harper & Bros (US)",
+    "published": "January 19, 1898",
+    "pages": 319,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Shakespeare and Company",
+    "published": "2 February 1922",
+    "pages": 732,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Simon & Schuster",
+    "published": "October 10, 1961",
+    "pages": 453,
+    "oclc": "35231812"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Delacorte",
+    "published": "March 31, 1969",
+    "pages": 190,
+    "oclc": "29960763"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Macmillan",
+    "published": "June 30, 1936",
+    "pages": null,
+    "oclc": "28491920"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Dr. Seuss",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": null,
+    "oclc": "38659585"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851",
+    "pages": 635,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "The Requiem Red",
+    "price": "£22.65",
+    "availability": 19,
+    "upc": "f77dbf2323deb740",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+    "price": "£57.25",
+    "availability": 19,
+    "upc": "deda3e61b9514b83",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Birdsong: A Story in Pictures",
+    "price": "£54.64",
+    "availability": 19,
+    "upc": "9528d0948525bf5f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "Penny Maybe",
+    "price": "£33.29",
+    "availability": 18,
+    "upc": "668fe56b17cfcd4f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "When We Collided",
+    "price": "£31.77",
+    "availability": 16,
+    "upc": "3ecb690d1542c568",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "The Torch Is Passed: A Harding Family Story",
+    "price": "£19.09",
+    "availability": 16,
+    "upc": "4eed62cf5f8d8edf",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer",
+    "price": "£20.59",
+    "availability": 16,
+    "upc": "8c9e6bf2467d740d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "Security",
+    "price": "£39.25",
+    "availability": 16,
+    "upc": "6f78a0d744c35456",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)",
+    "price": "£15.44",
+    "availability": 16,
+    "upc": "889139b8e9c4cb36",
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)",
+    "price": "£19.92",
+    "availability": 16,
+    "upc": "57e5a4d515c8ce44",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Douglas Adams",
+    "born_date": "March 11, 1952",
+    "born_location": "Cambridge, England, The United Kingdom"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "Elie Wiesel",
+    "born_date": "September 30, 1928",
+    "born_location": "Sighet, Romania"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Friedrich Nietzsche",
+    "born_date": "October 15, 1844",
+    "born_location": "Röcken bei Lützen, Prussian Province of Saxony, Germany"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Mark Twain",
+    "born_date": "November 30, 1835",
+    "born_location": "Florida, Missouri, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "Allen Saunders",
+    "born_date": "April 24, 1899",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Pablo Neruda",
+    "born_date": "July 12, 1904",
+    "born_location": "Parral, Chile"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Ralph Waldo Emerson",
+    "born_date": "May 25, 1803",
+    "born_location": "Boston, Massachusetts, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Mother Teresa",
+    "born_date": "August 26, 1910",
+    "born_location": "Skopje, Macedonia, the Former Yugoslav Republic of"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Garrison Keillor",
+    "born_date": "August 07, 1942",
+    "born_location": "Anoka, Minnesota, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Jim Henson",
+    "born_date": "September 24, 1936",
+    "born_location": "Greenville, Mississippi, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$391.48",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-21",
+    "price": "$393.88",
+    "description": "Acer Aspire 3 A315-21, 15.6\", AMD A4-9120. 4GB. 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Asus VivoBook Max",
+    "price": "$399",
+    "description": "Asus VivoBook Max X541NA-GQ041 Black Chocolate, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 500GB, Windows 10 Home",
+    "reviews": 4,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Asus VivoBook E502NA-GO022T Dark Blue",
+    "price": "$399.99",
+    "description": "Asus VivoBook E502NA-GO022T Dark Blue, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 3,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo ThinkPad E31-80",
+    "price": "$404.23",
+    "description": "Lenovo ThinkPad E31-80, 13.3\" HD, Celeron 3855U 1.6GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 12,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$408.98",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$409.63",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 8GB, 128GB SSD, Windows 10 Home",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire ES1-732 Black",
+    "price": "$410.46",
+    "description": "Acer Aspire ES1-732 Black, 17.3\" HD+, Celeron, N3350, 4GB, 1TB, Windows 10 Home",
+    "reviews": 14,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540NA-GQ026T",
+    "price": "$410.66",
+    "description": "Asus VivoBook 15 X540NA-GQ026T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 4,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Packard 255 G2",
+    "price": "$416.99",
+    "description": "15.6\", AMD E2-3800 1.3GHz, 4GB, 500GB, Windows 8.1",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Jane Eyre",
+    "author": "Charlotte Brontë",
+    "publisher": "Smith, Elder & Co.",
+    "published": "19 October 1847",
+    "pages": null,
+    "oclc": "3163777"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Wuthering Heights",
+    "author": "Emily Brontë",
+    "publisher": "Thomas Cautley Newby",
+    "published": "24 November 1847",
+    "pages": null,
+    "oclc": "71126926"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Great Expectations",
+    "author": "Charles Dickens",
+    "publisher": "Chapman & Hall",
+    "published": "1860",
+    "pages": 544,
+    "oclc": "1269308353"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "The Picture of Dorian Gray",
+    "author": "Oscar Wilde",
+    "publisher": "Lippincott's Monthly Magazine",
+    "published": "July 1890",
+    "pages": null,
+    "oclc": "53071567"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "Animal Farm",
+    "author": "George Orwell",
+    "publisher": "Secker and Warburg",
+    "published": "17 August 1945",
+    "pages": 92,
+    "oclc": "3655473"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Lord of the Flies",
+    "author": "William Golding",
+    "publisher": "Faber and Faber",
+    "published": "17 September 1954",
+    "pages": 224,
+    "oclc": "47677622"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Of Mice and Men",
+    "author": "John Steinbeck",
+    "publisher": "Covici Friede",
+    "published": "1937",
+    "pages": 107,
+    "oclc": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "The Grapes of Wrath",
+    "author": "John Steinbeck",
+    "publisher": "The Viking Press -James Lloyd",
+    "published": "April 14, 1939",
+    "pages": 464,
+    "oclc": "289946"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "publisher": "Ballantine Books",
+    "published": "1953-10-19",
+    "pages": 156,
+    "oclc": "53101079"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Little Women",
+    "author": "Louisa May Alcott",
+    "publisher": "Roberts Brothers",
+    "published": "September 30, 1868",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "Soumission",
+    "price": "£50.10",
+    "availability": 20,
+    "upc": "6957f44c3847a760",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Set Me Free",
+    "price": "£17.46",
+    "availability": 19,
+    "upc": "ce6396b0f23f6ecc",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+    "price": "£30.52",
+    "availability": 19,
+    "upc": "5674a18a29a43ced",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Elephant Tree",
+    "price": "£23.82",
+    "availability": 18,
+    "upc": "5dada2b7be26bd03",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Private Paris (Private #10)",
+    "price": "£47.61",
+    "availability": 17,
+    "upc": "b12b89017878a60d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+    "price": "£31.12",
+    "availability": 16,
+    "upc": "7858914fad68493c",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+    "price": "£42.96",
+    "availability": 16,
+    "upc": "aadee1c326d286e3",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+    "price": "£32.24",
+    "availability": 16,
+    "upc": "7d6d2a6c0276f81b",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Pop Gun War, Volume 1: Gift",
+    "price": "£18.97",
+    "availability": 16,
+    "upc": "e80f8e518b300dfe",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+    "price": "£14.02",
+    "availability": 16,
+    "upc": "72f9d5be3472d34e",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Charles M. Schulz",
+    "born_date": "November 26, 1922",
+    "born_location": "Minneapolis, MN, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "William Nicholson",
+    "born_date": "January 12, 1948",
+    "born_location": "Lewes, Sussex, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jorge Luis Borges",
+    "born_date": "August 24, 1899",
+    "born_location": "Buenos Aires"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "George Eliot",
+    "born_date": "November 22, 1819",
+    "born_location": "South Farm, Arbury Hall, Nuneaton, Warwickshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "George R.R. Martin",
+    "born_date": "September 20, 1948",
+    "born_location": "Bayonne, New Jersey, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "C.S. Lewis",
+    "born_date": "November 29, 1898",
+    "born_location": "Belfast"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Martin Luther King Jr.",
+    "born_date": "January 15, 1929",
+    "born_location": "Atlanta, Georgia, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "James Baldwin",
+    "born_date": "August 02, 1924",
+    "born_location": "Harlem, New York, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Haruki Murakami",
+    "born_date": "January 12, 1949",
+    "born_location": "Kyoto, Japan"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Alexandre Dumas-fils",
+    "born_date": "July 27, 1824",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus EeeBook R416NA-FA014T",
+    "price": "$433.3",
+    "description": "Asus EeeBook R416NA-FA014T, 14\" FHD, Pentium N4200, 4GB, 128GB eMMC, Windows 10 Home, Eng kbd",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-51",
+    "price": "$436.29",
+    "description": "Acer Aspire 3 A315-51, 15.6\" HD, Core i3-6006U, 4GB, 1TB, Windows 10 Home",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$436.29",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 500GB, Windows 10 Home",
+    "reviews": 2,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Acer Extensa 15 (2540) Black",
+    "price": "$439.73",
+    "description": "Acer Extensa 15 (2540) Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 6,
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$454.62",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 9,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$454.73",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Pro",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Acer Aspire A315-51-33TG",
+    "price": "$457.38",
+    "description": "Acer Aspire A315-51-33TG, Black 15.6\" HD, Core i3-7100U, 4GB DDR4, 128GB SSD, Windows 10 Home, ENG",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Lenovo V110-15IKB",
+    "price": "$465.95",
+    "description": "Lenovo V110-15IKB, 15.6\" HD, Core i5-7200U, 4GB, 500GB, DOS",
+    "reviews": 7,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540UA-DM260 Chocolate Black",
+    "price": "$468.56",
+    "description": "Asus VivoBook 15 X540UA-DM260 Chocolate Black, 15.6\" FHD, Core i3-6006U, 4GB, 256GB SSD, Endless OS, En kbd",
+    "reviews": 1,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$469.1",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Emma",
+    "author": "Jane Austen",
+    "publisher": "John Murray",
+    "published": "1816",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Sense and Sensibility",
+    "author": "Jane Austen",
+    "publisher": "Thomas Egerton, Military Library (Whitehall, London)",
+    "published": "30 October 1811",
+    "pages": null,
+    "oclc": "44961362"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Treasure Island",
+    "author": "Robert Louis Stevenson (Captain George North)",
+    "publisher": "Cassell and Company",
+    "published": "14 November 1883",
+    "pages": 292,
+    "oclc": "610014604"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "Heart of Darkness",
+    "author": "Joseph Conrad",
+    "publisher": "Blackwood's Magazine",
+    "published": "1899",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Time Machine",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Henry Holt (US)",
+    "published": "1895",
+    "pages": 84,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "The War of the Worlds",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Harper & Bros (US)",
+    "published": "January 19, 1898",
+    "pages": 319,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Shakespeare and Company",
+    "published": "2 February 1922",
+    "pages": 732,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Simon & Schuster",
+    "published": "October 10, 1961",
+    "pages": 453,
+    "oclc": "35231812"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Delacorte",
+    "published": "March 31, 1969",
+    "pages": 190,
+    "oclc": "29960763"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Macmillan",
+    "published": "June 30, 1936",
+    "pages": null,
+    "oclc": "28491920"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "A Light in the Attic",
+    "price": "£51.77",
+    "availability": 22,
+    "upc": "a897fe39b1053632",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+    "price": "£13.99",
+    "availability": 19,
+    "upc": "0312262ecafa5a40",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "In Her Wake",
+    "price": "£12.84",
+    "availability": 19,
+    "upc": "23356462d1320d61",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+    "price": "£17.66",
+    "availability": 18,
+    "upc": "6258a1f6a6dcfe50",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Slow States of Collapse: Poems",
+    "price": "£57.31",
+    "availability": 17,
+    "upc": "b4fd5943413e089a",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+    "price": "£25.52",
+    "availability": 16,
+    "upc": "9a9d6e9bc555731e",
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Nameless City (The Nameless City #1)",
+    "price": "£38.16",
+    "availability": 16,
+    "upc": "7d385d34d12e60ff",
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Art Forger",
+    "price": "£40.76",
+    "availability": 16,
+    "upc": "80cfab6bcff3a244",
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+    "price": "£13.61",
+    "availability": 16,
+    "upc": "0fa6dceead7ce47a",
+    "rating": 5
+   }
+  },
+  {
+   "set": "testset",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "My Paris Kitchen: Recipes and Stories",
+    "price": "£33.37",
+    "availability": 16,
+    "upc": "784bc2279baa878d",
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Albert Einstein",
+    "born_date": "March 14, 1879",
+    "born_location": "Ulm, Germany"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "J.K. Rowling",
+    "born_date": "July 31, 1965",
+    "born_location": "Yate"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jane Austen",
+    "born_date": "December 16, 1775",
+    "born_location": "Steventon Rectory, Hampshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Marilyn Monroe",
+    "born_date": "June 01, 1926",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "André Gide",
+    "born_date": "November 22, 1869",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Thomas A. Edison",
+    "born_date": "February 11, 1847",
+    "born_location": "Milan, Ohio, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Eleanor Roosevelt",
+    "born_date": "October 11, 1884",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Steve Martin",
+    "born_date": "August 14, 1945",
+    "born_location": "Waco, Texas, The United States"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Bob Marley",
+    "born_date": "February 06, 1945",
+    "born_location": "Nine Mile, Saint Ann, Jamaica"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Dr. Seuss",
+    "born_date": "March 02, 1904",
+    "born_location": "Springfield, MA"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus VivoBook X441NA-GA190",
+    "price": "$295.99",
+    "description": "Asus VivoBook X441NA-GA190 Chocolate Black, 14\", Celeron N3450, 4GB, 128GB SSD, Endless OS, ENG kbd",
+    "reviews": 14,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Dark Grey",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Dark Grey, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 8,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Prestigio SmartBook 133S Gold",
+    "price": "$299",
+    "description": "Prestigio SmartBook 133S Gold, 13.3\" FHD IPS, Celeron N3350 1.1GHz, 4GB, 32GB, Windows 10 Pro + Office 365 1 gadam",
+    "reviews": 12,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Aspire E1-510",
+    "price": "$306.99",
+    "description": "15.6\", Pentium N3520 2.16GHz, 4GB, 500GB, Linux",
+    "reviews": 2,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$321.94",
+    "description": "Lenovo V110-15IAP, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15IAP",
+    "price": "$356.49",
+    "description": "Asus VivoBook 15 X540NA-GQ008T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 500GB, Windows 10 Home, En kbd",
+    "reviews": 6,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Hewlett Packard 250 G6 Dark Ash Silver",
+    "price": "$364.46",
+    "description": "Hewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS",
+    "reviews": 12,
+    "rating": 1
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$372.7",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Celeron N3350 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Acer Aspire A315-31-C33J",
+    "price": "$379.94",
+    "description": "Acer Aspire A315-31-C33J Black 15.6\", HD, Celeron N3350, 4GB DDR3L, 128GB, Windows 10 Home, ENG",
+    "reviews": 0,
+    "rating": 2
+   }
+  },
+  {
+   "set": "testset",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$379.95",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 4
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "publisher": "T. Egerton, Whitehall",
+    "published": "28 January 1813",
+    "pages": null,
+    "oclc": "38659585"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Nineteen Eighty-Four",
+    "author": "George Orwell",
+    "publisher": "Secker & Warburg",
+    "published": "8 June 1949",
+    "pages": 328,
+    "oclc": "470015866"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "The Hobbit, or There and Back Again",
+    "author": "J. R. R. Tolkien",
+    "publisher": "George Allen & Unwin (UK)",
+    "published": "21 September 1937",
+    "pages": 310,
+    "oclc": "1827184"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "publisher": "J. B. Lippincott & Co.",
+    "published": "July 11, 1960",
+    "pages": 281,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "publisher": "Charles Scribner's Sons",
+    "published": "April 10, 1925",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Moby-Dick; or, The Whale",
+    "author": "Herman Melville",
+    "publisher": "Richard Bentley (United Kingdom) Harper & Brothers (United States)",
+    "published": "October 18, 1851",
+    "pages": 635,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Shelley",
+    "publisher": "Lackington, Hughes, Harding, Mavor & Jones",
+    "published": "1 January 1818",
+    "pages": 280,
+    "oclc": null
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "publisher": "Archibald Constable and Company (UK)",
+    "published": "May 1897",
+    "pages": null,
+    "oclc": "1447002"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "The Catcher in the Rye",
+    "author": "J. D. Salinger",
+    "publisher": "Little, Brown and Company",
+    "published": "July 16, 1951",
+    "pages": 234,
+    "oclc": "287628"
+   }
+  },
+  {
+   "set": "testset",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "publisher": "Chatto & Windus",
+    "published": "February 1932",
+    "pages": 311,
+    "oclc": "20156268"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "The Requiem Red",
+    "price": "£22.65",
+    "availability": 19,
+    "upc": "f77dbf2323deb740",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+    "price": "£57.25",
+    "availability": 19,
+    "upc": "deda3e61b9514b83",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Birdsong: A Story in Pictures",
+    "price": "£54.64",
+    "availability": 19,
+    "upc": "9528d0948525bf5f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "Penny Maybe",
+    "price": "£33.29",
+    "availability": 18,
+    "upc": "668fe56b17cfcd4f",
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "When We Collided",
+    "price": "£31.77",
+    "availability": 16,
+    "upc": "3ecb690d1542c568",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "The Torch Is Passed: A Harding Family Story",
+    "price": "£19.09",
+    "availability": 16,
+    "upc": "4eed62cf5f8d8edf",
+    "rating": 1
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer",
+    "price": "£20.59",
+    "availability": 16,
+    "upc": "8c9e6bf2467d740d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "Security",
+    "price": "£39.25",
+    "availability": 16,
+    "upc": "6f78a0d744c35456",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)",
+    "price": "£15.44",
+    "availability": 16,
+    "upc": "889139b8e9c4cb36",
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)",
+    "price": "£19.92",
+    "availability": 16,
+    "upc": "57e5a4d515c8ce44",
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Douglas Adams",
+    "born_date": "March 11, 1952",
+    "born_location": "Cambridge, England, The United Kingdom"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "Elie Wiesel",
+    "born_date": "September 30, 1928",
+    "born_location": "Sighet, Romania"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Friedrich Nietzsche",
+    "born_date": "October 15, 1844",
+    "born_location": "Röcken bei Lützen, Prussian Province of Saxony, Germany"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "Mark Twain",
+    "born_date": "November 30, 1835",
+    "born_location": "Florida, Missouri, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "Allen Saunders",
+    "born_date": "April 24, 1899",
+    "born_location": "The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "Pablo Neruda",
+    "born_date": "July 12, 1904",
+    "born_location": "Parral, Chile"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Ralph Waldo Emerson",
+    "born_date": "May 25, 1803",
+    "born_location": "Boston, Massachusetts, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "Mother Teresa",
+    "born_date": "August 26, 1910",
+    "born_location": "Skopje, Macedonia, the Former Yugoslav Republic of"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Garrison Keillor",
+    "born_date": "August 07, 1942",
+    "born_location": "Anoka, Minnesota, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Jim Henson",
+    "born_date": "September 24, 1936",
+    "born_location": "Greenville, Mississippi, The United States"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$391.48",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-21",
+    "price": "$393.88",
+    "description": "Acer Aspire 3 A315-21, 15.6\", AMD A4-9120. 4GB. 128GB SSD, Linux",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Asus VivoBook Max",
+    "price": "$399",
+    "description": "Asus VivoBook Max X541NA-GQ041 Black Chocolate, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 500GB, Windows 10 Home",
+    "reviews": 4,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Asus VivoBook E502NA-GO022T Dark Blue",
+    "price": "$399.99",
+    "description": "Asus VivoBook E502NA-GO022T Dark Blue, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 3,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Lenovo ThinkPad E31-80",
+    "price": "$404.23",
+    "description": "Lenovo ThinkPad E31-80, 13.3\" HD, Celeron 3855U 1.6GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 12,
+    "rating": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Acer Aspire 3 A315-31 Black",
+    "price": "$408.98",
+    "description": "Acer Aspire 3 A315-31 Black, 15.6\" HD, Pentium N4200 1.1GHz, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 10,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$409.63",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 8GB, 128GB SSD, Windows 10 Home",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Acer Aspire ES1-732 Black",
+    "price": "$410.46",
+    "description": "Acer Aspire ES1-732 Black, 17.3\" HD+, Celeron, N3350, 4GB, 1TB, Windows 10 Home",
+    "reviews": 14,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540NA-GQ026T",
+    "price": "$410.66",
+    "description": "Asus VivoBook 15 X540NA-GQ026T Chocolate Black, 15.6\" HD, Pentium N4200, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd",
+    "reviews": 4,
+    "rating": 4
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Packard 255 G2",
+    "price": "$416.99",
+    "description": "15.6\", AMD E2-3800 1.3GHz, 4GB, 500GB, Windows 8.1",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Jane Eyre",
+    "author": "Charlotte Brontë",
+    "publisher": "Smith, Elder & Co.",
+    "published": "19 October 1847",
+    "pages": null,
+    "oclc": "3163777"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Wuthering Heights",
+    "author": "Emily Brontë",
+    "publisher": "Thomas Cautley Newby",
+    "published": "24 November 1847",
+    "pages": null,
+    "oclc": "71126926"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Great Expectations",
+    "author": "Charles Dickens",
+    "publisher": "Chapman & Hall",
+    "published": "1860",
+    "pages": 544,
+    "oclc": "1269308353"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "The Picture of Dorian Gray",
+    "author": "Oscar Wilde",
+    "publisher": "Lippincott's Monthly Magazine",
+    "published": "July 1890",
+    "pages": null,
+    "oclc": "53071567"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "Animal Farm",
+    "author": "George Orwell",
+    "publisher": "Secker and Warburg",
+    "published": "17 August 1945",
+    "pages": 92,
+    "oclc": "3655473"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "Lord of the Flies",
+    "author": "William Golding",
+    "publisher": "Faber and Faber",
+    "published": "17 September 1954",
+    "pages": 224,
+    "oclc": "47677622"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": "Of Mice and Men",
+    "author": "John Steinbeck",
+    "publisher": "Covici Friede",
+    "published": "1937",
+    "pages": 107,
+    "oclc": null
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": "The Grapes of Wrath",
+    "author": "John Steinbeck",
+    "publisher": "The Viking Press -James Lloyd",
+    "published": "April 14, 1939",
+    "pages": 464,
+    "oclc": "289946"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "publisher": "Ballantine Books",
+    "published": "1953-10-19",
+    "pages": 156,
+    "oclc": "53101079"
+   }
+  },
+  {
+   "set": "holdout",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": "Little Women",
+    "author": "Louisa May Alcott",
+    "publisher": "Roberts Brothers",
+    "published": "September 30, 1868",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 0,
+   "answers": {
+    "title": "Soumission",
+    "price": "£50.10",
+    "availability": 20,
+    "upc": "6957f44c3847a760",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 1,
+   "answers": {
+    "title": "Set Me Free",
+    "price": "£17.46",
+    "availability": 19,
+    "upc": "ce6396b0f23f6ecc",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 2,
+   "answers": {
+    "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+    "price": "£30.52",
+    "availability": 19,
+    "upc": "5674a18a29a43ced",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 3,
+   "answers": {
+    "title": "The Elephant Tree",
+    "price": "£23.82",
+    "availability": 18,
+    "upc": "5dada2b7be26bd03",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 4,
+   "answers": {
+    "title": "Private Paris (Private #10)",
+    "price": "£47.61",
+    "availability": 17,
+    "upc": "b12b89017878a60d",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 5,
+   "answers": {
+    "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+    "price": "£31.12",
+    "availability": 16,
+    "upc": "7858914fad68493c",
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 6,
+   "answers": {
+    "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+    "price": "£42.96",
+    "availability": 16,
+    "upc": "aadee1c326d286e3",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 7,
+   "answers": {
+    "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+    "price": "£32.24",
+    "availability": 16,
+    "upc": "7d6d2a6c0276f81b",
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 8,
+   "answers": {
+    "title": "Pop Gun War, Volume 1: Gift",
+    "price": "£18.97",
+    "availability": 16,
+    "upc": "e80f8e518b300dfe",
+    "rating": 1
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "books",
+   "page": 9,
+   "answers": {
+    "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+    "price": "£14.02",
+    "availability": 16,
+    "upc": "72f9d5be3472d34e",
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 0,
+   "answers": {
+    "name": "Charles M. Schulz",
+    "born_date": "November 26, 1922",
+    "born_location": "Minneapolis, MN, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 1,
+   "answers": {
+    "name": "William Nicholson",
+    "born_date": "January 12, 1948",
+    "born_location": "Lewes, Sussex, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 2,
+   "answers": {
+    "name": "Jorge Luis Borges",
+    "born_date": "August 24, 1899",
+    "born_location": "Buenos Aires"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 3,
+   "answers": {
+    "name": "George Eliot",
+    "born_date": "November 22, 1819",
+    "born_location": "South Farm, Arbury Hall, Nuneaton, Warwickshire, The United Kingdom"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 4,
+   "answers": {
+    "name": "George R.R. Martin",
+    "born_date": "September 20, 1948",
+    "born_location": "Bayonne, New Jersey, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 5,
+   "answers": {
+    "name": "C.S. Lewis",
+    "born_date": "November 29, 1898",
+    "born_location": "Belfast"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 6,
+   "answers": {
+    "name": "Martin Luther King Jr.",
+    "born_date": "January 15, 1929",
+    "born_location": "Atlanta, Georgia, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 7,
+   "answers": {
+    "name": "James Baldwin",
+    "born_date": "August 02, 1924",
+    "born_location": "Harlem, New York, The United States"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 8,
+   "answers": {
+    "name": "Haruki Murakami",
+    "born_date": "January 12, 1949",
+    "born_location": "Kyoto"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "quotes",
+   "page": 9,
+   "answers": {
+    "name": "Alexandre Dumas-fils",
+    "born_date": "July 27, 1824",
+    "born_location": "Paris"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 0,
+   "answers": {
+    "title": "Asus EeeBook R416NA-FA014T",
+    "price": "$433.3",
+    "description": "Asus EeeBook R416NA-FA014T, 14\" FHD, Pentium N4200, 4GB, 128GB eMMC, Windows 10 Home, Eng kbd",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 1,
+   "answers": {
+    "title": "Acer Aspire 3 A315-51",
+    "price": "$436.29",
+    "description": "Acer Aspire 3 A315-51, 15.6\" HD, Core i3-6006U, 4GB, 1TB, Windows 10 Home",
+    "reviews": 1,
+    "rating": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 2,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$436.29",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 500GB, Windows 10 Home",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 3,
+   "answers": {
+    "title": "Acer Extensa 15 (2540) Black",
+    "price": "$439.73",
+    "description": "Acer Extensa 15 (2540) Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 6,
+    "rating": 4
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 4,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$454.62",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 9,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 5,
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$454.73",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Pro",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 6,
+   "answers": {
+    "title": "Acer Aspire A315-51-33TG",
+    "price": "$457.38",
+    "description": "Acer Aspire A315-51-33TG, Black 15.6\" HD, Core i3-7100U, 4GB DDR4, 128GB SSD, Windows 10 Home, ENG",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 7,
+   "answers": {
+    "title": "Lenovo V110-15IKB",
+    "price": "$465.95",
+    "description": "Lenovo V110-15IKB, 15.6\" HD, Core i5-7200U, 4GB, 500GB, DOS",
+    "reviews": 7,
+    "rating": 5
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 8,
+   "answers": {
+    "title": "Asus VivoBook 15 X540UA-DM260 Chocolate Black",
+    "price": "$468.56",
+    "description": "Asus VivoBook 15 X540UA-DM260 Chocolate Black, 15.6\" FHD, Core i3-6006U, 4GB, 256GB SSD, Endless OS, En kbd",
+    "reviews": 1,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "webscraper",
+   "page": 9,
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$469.1",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 0,
+   "answers": {
+    "title": "Emma",
+    "author": "Jane Austen",
+    "publisher": "John Murray",
+    "published": "1816",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 1,
+   "answers": {
+    "title": "Sense and Sensibility",
+    "author": "Jane Austen",
+    "publisher": "Thomas Egerton, Military Library (Whitehall, London)",
+    "published": "30 October 1811",
+    "pages": null,
+    "oclc": "44961362"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 2,
+   "answers": {
+    "title": "Treasure Island",
+    "author": "Robert Louis Stevenson (Captain George North)",
+    "publisher": "Cassell and Company",
+    "published": "14 November 1883",
+    "pages": 292,
+    "oclc": "610014604"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 3,
+   "answers": {
+    "title": "Heart of Darkness",
+    "author": "Joseph Conrad",
+    "publisher": "Blackwood's Magazine",
+    "published": "1899",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 4,
+   "answers": {
+    "title": "The Time Machine",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Henry Holt (US)",
+    "published": "1895",
+    "pages": 84,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 5,
+   "answers": {
+    "title": "The War of the Worlds",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Harper & Bros (US)",
+    "published": "January 19, 1898",
+    "pages": 319,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 6,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Shakespeare and Company",
+    "published": "2 February 1922",
+    "pages": 732,
+    "oclc": null
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 7,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Simon & Schuster",
+    "published": "October 10, 1961",
+    "pages": 453,
+    "oclc": "35231812"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 8,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Delacorte",
+    "published": "March 31, 1969",
+    "pages": 190,
+    "oclc": "29960763"
+   }
+  },
+  {
+   "set": "fresh",
+   "site": "wikipedia",
+   "page": 9,
+   "answers": {
+    "title": null,
+    "author": null,
+    "publisher": "Macmillan",
+    "published": "June 30, 1936",
+    "pages": null,
+    "oclc": "28491920"
+   }
+  }
+ ],
+ "engine_from": "p3-engine-run",
+ "min_hits": 3,
+ "samples": 5,
+ "learn_on": null,
+ "brain_calls": {
+  "testset": "150 of 200",
+  "holdout": "175 of 200",
+  "fresh": "175 of 200"
+ }
+}

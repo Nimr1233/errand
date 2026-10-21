@@ -259,6 +259,50 @@ On the test set it also fixed Dr. Seuss, the books star count read from the 5 ic
 
 These 80 pages come from 4 sites with fixed layouts, and the recipes are positional. A site whose layout changes from page to page gets no recipe, like Wikipedia, and falls back to the brain.
 
+## 8. The page reader moves into Errand (2026-10-21, `errand/extract.py`)
+
+**What moved:**
+- The numbered view, the answer form and prompt, and the snap step.
+- Round 1's fixes, now always on: one date per date field, numbers must be on the page, style and script hidden.
+- The vote across pages (`learn_recipe`, `replay`).
+- `read_pages`: the flow for one kind of page. Brains read sample pages, a recipe is learned from their answers, and code reads every page. A brain reads only the fields no recipe covers, and a recipe can be kept and reused for later pages of that kind.
+
+`bench/brains.py` and `bench/score.py` now call this code, so the scoreboard measures the engine itself.
+
+**Check that nothing changed:**
+- All 13 saved phase 3 runs give the same answers through the engine as before, except one.
+- The engine also reads date fields from recipes. So Dr. Seuss's birth date now comes from "Born: March 02, 1904 in ..." instead of his description's "2 March 1904", which is right now.
+
+**Tests:**
+- `tests/test_extract.py` has 9 tests on made-up pages with a fake brain, with no model and no network.
+- Each fix was broken on purpose once, to make sure a test catches it.
+- Whole suite: 48 passed.
+
+**A fresh third set:**
+- `bench/testset.py --set fresh` fetched the next 10 pages per site: 40 pages, 190 answers. The key was spot-checked against every Wikipedia box.
+- It is used only to check the engine. One new brain run (`p3-engine-run`, 5 runs) asked all three sets.
+
+**Two engine bugs, found by measuring and fixed:**
+1. **Agreeing on missing values.** With 5 sample pages, a held-out Wikipedia "pages" recipe was accepted on one real example. Its selector used an id that exists on one page only, so it found nothing on the others, and "nothing" agreed with the 3 pages where the brain said none. A recipe must now read a real value right on at least 3 samples, and on 4 of every 5 samples that show one. This took held-out from 95.7% to 98.3% (5 fixed, 0 broken). The held-out pages found this bug, so they can't also prove the fix, but it has its own tests.
+2. **Too few samples.** On fresh pages, 5 Wikipedia boxes happened to share a row order, the recipe trusted it, and the next pages broke. Learning once from 10 pages and reusing the recipe gives Wikipedia no recipe in any of the 5 runs, and breaks nothing. `read_pages` now takes 10 samples by default.
+
+**The engine on all three sets** (same brain answers in every column):
+
+| | Brains only | 5 samples per set | **Learned once on 10 pages, reused** |
+|---|---|---|---|
+| Test set | 96.3% | 98.5% (4 fixed / 0 broken) | **98.5%** (4 / 0) |
+| Held-out | 97.8% | 98.3% (1 / 0) | **99.4%** (3 / 0) |
+| **Fresh** (never used for any choice) | 94.1% | 90.4% (1 / **8**) | **97.3%** (6 / 0, p = 0.03) |
+| Brain calls on new pages | 200 of 200 | 175 of 200 | **100 of 200** |
+
+- With the recipe learned once, books and webscraper pages need no brain at all.
+- The same recipes came out of all 5 brain runs.
+- The fresh result equals round 2's vote, which used the 5-run majority: one run per page is enough.
+
+**Seen but not looked into:** this 600-question run reused far fewer cached prompt tokens than the 400-question runs (62 vs 482 a question) and ran at 2.38 pages/s instead of about 4. Accuracy is not affected.
+
+**Not built yet:** the job loop that fetches pages and calls `read_pages` for real jobs. The room's demo engine still fakes the work.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:
@@ -288,6 +332,11 @@ python -X utf8 bench/score.py --rescore p3-nostyle p3-nostyle-date-ground
 python -X utf8 bench/score.py --compare p3-base p3-nostyle-date-ground
 python -X utf8 bench/score.py --rescore p3-nostyle p3-r2-vote
 python -X utf8 bench/score.py --compare p3-nostyle-date-ground p3-r2-vote
+python -m pytest tests/test_extract.py
+python -X utf8 bench/testset.py --set fresh --fetch
+python -X utf8 bench/score.py --variant p3-engine-run --runs 5
+python -X utf8 -c "import sys; sys.path.insert(0, 'bench'); import score; score.engine('p3-engine-run', 'engine-learn10', samples=10, learn_on='testset')"
+python -X utf8 bench/score.py --compare p3-engine-run engine-learn10
 ```
 
 The server command is recorded in each `bench/brains-*.json` (`server_cmd`).

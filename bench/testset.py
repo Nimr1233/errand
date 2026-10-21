@@ -18,6 +18,7 @@ writing fixes, so a fix is checked on pages it wasn't made from (bench/cache/hol
 Run:  python -X utf8 bench/testset.py --fetch    (downloads, slowly)
       python -X utf8 bench/testset.py            (answers from the cache, plus 3 rows per site to check)
       python -X utf8 bench/testset.py --holdout --fetch
+      python -X utf8 bench/testset.py --set fresh --fetch   (a third set, the next 10 again: checks the engine)
 """
 import argparse, json, pathlib, random, re, sys, time
 from scrapling.fetchers import Fetcher
@@ -28,17 +29,29 @@ from fetch import challenged, text  # noqa: E402
 from brains import truth as books_truth  # noqa: E402
 
 ROOT = pathlib.Path(__file__).parent
+ORDER = ['testset', 'holdout', 'fresh']  # each set takes the next 10 pages of every listing
+BOOKS_OFFSET = {'testset': 0, 'holdout': 5, 'fresh': 2}  # which of every 10 saved books pages
 CACHE = ROOT / 'cache' / 'testset'
 TRUTH = ROOT / 'testset_truth.json'
-HOLDOUT, HOLDOUT_TRUTH = ROOT / 'cache' / 'holdout', ROOT / 'holdout_truth.json'
 PER_SITE = 10
 HEADERS = {'User-Agent': 'ErrandTestSet/0.1 (personal non-commercial test set; 10 pages per site, '
                          'one request every 2-3 s; python scrapling)'}
 WIKI_BOOKS = ['Pride_and_Prejudice', 'Nineteen_Eighty-Four', 'The_Hobbit', 'To_Kill_a_Mockingbird',
               'The_Great_Gatsby', 'Moby-Dick', 'Frankenstein', 'Dracula', 'The_Catcher_in_the_Rye',
               'Brave_New_World']
-WIKI_HOLDOUT = ['Jane_Eyre', 'Wuthering_Heights', 'Great_Expectations', 'The_Picture_of_Dorian_Gray', 'Animal_Farm',
-                'Lord_of_the_Flies', 'Of_Mice_and_Men', 'The_Grapes_of_Wrath', 'Fahrenheit_451', 'Little_Women']
+WIKI = {'testset': WIKI_BOOKS,
+        'holdout': ['Jane_Eyre', 'Wuthering_Heights', 'Great_Expectations', 'The_Picture_of_Dorian_Gray', 'Animal_Farm',
+                    'Lord_of_the_Flies', 'Of_Mice_and_Men', 'The_Grapes_of_Wrath', 'Fahrenheit_451', 'Little_Women'],
+        'fresh': ['Emma_(novel)', 'Sense_and_Sensibility', 'Treasure_Island', 'Heart_of_Darkness', 'The_Time_Machine',
+                  'The_War_of_the_Worlds', 'Ulysses_(novel)', 'Catch-22', 'Slaughterhouse-Five', 'Gone_with_the_Wind_(novel)']}
+
+
+def cache_of(name):
+    return ROOT / 'cache' / name
+
+
+def truth_of(name):
+    return ROOT / f'{name}_truth.json'
 
 
 def get(url):
@@ -50,11 +63,11 @@ def get(url):
     return page, html
 
 
-def discover(holdout=False):
-    """The pages to fetch: 10 per site, found from each site's own listing pages. The held-out set
-    takes the next 10 of each listing."""
-    skip = PER_SITE if holdout else 0
-    urls = {'books': None, 'wikipedia': [f'https://en.wikipedia.org/wiki/{t}' for t in (WIKI_HOLDOUT if holdout else WIKI_BOOKS)]}
+def discover(name):
+    """The pages to fetch: 10 per site, found from each site's own listing pages. Each set after the
+    first takes the next 10 of each listing."""
+    skip = ORDER.index(name) * PER_SITE
+    urls = {'books': None, 'wikipedia': [f'https://en.wikipedia.org/wiki/{t}' for t in WIKI[name]]}
     seen, n = [], 1
     while len(seen) < skip + PER_SITE:
         page, _ = get(f'https://quotes.toscrape.com/page/{n}/')
@@ -70,27 +83,29 @@ def discover(holdout=False):
     return urls
 
 
-def fetch(holdout=False):
-    urls, cache = discover(holdout), HOLDOUT if holdout else CACHE
+def used_by_others(name, site):
+    return {u for other in ORDER if other != name and (cache_of(other) / site / 'urls.json').exists()
+            for u in json.loads((cache_of(other) / site / 'urls.json').read_text(encoding='utf-8'))}
+
+
+def fetch(name):
+    urls = discover(name)
     for site, lst in urls.items():
-        out = cache / site
+        out = cache_of(name) / site
         out.mkdir(parents=True, exist_ok=True)
         if site == 'books':  # already downloaded for the 105-page benchmark: take 10 spread-out pages
             src = sorted((ROOT / 'cache' / 'A').glob('*.html'))
-            step = len(src) // PER_SITE
-            picked = src[step // 2 if holdout else 0::step][:PER_SITE]
+            picked = src[BOOKS_OFFSET[name]::len(src) // PER_SITE][:PER_SITE]
             for k, p in enumerate(picked):
                 (out / f'{k:02d}.html').write_text(p.read_text(encoding='utf-8'), encoding='utf-8')
             lst = [p.name for p in picked]
         else:
             assert len(lst) == PER_SITE, f'{site}: found {len(lst)} pages, want {PER_SITE}'
-            if holdout:
-                used = json.loads((CACHE / site / 'urls.json').read_text(encoding='utf-8'))
-                assert not set(lst) & set(used), f'{site}: held-out pages overlap the test set'
             for k, u in enumerate(lst):
                 _, html = get(u)
                 (out / f'{k:02d}.html').write_text(html, encoding='utf-8')
                 print(f'{site} {k:02d} {len(html):>7} chars  {u}')
+        assert not set(lst) & used_by_others(name, site), f'{site}: {name} pages overlap another set'
         (out / 'urls.json').write_text(json.dumps(lst, indent=1), encoding='utf-8')
 
 
@@ -149,10 +164,10 @@ RECIPES = {'books': lambda s: books_truth(str(s.html_content)), 'quotes': quotes
            'wikipedia': wikipedia}
 
 
-def build(holdout=False):
+def build(name='testset'):
     out = {}
     for site, recipe in RECIPES.items():
-        d = (HOLDOUT if holdout else CACHE) / site
+        d = cache_of(name) / site
         urls = json.loads((d / 'urls.json').read_text(encoding='utf-8'))
         rows = []
         for k in range(PER_SITE):
@@ -164,28 +179,29 @@ def build(holdout=False):
         for f in rows[0]['answers']:
             vals = [r['answers'][f] for r in rows]
             assert any(v not in (None, '') for v in vals), f'{site}.{f} is empty on every page: recipe is broken'
-    if holdout:
-        used = json.loads((CACHE / 'books' / 'urls.json').read_text(encoding='utf-8'))
-        assert not {r['url'] for r in out['books']} & set(used), 'books: held-out pages overlap the test set'
-    (HOLDOUT_TRUTH if holdout else TRUTH).write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
+    for site, rows in out.items():
+        assert not {r['url'] for r in rows} & used_by_others(name, site), f'{site}: {name} pages overlap another set'
+    truth_of(name).write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
     return out
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--fetch', action='store_true')
-    ap.add_argument('--holdout', action='store_true')
+    ap.add_argument('--set', choices=ORDER, default='testset')
+    ap.add_argument('--holdout', action='store_true', help='same as --set holdout')
     a = ap.parse_args()
+    name = 'holdout' if a.holdout else a.set
     if a.fetch:
-        fetch(a.holdout)
-    out = build(a.holdout)
+        fetch(name)
+    out = build(name)
     for site, rows in out.items():
         empty = {f: sum(r['answers'][f] in (None, '') for r in rows) for f in rows[0]['answers']}
         print(f'\n== {site}: {len(rows)} pages · fields with "none" answers: {({f: n for f, n in empty.items() if n})}')
         for r in rows[:3]:  # 3 rows per site for you to check against the real page
             print(' ', r['url'])
             print('   ', json.dumps(r['answers'], ensure_ascii=False))
-    print(f'\nanswers -> {HOLDOUT_TRUTH if a.holdout else TRUTH}')
+    print(f'\nanswers -> {truth_of(name)}')
 
 
 if __name__ == '__main__':

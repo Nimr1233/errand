@@ -1,0 +1,440 @@
+{
+ "books": [
+  {
+   "page": "books/00.html",
+   "url": "002.html",
+   "answers": {
+    "title": "Soumission",
+    "price": "£50.10",
+    "availability": 20,
+    "upc": "6957f44c3847a760",
+    "rating": 1
+   }
+  },
+  {
+   "page": "books/01.html",
+   "url": "012.html",
+   "answers": {
+    "title": "Set Me Free",
+    "price": "£17.46",
+    "availability": 19,
+    "upc": "ce6396b0f23f6ecc",
+    "rating": 5
+   }
+  },
+  {
+   "page": "books/02.html",
+   "url": "022.html",
+   "answers": {
+    "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+    "price": "£30.52",
+    "availability": 19,
+    "upc": "5674a18a29a43ced",
+    "rating": 3
+   }
+  },
+  {
+   "page": "books/03.html",
+   "url": "032.html",
+   "answers": {
+    "title": "The Elephant Tree",
+    "price": "£23.82",
+    "availability": 18,
+    "upc": "5dada2b7be26bd03",
+    "rating": 5
+   }
+  },
+  {
+   "page": "books/04.html",
+   "url": "042.html",
+   "answers": {
+    "title": "Private Paris (Private #10)",
+    "price": "£47.61",
+    "availability": 17,
+    "upc": "b12b89017878a60d",
+    "rating": 5
+   }
+  },
+  {
+   "page": "books/05.html",
+   "url": "052.html",
+   "answers": {
+    "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+    "price": "£31.12",
+    "availability": 16,
+    "upc": "7858914fad68493c",
+    "rating": 3
+   }
+  },
+  {
+   "page": "books/06.html",
+   "url": "062.html",
+   "answers": {
+    "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+    "price": "£42.96",
+    "availability": 16,
+    "upc": "aadee1c326d286e3",
+    "rating": 4
+   }
+  },
+  {
+   "page": "books/07.html",
+   "url": "072.html",
+   "answers": {
+    "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+    "price": "£32.24",
+    "availability": 16,
+    "upc": "7d6d2a6c0276f81b",
+    "rating": 5
+   }
+  },
+  {
+   "page": "books/08.html",
+   "url": "082.html",
+   "answers": {
+    "title": "Pop Gun War, Volume 1: Gift",
+    "price": "£18.97",
+    "availability": 16,
+    "upc": "e80f8e518b300dfe",
+    "rating": 1
+   }
+  },
+  {
+   "page": "books/09.html",
+   "url": "092.html",
+   "answers": {
+    "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+    "price": "£14.02",
+    "availability": 16,
+    "upc": "72f9d5be3472d34e",
+    "rating": 4
+   }
+  }
+ ],
+ "quotes": [
+  {
+   "page": "quotes/00.html",
+   "url": "https://quotes.toscrape.com/author/Charles-M-Schulz",
+   "answers": {
+    "name": "Charles M. Schulz",
+    "born_date": "November 26, 1922",
+    "born_location": "Minneapolis, MN, The United States"
+   }
+  },
+  {
+   "page": "quotes/01.html",
+   "url": "https://quotes.toscrape.com/author/William-Nicholson",
+   "answers": {
+    "name": "William Nicholson",
+    "born_date": "January 12, 1948",
+    "born_location": "Lewes, Sussex, The United Kingdom"
+   }
+  },
+  {
+   "page": "quotes/02.html",
+   "url": "https://quotes.toscrape.com/author/Jorge-Luis-Borges",
+   "answers": {
+    "name": "Jorge Luis Borges",
+    "born_date": "August 24, 1899",
+    "born_location": "Buenos Aires, Argentina"
+   }
+  },
+  {
+   "page": "quotes/03.html",
+   "url": "https://quotes.toscrape.com/author/George-Eliot",
+   "answers": {
+    "name": "George Eliot",
+    "born_date": "November 22, 1819",
+    "born_location": "South Farm, Arbury Hall, Nuneaton, Warwickshire, The United Kingdom"
+   }
+  },
+  {
+   "page": "quotes/04.html",
+   "url": "https://quotes.toscrape.com/author/George-R-R-Martin",
+   "answers": {
+    "name": "George R.R. Martin",
+    "born_date": "September 20, 1948",
+    "born_location": "Bayonne, New Jersey, The United States"
+   }
+  },
+  {
+   "page": "quotes/05.html",
+   "url": "https://quotes.toscrape.com/author/C-S-Lewis",
+   "answers": {
+    "name": "C.S. Lewis",
+    "born_date": "November 29, 1898",
+    "born_location": "Belfast, Ireland"
+   }
+  },
+  {
+   "page": "quotes/06.html",
+   "url": "https://quotes.toscrape.com/author/Martin-Luther-King-Jr",
+   "answers": {
+    "name": "Martin Luther King Jr.",
+    "born_date": "January 15, 1929",
+    "born_location": "Atlanta, Georgia, The United States"
+   }
+  },
+  {
+   "page": "quotes/07.html",
+   "url": "https://quotes.toscrape.com/author/James-Baldwin",
+   "answers": {
+    "name": "James Baldwin",
+    "born_date": "August 02, 1924",
+    "born_location": "Harlem, New York, The United States"
+   }
+  },
+  {
+   "page": "quotes/08.html",
+   "url": "https://quotes.toscrape.com/author/Haruki-Murakami",
+   "answers": {
+    "name": "Haruki Murakami",
+    "born_date": "January 12, 1949",
+    "born_location": "Kyoto, Japan"
+   }
+  },
+  {
+   "page": "quotes/09.html",
+   "url": "https://quotes.toscrape.com/author/Alexandre-Dumas-fils",
+   "answers": {
+    "name": "Alexandre Dumas-fils",
+    "born_date": "July 27, 1824",
+    "born_location": "Paris, France"
+   }
+  }
+ ],
+ "webscraper": [
+  {
+   "page": "webscraper/00.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/77",
+   "answers": {
+    "title": "Asus EeeBook R416NA-FA014T",
+    "price": "$433.3",
+    "description": "Asus EeeBook R416NA-FA014T, 14\" FHD, Pentium N4200, 4GB, 128GB eMMC, Windows 10 Home, Eng kbd",
+    "reviews": 1,
+    "rating": 1
+   }
+  },
+  {
+   "page": "webscraper/01.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/78",
+   "answers": {
+    "title": "Acer Aspire 3 A315-51",
+    "price": "$436.29",
+    "description": "Acer Aspire 3 A315-51, 15.6\" HD, Core i3-6006U, 4GB, 1TB, Windows 10 Home",
+    "reviews": 1,
+    "rating": 1
+   }
+  },
+  {
+   "page": "webscraper/02.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/79",
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$436.29",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 500GB, Windows 10 Home",
+    "reviews": 2,
+    "rating": 1
+   }
+  },
+  {
+   "page": "webscraper/03.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/80",
+   "answers": {
+    "title": "Acer Extensa 15 (2540) Black",
+    "price": "$439.73",
+    "description": "Acer Extensa 15 (2540) Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 6,
+    "rating": 4
+   }
+  },
+  {
+   "page": "webscraper/04.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/81",
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$454.62",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i5-7200U, 4GB, 500GB, Linux",
+    "reviews": 9,
+    "rating": 1
+   }
+  },
+  {
+   "page": "webscraper/05.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/82",
+   "answers": {
+    "title": "Lenovo V110-15ISK",
+    "price": "$454.73",
+    "description": "Lenovo V110-15ISK, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Pro",
+    "reviews": 2,
+    "rating": 2
+   }
+  },
+  {
+   "page": "webscraper/06.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/83",
+   "answers": {
+    "title": "Acer Aspire A315-51-33TG",
+    "price": "$457.38",
+    "description": "Acer Aspire A315-51-33TG, Black 15.6\" HD, Core i3-7100U, 4GB DDR4, 128GB SSD, Windows 10 Home, ENG",
+    "reviews": 9,
+    "rating": 3
+   }
+  },
+  {
+   "page": "webscraper/07.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/84",
+   "answers": {
+    "title": "Lenovo V110-15IKB",
+    "price": "$465.95",
+    "description": "Lenovo V110-15IKB, 15.6\" HD, Core i5-7200U, 4GB, 500GB, DOS",
+    "reviews": 7,
+    "rating": 1
+   }
+  },
+  {
+   "page": "webscraper/08.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/85",
+   "answers": {
+    "title": "Asus VivoBook 15 X540UA-DM260 Chocolate Black",
+    "price": "$468.56",
+    "description": "Asus VivoBook 15 X540UA-DM260 Chocolate Black, 15.6\" FHD, Core i3-6006U, 4GB, 256GB SSD, Endless OS, En kbd",
+    "reviews": 1,
+    "rating": 3
+   }
+  },
+  {
+   "page": "webscraper/09.html",
+   "url": "https://webscraper.io/test-sites/e-commerce/allinone/product/86",
+   "answers": {
+    "title": "Acer Aspire ES1-572 Black",
+    "price": "$469.1",
+    "description": "Acer Aspire ES1-572 Black, 15.6\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+    "reviews": 5,
+    "rating": 3
+   }
+  }
+ ],
+ "wikipedia": [
+  {
+   "page": "wikipedia/00.html",
+   "url": "https://en.wikipedia.org/wiki/Emma_(novel)",
+   "answers": {
+    "title": "Emma",
+    "author": "Jane Austen",
+    "publisher": "John Murray",
+    "published": "1816",
+    "pages": 1036,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/01.html",
+   "url": "https://en.wikipedia.org/wiki/Sense_and_Sensibility",
+   "answers": {
+    "title": "Sense and Sensibility",
+    "author": "Jane Austen",
+    "publisher": "Thomas Egerton, Military Library (Whitehall, London)",
+    "published": "30 October 1811",
+    "pages": null,
+    "oclc": "44961362"
+   }
+  },
+  {
+   "page": "wikipedia/02.html",
+   "url": "https://en.wikipedia.org/wiki/Treasure_Island",
+   "answers": {
+    "title": "Treasure Island",
+    "author": "Robert Louis Stevenson (Captain George North)",
+    "publisher": "Cassell and Company",
+    "published": "14 November 1883",
+    "pages": 292,
+    "oclc": "610014604"
+   }
+  },
+  {
+   "page": "wikipedia/03.html",
+   "url": "https://en.wikipedia.org/wiki/Heart_of_Darkness",
+   "answers": {
+    "title": "Heart of Darkness",
+    "author": "Joseph Conrad",
+    "publisher": "Blackwood's Magazine",
+    "published": "1899",
+    "pages": null,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/04.html",
+   "url": "https://en.wikipedia.org/wiki/The_Time_Machine",
+   "answers": {
+    "title": "The Time Machine",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Henry Holt (US)",
+    "published": "1895",
+    "pages": 84,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/05.html",
+   "url": "https://en.wikipedia.org/wiki/The_War_of_the_Worlds",
+   "answers": {
+    "title": "The War of the Worlds",
+    "author": "H. G. Wells",
+    "publisher": "William Heinemann (UK) Harper & Bros (US)",
+    "published": "January 19, 1898",
+    "pages": 319,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/06.html",
+   "url": "https://en.wikipedia.org/wiki/Ulysses_(novel)",
+   "answers": {
+    "title": "Ulysses",
+    "author": "James Joyce",
+    "publisher": "Shakespeare and Company",
+    "published": "2 February 1922",
+    "pages": 732,
+    "oclc": null
+   }
+  },
+  {
+   "page": "wikipedia/07.html",
+   "url": "https://en.wikipedia.org/wiki/Catch-22",
+   "answers": {
+    "title": "Catch-22",
+    "author": "Joseph Heller",
+    "publisher": "Simon & Schuster",
+    "published": "October 10, 1961",
+    "pages": 453,
+    "oclc": "35231812"
+   }
+  },
+  {
+   "page": "wikipedia/08.html",
+   "url": "https://en.wikipedia.org/wiki/Slaughterhouse-Five",
+   "answers": {
+    "title": "Slaughterhouse-Five, or the Children's Crusade",
+    "author": "Kurt Vonnegut",
+    "publisher": "Delacorte",
+    "published": "March 31, 1969",
+    "pages": 190,
+    "oclc": "29960763"
+   }
+  },
+  {
+   "page": "wikipedia/09.html",
+   "url": "https://en.wikipedia.org/wiki/Gone_with_the_Wind_(novel)",
+   "answers": {
+    "title": "Gone with the Wind",
+    "author": "Margaret Mitchell",
+    "publisher": "Macmillan",
+    "published": "June 30, 1936",
+    "pages": 1037,
+    "oclc": "28491920"
+   }
+  }
+ ]
+}
