@@ -214,6 +214,51 @@ On held-out Wikipedia alone: 83% → 98%. The held-out gain's error bar stays ab
 
 **Speed:** 3.95–4.16 pages/s in these 400-question runs (more questions keep all 53 brains busy). The fixes change it by no more than the wobble.
 
+## 7. Harness tuner, phase 3 round 2: a vote across pages (2026-10-21, `vote` in `bench/score.py`)
+
+**How it works:**
+1. On each test set page, take the brains' majority answer over the 5 runs. The answer key is never used.
+2. Every page piece that holds that answer suggests a recipe: a CSS selector from Scrapling's `generate_css_selector`, plus a way to read the piece:
+   - its text
+   - the whole number in it
+   - a number word in its class ("star-rating Three")
+   - how many identical icons sit together
+3. A field gets the recipe that gives back the majority answer on the most test set pages, if that is at least 8 of 10.
+4. Wherever a field has a recipe, code reads the value from the recipe instead of the brain. On held-out pages, that is a recipe checked on pages it wasn't made from.
+
+**Self-check, recipes learned from the answer key:**
+- 11 of 18 fields get a recipe, and every one reads all 10 held-out pages right.
+- No recipe for quotes' date and place (one piece holds both) or for any Wikipedia field (each box puts its rows in a different order). The brain keeps those.
+
+**Result** (the same brain answers as round 1's winner, so the only difference is the vote):
+
+| | Round 1 winner | With the vote | Gap (95% range) | Items fixed / broken |
+|---|---|---|---|---|
+| Test set (recipes made here) | 96.5% | 98.6% | +2.1 pts [+0.5, +4.3] | 4 / 0 |
+| **Held-out** | 97.5% | **99.4%** | **+1.9 pts [+0.3, +4.0]** | **4 / 0** |
+
+The four held-out items fixed:
+- the Elie Wiesel and Jim Henson names, read from the page heading instead of a description sentence
+- two lone stars that the brain read as 5
+
+On the test set it also fixed Dr. Seuss, the books star count read from the 5 icons, and both webscraper star counts.
+
+- **Stable:** recipes learned from a different brain run (`p3-base`) are identical, and they give held-out +3 fixed, 0 broken.
+- **Coverage:** books and webscraper get a recipe for every field, so their new pages need no brain call at all. Quotes needs the brain for 2 fields and Wikipedia for all 6.
+
+**Phase 3 so far**, from the start of round 1 to now (`p3-base` → `p3-r2-vote`):
+
+| | Before | After | Fixed / broken | McNemar p |
+|---|---|---|---|---|
+| Test set | 94.2% | 98.6% | 8 / 0 | 0.008 |
+| **Held-out** | 94.9% | **99.4%** | **9 / 0** | **0.004** |
+
+**Still wrong in most runs, 3 items:**
+- quotes/04 and quotes/09 birthplaces are cut short ("Paris" for "Paris, France"). The tail fix that finished them broke a held-out publisher.
+- Little Women's "335 + 355" pages.
+
+These 80 pages come from 4 sites with fixed layouts, and the recipes are positional. A site whose layout changes from page to page gets no recipe, like Wikipedia, and falls back to the brain.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:
@@ -241,6 +286,8 @@ python -X utf8 bench/score.py --perfect-brain
 python -X utf8 bench/score.py --variant p3-nostyle --runs 5
 python -X utf8 bench/score.py --rescore p3-nostyle p3-nostyle-date-ground
 python -X utf8 bench/score.py --compare p3-base p3-nostyle-date-ground
+python -X utf8 bench/score.py --rescore p3-nostyle p3-r2-vote
+python -X utf8 bench/score.py --compare p3-nostyle-date-ground p3-r2-vote
 ```
 
 The server command is recorded in each `bench/brains-*.json` (`server_cmd`).

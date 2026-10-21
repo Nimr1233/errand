@@ -22,6 +22,9 @@ the held-out pages, it makes more items right than it makes wrong (majority over
                must beat the wobble between two runs of the same settings (p3-base vs p3-base2)
   post fixes   change what code does with the brain's written answer, so they are re-scored on the
                very same answers (--rescore): no brain noise at all
+  vote (round 2) a post fix across pages: recipes are learned from the brains' majority answers on
+               the test set pages only (never the answer key), then replayed on every page; on the
+               held-out pages that is a recipe checked on pages it wasn't made from
 
 Run:  python -X utf8 bench/score.py --variant base --runs 5
       python -X utf8 bench/score.py --compare base rea-off
@@ -58,7 +61,7 @@ PROMPT_FIXES = {  # written from the testset failures only
     'once': 'A piece without ×N appears once.',  # webscraper/06: one star icon read as 5
     'heading': 'Take names and titles from headings and short labelled pieces, not from long description text.'}  # quotes/09
 VIEW_FIXES = {'nostyle': ('style', 'script', 'noscript')}  # bug: Wikipedia's infobox CSS was shown to the brain
-POST_FIXES = {'tail', 'ground', 'date'}  # see finish()
+POST_FIXES = {'tail', 'ground', 'date', 'vote'}  # see finish() and vote()
 OLD = [f for f in b.FLAGS if f not in ('-rea', 'off')] + ['--reasoning-budget', '0']  # before phase 1
 VARIANTS = {  # name: (server flags, answer form on, fixes)
     'base': (OLD, True, ()),
@@ -69,7 +72,10 @@ VARIANTS = {  # name: (server flags, answer form on, fixes)
     'p3-base': (b.FLAGS, True, ()), 'p3-base2': (b.FLAGS, True, ()),
     **{f'p3-{f}': (b.FLAGS, True, (f,)) for f in [*PROMPT_FIXES, *VIEW_FIXES, *sorted(POST_FIXES)]},
     'p3-nostyle-date': (b.FLAGS, True, ('nostyle', 'date')),
-    'p3-nostyle-date-ground': (b.FLAGS, True, ('nostyle', 'date', 'ground'))}  # round 1's winner: start round 2 here
+    'p3-nostyle-date-ground': (b.FLAGS, True, ('nostyle', 'date', 'ground')),  # round 1's winner: start round 2 here
+    'p3-r2-vote': (b.FLAGS, True, ('nostyle', 'date', 'ground', 'vote')),  # round 2's winner: start round 3 here
+    # the same vote learned from a second brain run, to check the recipes are stable
+    'p3-date-ground': (b.FLAGS, True, ('date', 'ground')), 'p3-date-ground-vote': (b.FLAGS, True, ('date', 'ground', 'vote'))}
 
 
 def system_prompt(site, fixes=()):
@@ -85,6 +91,10 @@ def schema(site):
             'properties': {k: {'type': ['integer' if k in NUMBERS else 'string', 'null']} for k in FIELDS[site]}}
 
 
+def clean_piece(el):
+    return re.sub(r'\s*\[\s*\w+\s*\]', '', b.piece_text(el))  # footnote marks like [ 1 ] are never data
+
+
 TAIL = re.compile(r'(?:,\s*[^,.;:()\[\]]+)+')  # ", South Gloucestershire, England" up to the piece's end
 
 
@@ -95,7 +105,7 @@ def snap_text(value, els, fixes=()):
     'tail' fix: an answer found inside a piece and followed only by a comma list to the piece's end
     ("Paris" in "Born: November 22, 1869 in Paris, France") comes back with that list."""
     v = re.sub(r'\s+', ' ', str(value)).strip().casefold()
-    pieces = [re.sub(r'\s*\[\s*\w+\s*\]', '', b.piece_text(el)) for el in els]  # footnote marks like [ 1 ] are never data
+    pieces = [clean_piece(el) for el in els]
     for t in pieces:
         if v and t.casefold().startswith(v):
             return t
@@ -132,6 +142,64 @@ def finish(site, written, view, els, fixes=()):
                 v = first_date(v)
         out[f] = v
     return out
+
+
+READERS = {  # how code reads a value out of one page piece, so a recipe can replay it on any page
+    'text': lambda el: clean_piece(el) or None,
+    'number': lambda el: (int(m.group().replace(',', '')) if
+                          (m := re.search(r'(?<![\d.,])\d+(?:,\d{3})*(?!\d|[.,]\d)', b.piece_text(el))) else None),
+    'word': lambda el: next((b.STARS[w] for w in el.attrib.get('class', '').split() if w in b.STARS), None),
+    # a run of identical empty icons, like stars: how many share this one's tag and class under its parent
+    'count': lambda el: None if b.piece_text(el) or el.parent is None else
+             sum(c.tag == el.tag and c.attrib.get('class') == el.attrib.get('class') for c in el.parent.children)}
+VOTE_SHARE = 0.8  # a recipe must give back the brains' majority answer on 8 of every 10 test set pages
+PAGES = {}
+
+
+def replay(set_, site, k, reader, selector):
+    if (set_, site, k) not in PAGES:
+        PAGES[(set_, site, k)] = b.Selector((SETS[set_] / site / f'{k:02d}.html').read_text(encoding='utf-8'))
+    el = PAGES[(set_, site, k)].css(selector)
+    return READERS[reader](el[0]) if el else None
+
+
+def learn_recipes(rows, fixes):
+    """'vote' fix, step 1. Per site and field: every page piece that holds the brains' majority answer
+    on a test set page suggests a (reader, selector); the one that gives back the majority answer on
+    the most test set pages wins, if that is at least VOTE_SHARE of them. Uses brain answers only."""
+    recipes = {}
+    for site in FIELDS:
+        mine = [r for r in rows if r.get('set', 'testset') == 'testset' and r['site'] == site]
+        ks = sorted({r['page'] for r in mine})
+        for f in FIELDS[site]:
+            majority = {}
+            for k in ks:
+                said = [r['answers'].get(f) for r in mine if r['page'] == k]
+                majority[k] = max(said, key=said.count)  # a tie goes to the answer seen first
+            votes = {}
+            for k, want in majority.items():
+                if want in (None, ''):
+                    continue
+                for el in page_view('testset', site, k, fixes)[1]:
+                    for name in (('number', 'word', 'count') if f in NUMBERS else ('text',)):
+                        got = READERS[name](el)
+                        if got not in (None, '') and correct(f, got, want):
+                            key = (name, el.generate_css_selector)
+                            votes[key] = votes.get(key, 0) + 1
+            for key in sorted(votes, key=votes.get, reverse=True)[:10]:
+                agree = sum(correct(f, replay('testset', site, k, *key), want) for k, want in majority.items())
+                if agree >= VOTE_SHARE * len(majority):
+                    recipes[(site, f)] = key
+                    break
+    return recipes
+
+
+def vote(rows, fixes):
+    """'vote' fix, step 2: wherever a field has a recipe, the recipe's value replaces the brain's."""
+    recipes = learn_recipes(rows, fixes)
+    out = [{**r, 'answers': {**r['answers'], **{f: replay(r.get('set', 'testset'), s, r['page'], *key)
+                                                 for (s, f), key in recipes.items() if s == r['site']}}} for r in rows]
+    return out, {f'{s}.{f}': list(key) for (s, f), key in recipes.items()}
 
 
 def perfect_brain(fixes=()):
@@ -249,13 +317,14 @@ def run(variant, runs, np_=53):
             wall = time.perf_counter() - t
         finally:
             proc.terminate(); proc.wait(30)
+    rows, recipes = vote(rows, fixes) if 'vote' in fixes else (rows, None)
     speed = {'pages_per_second': round(len(rows) / wall, 2), 'wall_seconds': round(wall, 1),
              'valid_json': sum(r['valid_json'] for r in rows) / len(rows),
              'thinking_leaks': sum(r['thinking_leak'] for r in rows),
              'mean_prompt_tokens': round(statistics.mean(r['prompt_tokens'] or 0 for r in rows)),
              'mean_cached_tokens': round(statistics.mean(r['cached_tokens'] or 0 for r in rows), 1),
              'latency_p50': sorted(r['seconds'] for r in rows)[len(rows) // 2]}
-    out = {'variant': variant, 'runs': runs, 'server_cmd': ' '.join(cmd), 'fixes': list(fixes),
+    out = {'variant': variant, 'runs': runs, 'server_cmd': ' '.join(cmd), 'fixes': list(fixes), 'recipes': recipes,
            'sets': report(rows, runs), 'speed': speed, 'rows': rows}
     (ROOT / f'score-{variant}.json').write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
     return out
@@ -272,7 +341,9 @@ def rescore(src, dst):
         if key not in views:
             views[key] = page_view(*key, xb)
         rows.append({**r, 'answers': finish(r['site'], r['written'], *views[key], xb)})
-    out = {**A, 'variant': dst, 'fixes': list(xb), 'rescored_from': src, 'sets': report(rows, A['runs']), 'rows': rows}
+    rows, recipes = vote(rows, xb) if 'vote' in xb else (rows, None)
+    out = {**A, 'variant': dst, 'fixes': list(xb), 'rescored_from': src, 'recipes': recipes,
+           'sets': report(rows, A['runs']), 'rows': rows}
     (ROOT / f'score-{dst}.json').write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
     return out
 
@@ -315,7 +386,7 @@ def main():
     ap.add_argument('--perfect-brain', action='store_true', help='how many right answers code spoils, per fix')
     a = ap.parse_args()
     if a.perfect_brain:
-        for fixes in [(), *[(f,) for f in sorted(POST_FIXES)], tuple(sorted(POST_FIXES))]:
+        for fixes in [(), *[(f,) for f in sorted(POST_FIXES - {'vote'})], tuple(sorted(POST_FIXES - {'vote'}))]:  # vote works across pages, not one page
             lost = perfect_brain(fixes)
             print(f"{'+'.join(fixes) or 'no fixes'}: a perfect brain loses {len(lost)}", lost)
         return

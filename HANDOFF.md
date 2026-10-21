@@ -272,7 +272,17 @@ From `reports/Full feature free Errand plan.md`:
   - Kept: one date per date field, a number must be on the page, and hide CSS from the brain (a bug).
   - Dropped: tail, once, heading.
   - Result: held-out 94.9% → 97.5%, test set 94.2% → 96.5%. Round 1's winning variant is `p3-nostyle-date-ground`; start the next round from it.
-- **Next (needs the user's go-ahead):** round 2, a vote across pages (recipes for all 4 sites), for the names and star counts. Or phase 2, clicking.
+- **Phase 3 round 2, a vote across pages** (`bench/results.md` section 7):
+  - Recipes are learned from the brains' majority answers on test set pages only, then replayed. The answer key is never used.
+  - Held-out 97.5% → 99.4% (4 fixed, 0 broken). A second brain run learned the same recipes.
+  - Phase 3 so far: held-out 94.9% → 99.4%, 9 fixed, 0 broken, p = 0.004.
+  - Books and webscraper need no brain on new pages. Wikipedia gets no recipe (its row order changes) and stays with the brain.
+  - The winner is `p3-r2-vote`.
+- **Next (needs the user's go-ahead):**
+  - the 3 items left
+  - recipes keyed by row label, for sites like Wikipedia
+  - moving the vote into the real engine
+  - or phase 2, clicking
 
 **Known limits (marked `shortcut:` in the code where it applies):**
 - With two pages open at once, both answer the terminal's live queries (Claude Code would get each answer twice). One room tab is fine.
