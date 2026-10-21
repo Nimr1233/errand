@@ -1,0 +1,3827 @@
+{
+  "summary": {
+    "pages": 105,
+    "wall_seconds": 67.0,
+    "pages_per_second": 1.566,
+    "latency_p50": 30.65,
+    "latency_p90": 46.26,
+    "mean_prompt_tokens": 1239,
+    "mean_gen_tok_s_per_slot": 3.3,
+    "json_parse_failures": 0,
+    "field_accuracy": 0.952,
+    "field_accuracy_excl_rating": 0.995,
+    "per_field": {
+      "title": 0.981,
+      "price": 1.0,
+      "availability": 1.0,
+      "upc": 1.0,
+      "rating": 0.781
+    },
+    "recipe_from_points": {
+      "recipe": {
+        "title": "#content_inner > article > div > div:nth-of-type(2) > h1",
+        "price": "#content_inner > article > div > div:nth-of-type(2) > p",
+        "availability": "#content_inner > article > div > div:nth-of-type(2) > p:nth-of-type(2)",
+        "upc": "#content_inner > article > table > tr > td",
+        "rating": "#content_inner > article > div > div:nth-of-type(2) > p:nth-of-type(3)"
+      },
+      "fields_with_recipe": 5,
+      "brain_calls": 5,
+      "replay_seconds_105_pages": 0.628,
+      "per_field": {
+        "title": 1.0,
+        "price": 1.0,
+        "availability": 1.0,
+        "upc": 1.0,
+        "rating": 1.0
+      }
+    },
+    "np": 53,
+    "ctx_per_slot": 4096,
+    "server_cmd": "C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\llama\\llama-server.exe -m C:\\Users\\Omer laptop\\AppData\\Local\\Temp\\errand\\dl\\Qwen3.5-2B-Q4_K_M.gguf -np 53 -c 217088 -ngl 99 -fa on -ctk q8_0 -ctv q8_0 -ctxcp 2 -cram 2048 --reasoning-budget 0 --host 127.0.0.1 --port 8080",
+    "max_vram_mib": 4494,
+    "shared_gpu_mib_delta": 150
+  },
+  "rows": [
+    {
+      "i": 0,
+      "seconds": 23.76,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 487,
+      "gen_tokens": 71,
+      "gen_tok_s": 2.9656471717872734,
+      "answer": {
+        "title": "A Light in the Attic",
+        "price": "\u00a351.77",
+        "availability": "In stock (22 available)",
+        "upc": "a897fe39b1053632",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "A Light in the Attic",
+        "price": "\u00a351.77",
+        "availability": 22,
+        "upc": "a897fe39b1053632",
+        "rating": 3
+      }
+    },
+    {
+      "i": 1,
+      "seconds": 24.1,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 613,
+      "gen_tokens": 69,
+      "gen_tok_s": 2.872548770703314,
+      "answer": {
+        "title": "Tipping the Velvet",
+        "price": "\u00a353.74",
+        "availability": "In stock (20 available)",
+        "upc": "90fa61229261140a",
+        "rating": 1
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Tipping the Velvet",
+        "price": "\u00a353.74",
+        "availability": 20,
+        "upc": "90fa61229261140a",
+        "rating": 1
+      }
+    },
+    {
+      "i": 2,
+      "seconds": 24.36,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 715,
+      "gen_tokens": 68,
+      "gen_tok_s": 2.879711815633801,
+      "answer": {
+        "title": "Soumission",
+        "price": "\u00a350.10",
+        "availability": "In stock (20 available)",
+        "upc": "6957f44c3847a760",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 40
+      },
+      "written": {
+        "title": "Soumission",
+        "price": "\u00a350.10",
+        "availability": 20,
+        "upc": "6957f44c3847a760",
+        "rating": 3
+      }
+    },
+    {
+      "i": 3,
+      "seconds": 23.86,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 818,
+      "gen_tokens": 66,
+      "gen_tok_s": 2.903503447664663,
+      "answer": {
+        "title": "Sharp Objects",
+        "price": "\u00a347.82",
+        "availability": "In stock (20 available)",
+        "upc": "e00eb4fd7b871a48",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Sharp Objects",
+        "price": "\u00a347.82",
+        "availability": 20,
+        "upc": "e00eb4fd7b871a48",
+        "rating": 4
+      }
+    },
+    {
+      "i": 4,
+      "seconds": 28.51,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 928,
+      "gen_tokens": 76,
+      "gen_tok_s": 2.8188390757846014,
+      "answer": {
+        "title": "Sapiens: A Brief History of Humankind",
+        "price": "\u00a354.23",
+        "availability": "In stock (20 available)",
+        "upc": "4165285e1663650f",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Sapiens: A Brief History of Humankind",
+        "price": "\u00a354.23",
+        "availability": 20,
+        "upc": "4165285e1663650f",
+        "rating": 5
+      }
+    },
+    {
+      "i": 5,
+      "seconds": 24.96,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1046,
+      "gen_tokens": 67,
+      "gen_tok_s": 2.920218437648624,
+      "answer": {
+        "title": "The Requiem Red",
+        "price": "\u00a322.65",
+        "availability": "In stock (19 available)",
+        "upc": "f77dbf2323deb740",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 61
+      },
+      "written": {
+        "title": "The Requiem Red",
+        "price": "\u00a322.65",
+        "availability": 19,
+        "upc": "f77dbf2323deb740",
+        "rating": 3
+      }
+    },
+    {
+      "i": 6,
+      "seconds": 29.89,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1158,
+      "gen_tokens": 75,
+      "gen_tok_s": 2.7907464730150084,
+      "answer": {
+        "title": "The Dirty Little Secrets of Getting Your Dream Job",
+        "price": "\u00a333.34",
+        "availability": "In stock (19 available)",
+        "upc": "2597b5a345f45e1b",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Dirty Little Secrets of Getting Your Dream Job",
+        "price": "\u00a333.34",
+        "availability": 19,
+        "upc": "2597b5a345f45e1b",
+        "rating": 4
+      }
+    },
+    {
+      "i": 7,
+      "seconds": 39.77,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1199,
+      "gen_tokens": 86,
+      "gen_tok_s": 2.379735582819922,
+      "answer": {
+        "title": "The Coming Woman: A Novel Based on the Life of the Infamous Feminist, Victoria Woodhull",
+        "price": "\u00a317.93",
+        "availability": "In stock (19 available)",
+        "upc": "e72a5dfc7e9267b2",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Coming Woman: A Novel Based on the Life of the Infamous Feminist, Victoria Woodhull",
+        "price": "\u00a317.93",
+        "availability": 19,
+        "upc": "e72a5dfc7e9267b2",
+        "rating": 3
+      }
+    },
+    {
+      "i": 8,
+      "seconds": 45.56,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1237,
+      "gen_tokens": 87,
+      "gen_tok_s": 2.321525255049918,
+      "answer": {
+        "title": "The Boys in the Boat: Nine Americans and Their Epic Quest for Gold at the 1936 Berlin Olympics",
+        "price": "\u00a322.60",
+        "availability": "In stock (19 available)",
+        "upc": "e10e1e165dc8be4a",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Boys in the Boat: Nine Americans and Their Epic Quest for Gold at the 1936 Berlin Olympics",
+        "price": "\u00a322.60",
+        "availability": 19,
+        "upc": "e10e1e165dc8be4a",
+        "rating": 4
+      }
+    },
+    {
+      "i": 9,
+      "seconds": 29.88,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1248,
+      "gen_tokens": 67,
+      "gen_tok_s": 3.09010145926764,
+      "answer": {
+        "title": "The Black Maria",
+        "price": "\u00a352.15",
+        "availability": "In stock (19 available)",
+        "upc": "1dfe412b8ac00530",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 40
+      },
+      "written": {
+        "title": "The Black Maria",
+        "price": "\u00a352.15",
+        "availability": 19,
+        "upc": "1dfe412b8ac00530",
+        "rating": 3
+      }
+    },
+    {
+      "i": 10,
+      "seconds": 27.61,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1260,
+      "gen_tokens": 74,
+      "gen_tok_s": 2.8800610415129237,
+      "answer": {
+        "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+        "price": "\u00a313.99",
+        "availability": "In stock (19 available)",
+        "upc": "0312262ecafa5a40",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 47
+      },
+      "written": {
+        "title": "Starving Hearts (Triangular Trade Trilogy, #1)",
+        "price": "\u00a313.99",
+        "availability": 19,
+        "upc": "0312262ecafa5a40",
+        "rating": 3
+      }
+    },
+    {
+      "i": 11,
+      "seconds": 42.51,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1250,
+      "gen_tokens": 69,
+      "gen_tok_s": 2.629887229662096,
+      "answer": {
+        "title": "Shakespeare's Sonnets",
+        "price": "\u00a320.66",
+        "availability": "In stock (19 available)",
+        "upc": "30a7f60cd76ca58c",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Shakespeare's Sonnets",
+        "price": "\u00a320.66",
+        "availability": 19,
+        "upc": "30a7f60cd76ca58c",
+        "rating": 4
+      }
+    },
+    {
+      "i": 12,
+      "seconds": 24.86,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1249,
+      "gen_tokens": 66,
+      "gen_tok_s": 2.949324747561623,
+      "answer": {
+        "title": "Set Me Free",
+        "price": "\u00a317.46",
+        "availability": "In stock (19 available)",
+        "upc": "ce6396b0f23f6ecc",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Set Me Free",
+        "price": "\u00a317.46",
+        "availability": 19,
+        "upc": "ce6396b0f23f6ecc",
+        "rating": 5
+      }
+    },
+    {
+      "i": 13,
+      "seconds": 35.62,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1271,
+      "gen_tokens": 78,
+      "gen_tok_s": 2.5908847023332564,
+      "answer": {
+        "title": "Scott Pilgrim's Precious Little Life (Scott Pilgrim #1)",
+        "price": "\u00a352.29",
+        "availability": "In stock (19 available)",
+        "upc": "3b1c02bac2a429e6",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Scott Pilgrim's Precious Little Life (Scott Pilgrim #1)",
+        "price": "\u00a352.29",
+        "availability": 19,
+        "upc": "3b1c02bac2a429e6",
+        "rating": 5
+      }
+    },
+    {
+      "i": 14,
+      "seconds": 29.03,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1239,
+      "gen_tokens": 72,
+      "gen_tok_s": 2.913581809335124,
+      "answer": {
+        "title": "Rip it Up and Start Again",
+        "price": "\u00a335.02",
+        "availability": "In stock (19 available)",
+        "upc": "a34ba96d4081e6a4",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Rip it Up and Start Again",
+        "price": "\u00a335.02",
+        "availability": 19,
+        "upc": "a34ba96d4081e6a4",
+        "rating": 5
+      }
+    },
+    {
+      "i": 15,
+      "seconds": 49.53,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1232,
+      "gen_tokens": 88,
+      "gen_tok_s": 2.325039321225348,
+      "answer": {
+        "title": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+        "price": "\u00a357.25",
+        "availability": "In stock (19 available)",
+        "upc": "deda3e61b9514b83",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991",
+        "price": "\u00a357.25",
+        "availability": 19,
+        "upc": "deda3e61b9514b83",
+        "rating": 3
+      }
+    },
+    {
+      "i": 16,
+      "seconds": 26.87,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1233,
+      "gen_tokens": 64,
+      "gen_tok_s": 3.1876493261916496,
+      "answer": {
+        "title": "Olio",
+        "price": "\u00a323.88",
+        "availability": "In stock (19 available)",
+        "upc": "feb7cc7701ecf901",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 33
+      },
+      "written": {
+        "title": "Olio",
+        "price": "\u00a323.88",
+        "availability": 19,
+        "upc": "feb7cc7701ecf901",
+        "rating": 3
+      }
+    },
+    {
+      "i": 17,
+      "seconds": 41.44,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1237,
+      "gen_tokens": 84,
+      "gen_tok_s": 2.376116241438717,
+      "answer": {
+        "title": "Mesaerion: The Best Science Fiction Stories 1800-1849",
+        "price": "\u00a337.59",
+        "availability": "In stock (19 available)",
+        "upc": "e30f54cea9b38190",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 40
+      },
+      "written": {
+        "title": "Mesaerion: The Best Science Fiction Stories 1800-1849",
+        "price": "\u00a337.59",
+        "availability": 19,
+        "upc": "e30f54cea9b38190",
+        "rating": 3
+      }
+    },
+    {
+      "i": 18,
+      "seconds": 26.87,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1243,
+      "gen_tokens": 69,
+      "gen_tok_s": 2.979598600745443,
+      "answer": {
+        "title": "Libertarianism for Beginners",
+        "price": "\u00a351.33",
+        "availability": "In stock (19 available)",
+        "upc": "a18a4f574854aced",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Libertarianism for Beginners",
+        "price": "\u00a351.33",
+        "availability": 19,
+        "upc": "a18a4f574854aced",
+        "rating": 2
+      }
+    },
+    {
+      "i": 19,
+      "seconds": 27.6,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1261,
+      "gen_tokens": 71,
+      "gen_tok_s": 2.9728255713282357,
+      "answer": {
+        "title": "It's Only the Himalayas",
+        "price": "\u00a345.17",
+        "availability": "In stock (19 available)",
+        "upc": "a22124811bfa8350",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "It's Only the Himalayas",
+        "price": "\u00a345.17",
+        "availability": 19,
+        "upc": "a22124811bfa8350",
+        "rating": 2
+      }
+    },
+    {
+      "i": 20,
+      "seconds": 34.07,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1244,
+      "gen_tokens": 69,
+      "gen_tok_s": 2.8595916528351446,
+      "answer": {
+        "title": "In Her Wake",
+        "price": "\u00a312.84",
+        "availability": "In stock (19 available)",
+        "upc": "23356462d1320d61",
+        "rating": 1
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "In Her Wake",
+        "price": "\u00a312.84",
+        "availability": 19,
+        "upc": "23356462d1320d61",
+        "rating": 1
+      }
+    },
+    {
+      "i": 21,
+      "seconds": 34.76,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1240,
+      "gen_tokens": 69,
+      "gen_tok_s": 2.8443403378699865,
+      "answer": {
+        "title": "How Music Works",
+        "price": "\u00a337.32",
+        "availability": "In stock (19 available)",
+        "upc": "327f68a59745c102",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "How Music Works",
+        "price": "\u00a337.32",
+        "availability": 19,
+        "upc": "327f68a59745c102",
+        "rating": 2
+      }
+    },
+    {
+      "i": 22,
+      "seconds": 58.09,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1308,
+      "gen_tokens": 114,
+      "gen_tok_s": 2.899418207361053,
+      "answer": {
+        "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+        "price": "\u00a330.52",
+        "availability": "In stock (19 available)",
+        "upc": "5674a18a29a43ced",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Foolproof Preserving: A Guide to Small Batch Jams, Jellies, Pickles, Condiments, and More: A Foolproof Guide to Making Small Batch Jams, Jellies, Pickles, Condiments, and More",
+        "price": "\u00a330.52",
+        "availability": 19,
+        "upc": "5674a18a29a43ced",
+        "rating": 3
+      }
+    },
+    {
+      "i": 23,
+      "seconds": 36.47,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1287,
+      "gen_tokens": 73,
+      "gen_tok_s": 2.6930583391617473,
+      "answer": {
+        "title": "Chase Me (Paris Nights #2)",
+        "price": "\u00a325.27",
+        "availability": "In stock (19 available)",
+        "upc": "c2e46a2ee3b4a322",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Chase Me (Paris Nights #2)",
+        "price": "\u00a325.27",
+        "availability": 19,
+        "upc": "c2e46a2ee3b4a322",
+        "rating": 5
+      }
+    },
+    {
+      "i": 24,
+      "seconds": 26.29,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1175,
+      "gen_tokens": 65,
+      "gen_tok_s": 3.0562882820999926,
+      "answer": {
+        "title": "Black Dust",
+        "price": "\u00a334.53",
+        "availability": "In stock (19 available)",
+        "upc": "00bfed9e18bb36f3",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Black Dust",
+        "price": "\u00a334.53",
+        "availability": 19,
+        "upc": "00bfed9e18bb36f3",
+        "rating": 5
+      }
+    },
+    {
+      "i": 25,
+      "seconds": 29.88,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1203,
+      "gen_tokens": 72,
+      "gen_tok_s": 2.8942768366010743,
+      "answer": {
+        "title": "Birdsong: A Story in Pictures",
+        "price": "\u00a354.64",
+        "availability": "In stock (19 available)",
+        "upc": "9528d0948525bf5f",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Birdsong: A Story in Pictures",
+        "price": "\u00a354.64",
+        "availability": 19,
+        "upc": "9528d0948525bf5f",
+        "rating": 3
+      }
+    },
+    {
+      "i": 26,
+      "seconds": 53.33,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1302,
+      "gen_tokens": 85,
+      "gen_tok_s": 2.472530771822851,
+      "answer": {
+        "title": "America's Cradle of Quarterbacks: Western Pennsylvania's Football Factory from Johnny Unitas to Joe Montana",
+        "price": "\u00a322.50",
+        "availability": "In stock (19 available)",
+        "upc": "c7d160c2c0de586f",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "America's Cradle of Quarterbacks: Western Pennsylvania's Football Factory from Johnny Unitas to Joe Montana",
+        "price": "\u00a322.50",
+        "availability": 19,
+        "upc": "c7d160c2c0de586f",
+        "rating": 3
+      }
+    },
+    {
+      "i": 27,
+      "seconds": 39.0,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1288,
+      "gen_tokens": 71,
+      "gen_tok_s": 2.676953203530932,
+      "answer": {
+        "title": "Aladdin and His Wonderful Lamp",
+        "price": "\u00a353.13",
+        "availability": "In stock (19 available)",
+        "upc": "904208d6aa64b655",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Aladdin and His Wonderful Lamp",
+        "price": "\u00a353.13",
+        "availability": 19,
+        "upc": "904208d6aa64b655",
+        "rating": 3
+      }
+    },
+    {
+      "i": 28,
+      "seconds": 46.26,
+      "parsed": true,
+      "score": {
+        "title": false,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1250,
+      "gen_tokens": 73,
+      "gen_tok_s": 2.5404875202608292,
+      "answer": {
+        "title": "Worlds Elsewhere: Journeys Around Shakespeare's Globe",
+        "price": "\u00a340.30",
+        "availability": "In stock (18 available)",
+        "upc": "4c28def39d850cdf",
+        "rating": 5
+      },
+      "points": {
+        "title": null,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Worlds Elsewhere: Journeys Around Shakespeare's Globe",
+        "price": "\u00a340.30",
+        "availability": 18,
+        "upc": "4c28def39d850cdf",
+        "rating": 5
+      }
+    },
+    {
+      "i": 29,
+      "seconds": 29.08,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1234,
+      "gen_tokens": 61,
+      "gen_tok_s": 3.4151114012185,
+      "answer": {
+        "title": "Wall and Piece",
+        "price": "\u00a344.18",
+        "availability": "In stock (18 available)",
+        "upc": "ccd9ffa25efabdea",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Wall and Piece",
+        "price": "\u00a344.18",
+        "availability": 18,
+        "upc": "ccd9ffa25efabdea",
+        "rating": 4
+      }
+    },
+    {
+      "i": 30,
+      "seconds": 34.0,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1221,
+      "gen_tokens": 75,
+      "gen_tok_s": 2.691673917817957,
+      "answer": {
+        "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+        "price": "\u00a317.66",
+        "availability": "In stock (18 available)",
+        "upc": "6258a1f6a6dcfe50",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Four Agreements: A Practical Guide to Personal Freedom",
+        "price": "\u00a317.66",
+        "availability": 18,
+        "upc": "6258a1f6a6dcfe50",
+        "rating": 5
+      }
+    },
+    {
+      "i": 31,
+      "seconds": 49.59,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1264,
+      "gen_tokens": 80,
+      "gen_tok_s": 2.44569648281293,
+      "answer": {
+        "title": "The Five Love Languages: How to Express Heartfelt Commitment to Your Mate",
+        "price": "\u00a331.05",
+        "availability": "In stock (18 available)",
+        "upc": "3c039985229453bf",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Five Love Languages: How to Express Heartfelt Commitment to Your Mate",
+        "price": "\u00a331.05",
+        "availability": 18,
+        "upc": "3c039985229453bf",
+        "rating": 3
+      }
+    },
+    {
+      "i": 32,
+      "seconds": 34.06,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1244,
+      "gen_tokens": 65,
+      "gen_tok_s": 3.016544473834281,
+      "answer": {
+        "title": "The Elephant Tree",
+        "price": "\u00a323.82",
+        "availability": "In stock (18 available)",
+        "upc": "5dada2b7be26bd03",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Elephant Tree",
+        "price": "\u00a323.82",
+        "availability": 18,
+        "upc": "5dada2b7be26bd03",
+        "rating": 5
+      }
+    },
+    {
+      "i": 33,
+      "seconds": 31.58,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1215,
+      "gen_tokens": 71,
+      "gen_tok_s": 2.85978997212195,
+      "answer": {
+        "title": "The Bear and the Piano",
+        "price": "\u00a336.89",
+        "availability": "In stock (18 available)",
+        "upc": "9f6568e9c95f60b0",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 33
+      },
+      "written": {
+        "title": "The Bear and the Piano",
+        "price": "\u00a336.89",
+        "availability": 18,
+        "upc": "9f6568e9c95f60b0",
+        "rating": 3
+      }
+    },
+    {
+      "i": 34,
+      "seconds": 36.52,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1159,
+      "gen_tokens": 67,
+      "gen_tok_s": 2.8618542621530483,
+      "answer": {
+        "title": "Sophie's World",
+        "price": "\u00a315.94",
+        "availability": "In stock (18 available)",
+        "upc": "6be3beb0793a53e7",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Sophie's World",
+        "price": "\u00a315.94",
+        "availability": 18,
+        "upc": "6be3beb0793a53e7",
+        "rating": 5
+      }
+    },
+    {
+      "i": 35,
+      "seconds": 40.73,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1224,
+      "gen_tokens": 66,
+      "gen_tok_s": 2.7726805482126915,
+      "answer": {
+        "title": "Penny Maybe",
+        "price": "\u00a333.29",
+        "availability": "In stock (18 available)",
+        "upc": "668fe56b17cfcd4f",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Penny Maybe",
+        "price": "\u00a333.29",
+        "availability": 18,
+        "upc": "668fe56b17cfcd4f",
+        "rating": 3
+      }
+    },
+    {
+      "i": 36,
+      "seconds": 50.11,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1259,
+      "gen_tokens": 86,
+      "gen_tok_s": 2.3600239922815556,
+      "answer": {
+        "title": "Maude (1883-1993):She Grew Up with the country",
+        "price": "\u00a318.02",
+        "availability": "In stock (18 available)",
+        "upc": "094b269567e1c300",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 33
+      },
+      "written": {
+        "title": "Maude (1883-1993):She Grew Up with the country",
+        "price": "\u00a318.02",
+        "availability": 18,
+        "upc": "094b269567e1c300",
+        "rating": 3
+      }
+    },
+    {
+      "i": 37,
+      "seconds": 30.65,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1236,
+      "gen_tokens": 69,
+      "gen_tok_s": 2.9684790307950886,
+      "answer": {
+        "title": "In a Dark, Dark Wood",
+        "price": "\u00a319.63",
+        "availability": "In stock (18 available)",
+        "upc": "19ed25f4641d5efd",
+        "rating": 1
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "In a Dark, Dark Wood",
+        "price": "\u00a319.63",
+        "availability": 18,
+        "upc": "19ed25f4641d5efd",
+        "rating": 1
+      }
+    },
+    {
+      "i": 38,
+      "seconds": 37.36,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1230,
+      "gen_tokens": 66,
+      "gen_tok_s": 2.8748811900062052,
+      "answer": {
+        "title": "Behind Closed Doors",
+        "price": "\u00a352.22",
+        "availability": "In stock (18 available)",
+        "upc": "be5cc846f45496fb",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Behind Closed Doors",
+        "price": "\u00a352.22",
+        "availability": 18,
+        "upc": "be5cc846f45496fb",
+        "rating": 4
+      }
+    },
+    {
+      "i": 39,
+      "seconds": 34.06,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1295,
+      "gen_tokens": 72,
+      "gen_tok_s": 2.7795411987511325,
+      "answer": {
+        "title": "You can't bury them all: Poems",
+        "price": "\u00a333.63",
+        "availability": "In stock (17 available)",
+        "upc": "55f9da0c5eea2e10",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": null
+      },
+      "written": {
+        "title": "You can't bury them all: Poems",
+        "price": "\u00a333.63",
+        "availability": 17,
+        "upc": "55f9da0c5eea2e10",
+        "rating": 3
+      }
+    },
+    {
+      "i": 40,
+      "seconds": 27.26,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1286,
+      "gen_tokens": 72,
+      "gen_tok_s": 2.905085774089564,
+      "answer": {
+        "title": "Slow States of Collapse: Poems",
+        "price": "\u00a357.31",
+        "availability": "In stock (17 available)",
+        "upc": "b4fd5943413e089a",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Slow States of Collapse: Poems",
+        "price": "\u00a357.31",
+        "availability": 17,
+        "upc": "b4fd5943413e089a",
+        "rating": 3
+      }
+    },
+    {
+      "i": 41,
+      "seconds": 38.11,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1253,
+      "gen_tokens": 66,
+      "gen_tok_s": 2.8424569130541846,
+      "answer": {
+        "title": "Reasons to Stay Alive",
+        "price": "\u00a326.41",
+        "availability": "In stock (17 available)",
+        "upc": "c8f7f0cb1abb9cac",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Reasons to Stay Alive",
+        "price": "\u00a326.41",
+        "availability": 17,
+        "upc": "c8f7f0cb1abb9cac",
+        "rating": 2
+      }
+    },
+    {
+      "i": 42,
+      "seconds": 44.85,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1256,
+      "gen_tokens": 73,
+      "gen_tok_s": 2.486447222274119,
+      "answer": {
+        "title": "Private Paris (Private #10)",
+        "price": "\u00a347.61",
+        "availability": "In stock (17 available)",
+        "upc": "b12b89017878a60d",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Private Paris (Private #10)",
+        "price": "\u00a347.61",
+        "availability": 17,
+        "upc": "b12b89017878a60d",
+        "rating": 5
+      }
+    },
+    {
+      "i": 43,
+      "seconds": 48.86,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1280,
+      "gen_tokens": 82,
+      "gen_tok_s": 2.374611498167899,
+      "answer": {
+        "title": "#HigherSelfie: Wake Up Your Life. Free Your Soul. Find Your Tribe.",
+        "price": "\u00a323.11",
+        "availability": "In stock (17 available)",
+        "upc": "c27f6e1f185b0383",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "HigherSelfie: Wake Up Your Life. Free Your Soul. Find Your Tribe.",
+        "price": "\u00a323.11",
+        "availability": 17,
+        "upc": "c27f6e1f185b0383",
+        "rating": 5
+      }
+    },
+    {
+      "i": 44,
+      "seconds": 41.55,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1273,
+      "gen_tokens": 70,
+      "gen_tok_s": 2.6228758411923945,
+      "answer": {
+        "title": "Without Borders (Wanderlove #1)",
+        "price": "\u00a345.07",
+        "availability": "In stock (16 available)",
+        "upc": "acddfeab2a407640",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Without Borders (Wanderlove #1)",
+        "price": "\u00a345.07",
+        "availability": 16,
+        "upc": "acddfeab2a407640",
+        "rating": 2
+      }
+    },
+    {
+      "i": 45,
+      "seconds": 34.06,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1219,
+      "gen_tokens": 69,
+      "gen_tok_s": 2.859650097419447,
+      "answer": {
+        "title": "When We Collided",
+        "price": "\u00a331.77",
+        "availability": "In stock (16 available)",
+        "upc": "3ecb690d1542c568",
+        "rating": 1
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "When We Collided",
+        "price": "\u00a331.77",
+        "availability": 16,
+        "upc": "3ecb690d1542c568",
+        "rating": 1
+      }
+    },
+    {
+      "i": 46,
+      "seconds": 46.26,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1238,
+      "gen_tokens": 72,
+      "gen_tok_s": 2.5655637958333,
+      "answer": {
+        "title": "We Love You, Charlie Freeman",
+        "price": "\u00a350.27",
+        "availability": "In stock (16 available)",
+        "upc": "8d455c7539795d2a",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "We Love You, Charlie Freeman",
+        "price": "\u00a350.27",
+        "availability": 16,
+        "upc": "8d455c7539795d2a",
+        "rating": 5
+      }
+    },
+    {
+      "i": 47,
+      "seconds": 39.89,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1275,
+      "gen_tokens": 74,
+      "gen_tok_s": 2.572807455248834,
+      "answer": {
+        "title": "Untitled Collection: Sabbath Poems 2014",
+        "price": "\u00a314.27",
+        "availability": "In stock (16 available)",
+        "upc": "657fe5ead67a7767",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Untitled Collection: Sabbath Poems 2014",
+        "price": "\u00a314.27",
+        "availability": 16,
+        "upc": "657fe5ead67a7767",
+        "rating": 4
+      }
+    },
+    {
+      "i": 48,
+      "seconds": 55.15,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1292,
+      "gen_tokens": 92,
+      "gen_tok_s": 2.5423408712529527,
+      "answer": {
+        "title": "Unseen City: The Majesty of Pigeons, the Discreet Charm of Snails & Other Wonders of the Urban Wilderness",
+        "price": "\u00a344.18",
+        "availability": "In stock (16 available)",
+        "upc": "d170b5a0da46380e",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Unseen City: The Majesty of Pigeons, the Discreet Charm of Snails & Other Wonders of the Urban Wilderness",
+        "price": "\u00a344.18",
+        "availability": 16,
+        "upc": "d170b5a0da46380e",
+        "rating": 4
+      }
+    },
+    {
+      "i": 49,
+      "seconds": 44.84,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1230,
+      "gen_tokens": 68,
+      "gen_tok_s": 2.60330314874567,
+      "answer": {
+        "title": "Unicorn Tracks",
+        "price": "\u00a318.78",
+        "availability": "In stock (16 available)",
+        "upc": "7ae099f3898e0209",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Unicorn Tracks",
+        "price": "\u00a318.78",
+        "availability": 16,
+        "upc": "7ae099f3898e0209",
+        "rating": 3
+      }
+    },
+    {
+      "i": 50,
+      "seconds": 53.32,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1166,
+      "gen_tokens": 88,
+      "gen_tok_s": 2.457178718233904,
+      "answer": {
+        "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+        "price": "\u00a325.52",
+        "availability": "In stock (16 available)",
+        "upc": "9a9d6e9bc555731e",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 40
+      },
+      "written": {
+        "title": "Unbound: How Eight Technologies Made Us Human, Transformed Society, and Brought Our World to the Brink",
+        "price": "\u00a325.52",
+        "availability": 16,
+        "upc": "9a9d6e9bc555731e",
+        "rating": 3
+      }
+    },
+    {
+      "i": 51,
+      "seconds": 50.1,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1243,
+      "gen_tokens": 90,
+      "gen_tok_s": 2.3062088194348624,
+      "answer": {
+        "title": "Tsubasa: WoRLD CHRoNiCLE 2 (Tsubasa WoRLD CHRoNiCLE #2)",
+        "price": "\u00a316.28",
+        "availability": "In stock (16 available)",
+        "upc": "09555be379ad9253",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": null
+      },
+      "written": {
+        "title": "Tsubasa: WoRLD CHRoNiCLE 2 (Tsubasa WoRLD CHRoNiCLE #2)",
+        "price": "\u00a316.28",
+        "availability": 16,
+        "upc": "09555be379ad9253",
+        "rating": 3
+      }
+    },
+    {
+      "i": 52,
+      "seconds": 46.2,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1312,
+      "gen_tokens": 80,
+      "gen_tok_s": 2.4125540026546033,
+      "answer": {
+        "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+        "price": "\u00a331.12",
+        "availability": "In stock (16 available)",
+        "upc": "7858914fad68493c",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Throwing Rocks at the Google Bus: How Growth Became the Enemy of Prosperity",
+        "price": "\u00a331.12",
+        "availability": 16,
+        "upc": "7858914fad68493c",
+        "rating": 3
+      }
+    },
+    {
+      "i": 53,
+      "seconds": 33.73,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1139,
+      "gen_tokens": 66,
+      "gen_tok_s": 1.9775429011199341,
+      "answer": {
+        "title": "This One Summer",
+        "price": "\u00a319.49",
+        "availability": "In stock (16 available)",
+        "upc": "51653ef291ab7ddc",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "This One Summer",
+        "price": "\u00a319.49",
+        "availability": 16,
+        "upc": "51653ef291ab7ddc",
+        "rating": 4
+      }
+    },
+    {
+      "i": 54,
+      "seconds": 33.59,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1121,
+      "gen_tokens": 67,
+      "gen_tok_s": 2.042225992914033,
+      "answer": {
+        "title": "Thirst",
+        "price": "\u00a317.27",
+        "availability": "In stock (16 available)",
+        "upc": "709822d0b5bcb7f4",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Thirst",
+        "price": "\u00a317.27",
+        "availability": 16,
+        "upc": "709822d0b5bcb7f4",
+        "rating": 5
+      }
+    },
+    {
+      "i": 55,
+      "seconds": 34.16,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1260,
+      "gen_tokens": 71,
+      "gen_tok_s": 2.156428692848709,
+      "answer": {
+        "title": "The Torch Is Passed: A Harding Family Story",
+        "price": "\u00a319.09",
+        "availability": "In stock (16 available)",
+        "upc": "4eed62cf5f8d8edf",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 54
+      },
+      "written": {
+        "title": "The Torch Is Passed: A Harding Family Story",
+        "price": "\u00a319.09",
+        "availability": 16,
+        "upc": "4eed62cf5f8d8edf",
+        "rating": 3
+      }
+    },
+    {
+      "i": 56,
+      "seconds": 33.92,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1216,
+      "gen_tokens": 71,
+      "gen_tok_s": 2.187134611823912,
+      "answer": {
+        "title": "The Secret of Dreadwillow Carse",
+        "price": "\u00a356.13",
+        "availability": "In stock (16 available)",
+        "upc": "b5ea0b5dabed25a8",
+        "rating": 1
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Secret of Dreadwillow Carse",
+        "price": "\u00a356.13",
+        "availability": 16,
+        "upc": "b5ea0b5dabed25a8",
+        "rating": 1
+      }
+    },
+    {
+      "i": 57,
+      "seconds": 37.84,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1385,
+      "gen_tokens": 99,
+      "gen_tok_s": 2.7141511659785693,
+      "answer": {
+        "title": "The Pioneer Woman Cooks: Dinnertime: Comfort Classics, Freezer Food, 16-Minute Meals, and Other Delicious Ways to Solve Supper!",
+        "price": "\u00a356.41",
+        "availability": "The Pioneer Woman Cooks: Dinnertime: Comfort Classics, Freezer Food, 16-Minute Meals, and Other Delicious Ways to Solve Supper!",
+        "upc": "142d767a56a9254d",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 7,
+        "upc": 17,
+        "rating": 33
+      },
+      "written": {
+        "title": "The Pioneer Woman Cooks: Dinnertime: Comfort Classics, Freezer Food, 16-Minute Meals, and Other Delicious Ways to Solve Supper!",
+        "price": "\u00a356.41",
+        "availability": 16,
+        "upc": "142d767a56a9254d",
+        "rating": 3
+      }
+    },
+    {
+      "i": 58,
+      "seconds": 32.85,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1238,
+      "gen_tokens": 68,
+      "gen_tok_s": 2.1531878074037136,
+      "answer": {
+        "title": "The Past Never Ends",
+        "price": "\u00a356.50",
+        "availability": "In stock (16 available)",
+        "upc": "5ee94540d0749ea0",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Past Never Ends",
+        "price": "\u00a356.50",
+        "availability": 16,
+        "upc": "5ee94540d0749ea0",
+        "rating": 4
+      }
+    },
+    {
+      "i": 59,
+      "seconds": 33.14,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1248,
+      "gen_tokens": 78,
+      "gen_tok_s": 2.417859503522382,
+      "answer": {
+        "title": "The Natural History of Us (The Fine Art of Pretending #2)",
+        "price": "\u00a345.22",
+        "availability": "In stock (16 available)",
+        "upc": "cedf82b5086e4691",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Natural History of Us (The Fine Art of Pretending #2)",
+        "price": "\u00a345.22",
+        "availability": 16,
+        "upc": "cedf82b5086e4691",
+        "rating": 3
+      }
+    },
+    {
+      "i": 60,
+      "seconds": 32.7,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1237,
+      "gen_tokens": 76,
+      "gen_tok_s": 2.5237843965313513,
+      "answer": {
+        "title": "The Nameless City (The Nameless City #1)",
+        "price": "\u00a338.16",
+        "availability": "In stock (16 available)",
+        "upc": "7d385d34d12e60ff",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Nameless City (The Nameless City #1)",
+        "price": "\u00a338.16",
+        "availability": 16,
+        "upc": "7d385d34d12e60ff",
+        "rating": 4
+      }
+    },
+    {
+      "i": 61,
+      "seconds": 33.19,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1220,
+      "gen_tokens": 78,
+      "gen_tok_s": 2.6170270783112044,
+      "answer": {
+        "title": "The Murder That Never Was (Forensic Instincts #5)",
+        "price": "\u00a354.11",
+        "availability": "In stock (16 available)",
+        "upc": "d01ac97e2b8947c2",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Murder That Never Was (Forensic Instincts #5)",
+        "price": "\u00a354.11",
+        "availability": 16,
+        "upc": "d01ac97e2b8947c2",
+        "rating": 3
+      }
+    },
+    {
+      "i": 62,
+      "seconds": 33.19,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1252,
+      "gen_tokens": 78,
+      "gen_tok_s": 2.753068983649523,
+      "answer": {
+        "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+        "price": "\u00a342.96",
+        "availability": "In stock (16 available)",
+        "upc": "aadee1c326d286e3",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Most Perfect Thing: Inside (and Outside) a Bird's Egg",
+        "price": "\u00a342.96",
+        "availability": 16,
+        "upc": "aadee1c326d286e3",
+        "rating": 4
+      }
+    },
+    {
+      "i": 63,
+      "seconds": 36.08,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1299,
+      "gen_tokens": 98,
+      "gen_tok_s": 2.936272148232705,
+      "answer": {
+        "title": "The Mindfulness and Acceptance Workbook for Anxiety: A Guide to Breaking Free from Anxiety, Phobias, and Worry Using Acceptance and Commitment Therapy",
+        "price": "\u00a323.89",
+        "availability": "In stock (16 available)",
+        "upc": "31075275518532d7",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 61
+      },
+      "written": {
+        "title": "The Mindfulness and Acceptance Workbook for Anxiety: A Guide to Breaking Free from Anxiety, Phobias, and Worry Using Acceptance and Commitment Therapy",
+        "price": "\u00a323.89",
+        "availability": 16,
+        "upc": "31075275518532d7",
+        "rating": 3
+      }
+    },
+    {
+      "i": 64,
+      "seconds": 33.63,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1329,
+      "gen_tokens": 83,
+      "gen_tok_s": 2.7642675139438757,
+      "answer": {
+        "title": "The Life-Changing Magic of Tidying Up: The Japanese Art of Decluttering and Organizing",
+        "price": "\u00a316.77",
+        "availability": "In stock (16 available)",
+        "upc": "0da9aa9d24677fc0",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Life-Changing Magic of Tidying Up: The Japanese Art of Decluttering and Organizing",
+        "price": "\u00a316.77",
+        "availability": 16,
+        "upc": "0da9aa9d24677fc0",
+        "rating": 3
+      }
+    },
+    {
+      "i": 65,
+      "seconds": 32.51,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1302,
+      "gen_tokens": 81,
+      "gen_tok_s": 2.730293424634345,
+      "answer": {
+        "title": "The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer",
+        "price": "\u00a320.59",
+        "availability": "In stock (16 available)",
+        "upc": "8c9e6bf2467d740d",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Inefficiency Assassin: Time Management Tactics for Working Smarter, Not Longer",
+        "price": "\u00a320.59",
+        "availability": 16,
+        "upc": "8c9e6bf2467d740d",
+        "rating": 5
+      }
+    },
+    {
+      "i": 66,
+      "seconds": 32.01,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1338,
+      "gen_tokens": 78,
+      "gen_tok_s": 2.93204825846805,
+      "answer": {
+        "title": "The Gutsy Girl: Escapades for Your Life of Epic Adventure",
+        "price": "\u00a337.13",
+        "availability": "In stock (16 available)",
+        "upc": "acd86a5426e21ca0",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 33
+      },
+      "written": {
+        "title": "The Gutsy Girl: Escapades for Your Life of Epic Adventure",
+        "price": "\u00a337.13",
+        "availability": 16,
+        "upc": "acd86a5426e21ca0",
+        "rating": 3
+      }
+    },
+    {
+      "i": 67,
+      "seconds": 31.91,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1340,
+      "gen_tokens": 81,
+      "gen_tok_s": 2.8004578888671188,
+      "answer": {
+        "title": "The Electric Pencil: Drawings from Inside State Hospital No. 3",
+        "price": "\u00a356.06",
+        "availability": "In stock (16 available)",
+        "upc": "a30b270e25489e5c",
+        "rating": 1
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Electric Pencil: Drawings from Inside State Hospital No. 3",
+        "price": "\u00a356.06",
+        "availability": 16,
+        "upc": "a30b270e25489e5c",
+        "rating": 1
+      }
+    },
+    {
+      "i": 68,
+      "seconds": 30.7,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1167,
+      "gen_tokens": 75,
+      "gen_tok_s": 2.958085645293792,
+      "answer": {
+        "title": "The Death of Humanity: and the Case for Life",
+        "price": "\u00a358.11",
+        "availability": "In stock (16 available)",
+        "upc": "bd261725b99f5983",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Death of Humanity: and the Case for Life",
+        "price": "\u00a358.11",
+        "availability": 16,
+        "upc": "bd261725b99f5983",
+        "rating": 4
+      }
+    },
+    {
+      "i": 69,
+      "seconds": 32.61,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1292,
+      "gen_tokens": 87,
+      "gen_tok_s": 3.005737428494468,
+      "answer": {
+        "title": "The Bulletproof Diet: Lose up to a Pound a Day, Reclaim Energy and Focus, Upgrade Your Life",
+        "price": "\u00a349.05",
+        "availability": "In stock (16 available)",
+        "upc": "43c6a960757cf559",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Bulletproof Diet: Lose up to a Pound a Day, Reclaim Energy and Focus, Upgrade Your Life",
+        "price": "\u00a349.05",
+        "availability": 16,
+        "upc": "43c6a960757cf559",
+        "rating": 3
+      }
+    },
+    {
+      "i": 70,
+      "seconds": 29.05,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1290,
+      "gen_tokens": 66,
+      "gen_tok_s": 2.6837048619937804,
+      "answer": {
+        "title": "The Art Forger",
+        "price": "\u00a340.76",
+        "availability": "In stock (16 available)",
+        "upc": "80cfab6bcff3a244",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Art Forger",
+        "price": "\u00a340.76",
+        "availability": 16,
+        "upc": "80cfab6bcff3a244",
+        "rating": 3
+      }
+    },
+    {
+      "i": 71,
+      "seconds": 30.96,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1202,
+      "gen_tokens": 82,
+      "gen_tok_s": 2.9314663342987024,
+      "answer": {
+        "title": "The Age of Genius: The Seventeenth Century and the Birth of the Modern Mind",
+        "price": "\u00a319.73",
+        "availability": "In stock (16 available)",
+        "upc": "a3d2a4250807f1e9",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 47
+      },
+      "written": {
+        "title": "The Age of Genius: The Seventeenth Century and the Birth of the Modern Mind",
+        "price": "\u00a319.73",
+        "availability": 16,
+        "upc": "a3d2a4250807f1e9",
+        "rating": 3
+      }
+    },
+    {
+      "i": 72,
+      "seconds": 30.04,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1224,
+      "gen_tokens": 81,
+      "gen_tok_s": 2.9780401182951985,
+      "answer": {
+        "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+        "price": "\u00a332.24",
+        "availability": "In stock (16 available)",
+        "upc": "7d6d2a6c0276f81b",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "The Activist's Tao Te Ching: Ancient Advice for a Modern Revolution",
+        "price": "\u00a332.24",
+        "availability": 16,
+        "upc": "7d6d2a6c0276f81b",
+        "rating": 5
+      }
+    },
+    {
+      "i": 73,
+      "seconds": 28.53,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1374,
+      "gen_tokens": 83,
+      "gen_tok_s": 3.250955315024508,
+      "answer": {
+        "title": "Spark Joy: An Illustrated Master Class on the Art of Organizing and Tidying Up",
+        "price": "\u00a341.83",
+        "availability": "In stock (16 available)",
+        "upc": "87b0615b6e1f4d7b",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Spark Joy: An Illustrated Master Class on the Art of Organizing and Tidying Up",
+        "price": "\u00a341.83",
+        "availability": 16,
+        "upc": "87b0615b6e1f4d7b",
+        "rating": 4
+      }
+    },
+    {
+      "i": 74,
+      "seconds": 25.46,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1267,
+      "gen_tokens": 67,
+      "gen_tok_s": 2.96300818957506,
+      "answer": {
+        "title": "Soul Reader",
+        "price": "\u00a339.58",
+        "availability": "In stock (16 available)",
+        "upc": "e6af5bf1163c1151",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Soul Reader",
+        "price": "\u00a339.58",
+        "availability": 16,
+        "upc": "e6af5bf1163c1151",
+        "rating": 2
+      }
+    },
+    {
+      "i": 75,
+      "seconds": 25.6,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1208,
+      "gen_tokens": 67,
+      "gen_tok_s": 3.052083386802597,
+      "answer": {
+        "title": "Security",
+        "price": "\u00a339.25",
+        "availability": "In stock (16 available)",
+        "upc": "6f78a0d744c35456",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Security",
+        "price": "\u00a339.25",
+        "availability": 16,
+        "upc": "6f78a0d744c35456",
+        "rating": 2
+      }
+    },
+    {
+      "i": 76,
+      "seconds": 28.01,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1233,
+      "gen_tokens": 80,
+      "gen_tok_s": 3.287286357595171,
+      "answer": {
+        "title": "Saga, Volume 6 (Saga (Collected Editions) #6)",
+        "price": "\u00a325.02",
+        "availability": "In stock (16 available)",
+        "upc": "c849f0b2f5d6a742",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Saga, Volume 6 (Saga (Collected Editions) #6)",
+        "price": "\u00a325.02",
+        "availability": 16,
+        "upc": "c849f0b2f5d6a742",
+        "rating": 3
+      }
+    },
+    {
+      "i": 77,
+      "seconds": 28.2,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1264,
+      "gen_tokens": 78,
+      "gen_tok_s": 3.5647831278536786,
+      "answer": {
+        "title": "Saga, Volume 5 (Saga (Collected Editions) #5)",
+        "price": "\u00a351.04",
+        "availability": "In stock (16 available)",
+        "upc": "53a3d11bb568cc8b",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Saga, Volume 5 (Saga (Collected Editions) #5)",
+        "price": "\u00a351.04",
+        "availability": 16,
+        "upc": "53a3d11bb568cc8b",
+        "rating": 2
+      }
+    },
+    {
+      "i": 78,
+      "seconds": 27.76,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1365,
+      "gen_tokens": 80,
+      "gen_tok_s": 3.4891524018485973,
+      "answer": {
+        "title": "Reskilling America: Learning to Labor in the Twenty-First Century",
+        "price": "\u00a319.83",
+        "availability": "In stock (16 available)",
+        "upc": "d7310206583a54b6",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 54
+      },
+      "written": {
+        "title": "Reskilling America: Learning to Labor in the Twenty-First Century",
+        "price": "\u00a319.83",
+        "availability": 16,
+        "upc": "d7310206583a54b6",
+        "rating": 3
+      }
+    },
+    {
+      "i": 79,
+      "seconds": 28.6,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1304,
+      "gen_tokens": 92,
+      "gen_tok_s": 3.588282090233465,
+      "answer": {
+        "title": "Rat Queens, Vol. 3: Demons (Rat Queens (Collected Editions) #11-15)",
+        "price": "\u00a350.40",
+        "availability": "In stock (16 available)",
+        "upc": "c82a3e358c773c73",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Rat Queens, Vol. 3: Demons (Rat Queens (Collected Editions) #11-15)",
+        "price": "\u00a350.40",
+        "availability": 16,
+        "upc": "c82a3e358c773c73",
+        "rating": 3
+      }
+    },
+    {
+      "i": 80,
+      "seconds": 27.86,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1357,
+      "gen_tokens": 92,
+      "gen_tok_s": 3.701492449890944,
+      "answer": {
+        "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+        "price": "\u00a313.61",
+        "availability": "In stock (16 available)",
+        "upc": "0fa6dceead7ce47a",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Princess Jellyfish 2-in-1 Omnibus, Vol. 01 (Princess Jellyfish 2-in-1 Omnibus #1)",
+        "price": "\u00a313.61",
+        "availability": 16,
+        "upc": "0fa6dceead7ce47a",
+        "rating": 5
+      }
+    },
+    {
+      "i": 81,
+      "seconds": 25.62,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1217,
+      "gen_tokens": 75,
+      "gen_tok_s": 3.769837368197061,
+      "answer": {
+        "title": "Princess Between Worlds (Wide-Awake Princess #5)",
+        "price": "\u00a313.34",
+        "availability": "In stock (16 available)",
+        "upc": "0e691eda369f4e09",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Princess Between Worlds (Wide-Awake Princess #5)",
+        "price": "\u00a313.34",
+        "availability": 16,
+        "upc": "0e691eda369f4e09",
+        "rating": 5
+      }
+    },
+    {
+      "i": 82,
+      "seconds": 24.59,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1366,
+      "gen_tokens": 74,
+      "gen_tok_s": 3.754276146244793,
+      "answer": {
+        "title": "Pop Gun War, Volume 1: Gift",
+        "price": "\u00a318.97",
+        "availability": "In stock (16 available)",
+        "upc": "e80f8e518b300dfe",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 40
+      },
+      "written": {
+        "title": "Pop Gun War, Volume 1: Gift",
+        "price": "\u00a318.97",
+        "availability": 16,
+        "upc": "e80f8e518b300dfe",
+        "rating": 3
+      }
+    },
+    {
+      "i": 83,
+      "seconds": 27.96,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1289,
+      "gen_tokens": 111,
+      "gen_tok_s": 4.84081145554267,
+      "answer": {
+        "title": "Political Suicide: Missteps, Peccadilloes, Bad Calls, Backroom Hijinx, Sordid Pasts, Rotten Breaks, and Just Plain Dumb Mistakes in the Annals of American Politics",
+        "price": "\u00a336.28",
+        "availability": "In stock (16 available)",
+        "upc": "7392c0032f92d816",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Political Suicide: Missteps, Peccadilloes, Bad Calls, Backroom Hijinx, Sordid Pasts, Rotten Breaks, and Just Plain Dumb Mistakes in the Annals of American Politics",
+        "price": "\u00a336.28",
+        "availability": 16,
+        "upc": "7392c0032f92d816",
+        "rating": 2
+      }
+    },
+    {
+      "i": 84,
+      "seconds": 21.78,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1305,
+      "gen_tokens": 67,
+      "gen_tok_s": 3.7800360374890225,
+      "answer": {
+        "title": "Patience",
+        "price": "\u00a310.16",
+        "availability": "In stock (16 available)",
+        "upc": "9429b4d59c537af5",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Patience",
+        "price": "\u00a310.16",
+        "availability": 16,
+        "upc": "9429b4d59c537af5",
+        "rating": 3
+      }
+    },
+    {
+      "i": 85,
+      "seconds": 23.92,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1344,
+      "gen_tokens": 83,
+      "gen_tok_s": 4.038090022815209,
+      "answer": {
+        "title": "Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)",
+        "price": "\u00a315.44",
+        "availability": "In stock (16 available)",
+        "upc": "889139b8e9c4cb36",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Outcast, Vol. 1: A Darkness Surrounds Him (Outcast #1)",
+        "price": "\u00a315.44",
+        "availability": 16,
+        "upc": "889139b8e9c4cb36",
+        "rating": 4
+      }
+    },
+    {
+      "i": 86,
+      "seconds": 23.28,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1357,
+      "gen_tokens": 79,
+      "gen_tok_s": 4.071499710819123,
+      "answer": {
+        "title": "orange: The Complete Collection 1 (orange: The Complete Collection #1)",
+        "price": "\u00a348.41",
+        "availability": "In stock (16 available)",
+        "upc": "11809b1d323b3057",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 40
+      },
+      "written": {
+        "title": "The Complete Collection 1 (orange: The Complete Collection #1)",
+        "price": "\u00a348.41",
+        "availability": 16,
+        "upc": "11809b1d323b3057",
+        "rating": 3
+      }
+    },
+    {
+      "i": 87,
+      "seconds": 22.27,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1303,
+      "gen_tokens": 77,
+      "gen_tok_s": 4.184420861562344,
+      "answer": {
+        "title": "Online Marketing for Busy Authors: A Step-By-Step Guide",
+        "price": "\u00a346.35",
+        "availability": "In stock (16 available)",
+        "upc": "9ffa38d3b832433a",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": null
+      },
+      "written": {
+        "title": "Online Marketing for Busy Authors: A Step-By-Step Guide",
+        "price": "\u00a346.35",
+        "availability": 16,
+        "upc": "9ffa38d3b832433a",
+        "rating": 3
+      }
+    },
+    {
+      "i": 88,
+      "seconds": 20.18,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1262,
+      "gen_tokens": 69,
+      "gen_tok_s": 4.025799692547309,
+      "answer": {
+        "title": "On a Midnight Clear",
+        "price": "\u00a314.07",
+        "availability": "In stock (16 available)",
+        "upc": "b757c0c361e689ce",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "On a Midnight Clear",
+        "price": "\u00a314.07",
+        "availability": 16,
+        "upc": "b757c0c361e689ce",
+        "rating": 3
+      }
+    },
+    {
+      "i": 89,
+      "seconds": 20.4,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1237,
+      "gen_tokens": 70,
+      "gen_tok_s": 4.119692470330602,
+      "answer": {
+        "title": "Obsidian (Lux #1)",
+        "price": "\u00a314.86",
+        "availability": "In stock (16 available)",
+        "upc": "3c346ab1e76ae1f6",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Obsidian (Lux #1)",
+        "price": "\u00a314.86",
+        "availability": 16,
+        "upc": "3c346ab1e76ae1f6",
+        "rating": 2
+      }
+    },
+    {
+      "i": 90,
+      "seconds": 19.81,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1362,
+      "gen_tokens": 71,
+      "gen_tok_s": 4.189452048998155,
+      "answer": {
+        "title": "My Paris Kitchen: Recipes and Stories",
+        "price": "\u00a333.37",
+        "availability": "In stock (16 available)",
+        "upc": "784bc2279baa878d",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "My Paris Kitchen: Recipes and Stories",
+        "price": "\u00a333.37",
+        "availability": 16,
+        "upc": "784bc2279baa878d",
+        "rating": 2
+      }
+    },
+    {
+      "i": 91,
+      "seconds": 17.46,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1217,
+      "gen_tokens": 68,
+      "gen_tok_s": 4.626811405297285,
+      "answer": {
+        "title": "Masks and Shadows",
+        "price": "\u00a356.40",
+        "availability": "In stock (16 available)",
+        "upc": "fa9610a50a1bf149",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Masks and Shadows",
+        "price": "\u00a356.40",
+        "availability": 16,
+        "upc": "fa9610a50a1bf149",
+        "rating": 2
+      }
+    },
+    {
+      "i": 92,
+      "seconds": 20.24,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1395,
+      "gen_tokens": 85,
+      "gen_tok_s": 5.190238619366868,
+      "answer": {
+        "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+        "price": "\u00a314.02",
+        "availability": "In stock (16 available)",
+        "upc": "72f9d5be3472d34e",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Mama Tried: Traditional Italian Cooking for the Screwed, Crude, Vegan, and Tattooed",
+        "price": "\u00a314.02",
+        "availability": 16,
+        "upc": "72f9d5be3472d34e",
+        "rating": 4
+      }
+    },
+    {
+      "i": 93,
+      "seconds": 19.8,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1375,
+      "gen_tokens": 88,
+      "gen_tok_s": 5.134144575386769,
+      "answer": {
+        "title": "Lumberjanes, Vol. 2: Friendship to the Max (Lumberjanes #5-8)",
+        "price": "\u00a346.91",
+        "availability": "In stock (16 available)",
+        "upc": "460089f796fb3f82",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Lumberjanes, Vol. 2: Friendship to the Max (Lumberjanes #5-8)",
+        "price": "\u00a346.91",
+        "availability": 16,
+        "upc": "460089f796fb3f82",
+        "rating": 2
+      }
+    },
+    {
+      "i": 94,
+      "seconds": 19.26,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1371,
+      "gen_tokens": 88,
+      "gen_tok_s": 5.2374670573857225,
+      "answer": {
+        "title": "Lumberjanes, Vol. 1: Beware the Kitten Holy (Lumberjanes #1-4)",
+        "price": "\u00a345.61",
+        "availability": "In stock (16 available)",
+        "upc": "b6ee99bcf06fc91f",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Lumberjanes, Vol. 1: Beware the Kitten Holy (Lumberjanes #1-4)",
+        "price": "\u00a345.61",
+        "availability": 16,
+        "upc": "b6ee99bcf06fc91f",
+        "rating": 3
+      }
+    },
+    {
+      "i": 95,
+      "seconds": 19.24,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1350,
+      "gen_tokens": 88,
+      "gen_tok_s": 5.3352165625727075,
+      "answer": {
+        "title": "Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)",
+        "price": "\u00a319.92",
+        "availability": "In stock (16 available)",
+        "upc": "57e5a4d515c8ce44",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Lumberjanes Vol. 3: A Terrible Plan (Lumberjanes #9-12)",
+        "price": "\u00a319.92",
+        "availability": 16,
+        "upc": "57e5a4d515c8ce44",
+        "rating": 2
+      }
+    },
+    {
+      "i": 96,
+      "seconds": 18.27,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1402,
+      "gen_tokens": 80,
+      "gen_tok_s": 5.150405196719727,
+      "answer": {
+        "title": "Layered: Baking, Building, and Styling Spectacular Cakes",
+        "price": "\u00a340.11",
+        "availability": "In stock (16 available)",
+        "upc": "7b75cc7f223791f4",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 54
+      },
+      "written": {
+        "title": "Layered: Baking, Building, and Styling Spectacular Cakes",
+        "price": "\u00a340.11",
+        "availability": 16,
+        "upc": "7b75cc7f223791f4",
+        "rating": 3
+      }
+    },
+    {
+      "i": 97,
+      "seconds": 16.11,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1277,
+      "gen_tokens": 80,
+      "gen_tok_s": 5.625540924243618,
+      "answer": {
+        "title": "Judo: Seven Steps to Black Belt (an Introductory Guide for Beginners)",
+        "price": "\u00a353.90",
+        "availability": "In stock (16 available)",
+        "upc": "228f74b74f3a08ae",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Judo: Seven Steps to Black Belt (an Introductory Guide for Beginners)",
+        "price": "\u00a353.90",
+        "availability": 16,
+        "upc": "228f74b74f3a08ae",
+        "rating": 2
+      }
+    },
+    {
+      "i": 98,
+      "seconds": 16.0,
+      "parsed": true,
+      "score": {
+        "title": false,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1203,
+      "gen_tokens": 83,
+      "gen_tok_s": 6.165892897237274,
+      "answer": {
+        "title": "The Bridge to Consciousness: I'm Writing the Bridge Between Science and Our Old and New Beliefs",
+        "price": "\u00a335.67",
+        "availability": "In stock (16 available)",
+        "upc": "18ad3ed896c7ce05",
+        "rating": 3
+      },
+      "points": {
+        "title": null,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 33
+      },
+      "written": {
+        "title": "The Bridge to Consciousness: I'm Writing the Bridge Between Science and Our Old and New Beliefs",
+        "price": "\u00a335.67",
+        "availability": 16,
+        "upc": "18ad3ed896c7ce05",
+        "rating": 3
+      }
+    },
+    {
+      "i": 99,
+      "seconds": 15.1,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1326,
+      "gen_tokens": 75,
+      "gen_tok_s": 6.106247888084028,
+      "answer": {
+        "title": "In the Country We Love: My Family Divided",
+        "price": "\u00a322.00",
+        "availability": "In stock (16 available)",
+        "upc": "b136b1b180ca753a",
+        "rating": 4
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "In the Country We Love: My Family Divided",
+        "price": "\u00a322.00",
+        "availability": 16,
+        "upc": "b136b1b180ca753a",
+        "rating": 4
+      }
+    },
+    {
+      "i": 100,
+      "seconds": 15.24,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1279,
+      "gen_tokens": 80,
+      "gen_tok_s": 6.180714387310477,
+      "answer": {
+        "title": "Immunity: How Elie Metchnikoff Changed the Course of Modern Medicine",
+        "price": "\u00a357.36",
+        "availability": "In stock (16 available)",
+        "upc": "e4f74c16de34d440",
+        "rating": 5
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "Immunity: How Elie Metchnikoff Changed the Course of Modern Medicine",
+        "price": "\u00a357.36",
+        "availability": 16,
+        "upc": "e4f74c16de34d440",
+        "rating": 5
+      }
+    },
+    {
+      "i": 101,
+      "seconds": 15.88,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1394,
+      "gen_tokens": 92,
+      "gen_tok_s": 6.766534771288894,
+      "answer": {
+        "title": "I Hate Fairyland, Vol. 1: Madly Ever After (I Hate Fairyland (Compilations) #1-5)",
+        "price": "\u00a329.17",
+        "availability": "In stock (16 available)",
+        "upc": "8d4eefad7a2b3915",
+        "rating": 2
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "I Hate Fairyland, Vol. 1: Madly Ever After (I Hate Fairyland (Compilations) #1-5)",
+        "price": "\u00a329.17",
+        "availability": 16,
+        "upc": "8d4eefad7a2b3915",
+        "rating": 2
+      }
+    },
+    {
+      "i": 102,
+      "seconds": 12.11,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1406,
+      "gen_tokens": 72,
+      "gen_tok_s": 6.6575692389545065,
+      "answer": {
+        "title": "I am a Hero Omnibus Volume 1",
+        "price": "\u00a354.63",
+        "availability": "In stock (16 available)",
+        "upc": "1c89ae5bb804e4de",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "I am a Hero Omnibus Volume 1",
+        "price": "\u00a354.63",
+        "availability": 16,
+        "upc": "1c89ae5bb804e4de",
+        "rating": 3
+      }
+    },
+    {
+      "i": 103,
+      "seconds": 12.47,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": true
+      },
+      "prompt_tokens": 1297,
+      "gen_tokens": 79,
+      "gen_tok_s": 7.072631482259437,
+      "answer": {
+        "title": "How to Be Miserable: 40 Strategies You Already Use",
+        "price": "\u00a346.03",
+        "availability": "In stock (16 available)",
+        "upc": "a6f99b9e687f9d46",
+        "rating": 1
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": 10
+      },
+      "written": {
+        "title": "How to Be Miserable: 40 Strategies You Already Use",
+        "price": "\u00a346.03",
+        "availability": 16,
+        "upc": "a6f99b9e687f9d46",
+        "rating": 1
+      }
+    },
+    {
+      "i": 104,
+      "seconds": 10.88,
+      "parsed": true,
+      "score": {
+        "title": true,
+        "price": true,
+        "availability": true,
+        "upc": true,
+        "rating": false
+      },
+      "prompt_tokens": 1191,
+      "gen_tokens": 77,
+      "gen_tok_s": 7.6267485324530195,
+      "answer": {
+        "title": "Her Backup Boyfriend (The Sorensen Family #1)",
+        "price": "\u00a333.97",
+        "availability": "In stock (16 available)",
+        "upc": "2a97cffe61c3c4c7",
+        "rating": 3
+      },
+      "points": {
+        "title": 7,
+        "price": 8,
+        "availability": 9,
+        "upc": 17,
+        "rating": null
+      },
+      "written": {
+        "title": "Her Backup Boyfriend (The Sorensen Family #1)",
+        "price": "\u00a333.97",
+        "availability": 16,
+        "upc": "2a97cffe61c3c4c7",
+        "rating": 3
+      }
+    }
+  ]
+}

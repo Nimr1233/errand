@@ -75,6 +75,42 @@ One brain call wrote a recipe from a sample page in 0.83 s:
 
 The fields the recipe gets right, it gets right on every page, for almost no time. The fields it gets wrong, it gets wrong on every page. That pattern fits the design: validation flags an empty or invalid field once, and a fixer brain rewrites that selector once. A fixer was not built or measured in this benchmark.
 
+## 4. Point, don't write (2026-10-21, `--point`)
+
+**What changed:**
+- Brains read a numbered list of page pieces with their labels kept (`[10] p class=star-rating Three:`), not plain text.
+- They fill a fixed form: llama.cpp `json_schema`, with rating limited to 1–5.
+- Code then snaps each written value to the page piece holding it and copies that piece exactly.
+- Code also turns the pieces the brains used on 5 sample pages into CSS selectors (Scrapling's `generate_css_selector`). The brain never writes CSS.
+
+**Answer formats tried first** (35 pages, 35 brains):
+
+| Format | All fields right |
+|---|---|
+| Brain answers line numbers, "null" allowed | 39% |
+| Line numbers, "null" not allowed | 64% |
+| **Brain writes the value, code snaps it to its line** | **96%** |
+
+A 2B brain copies well and counts badly. With "null" allowed, it answered null for every field on 69 of 105 pages.
+
+**All 105 pages, 53 brains** (same model and server settings as section 2):
+
+| Field | Before (section 2) | Brains on every page | Recipe from 5 pointed pages, replayed on all 105 |
+|---|---|---|---|
+| title | 70% | 98% | **100%** |
+| price | 100% | 100% | **100%** |
+| availability | 100% | 100% | **100%** |
+| UPC | 100% | 100% | **100%** |
+| rating | **0%** | 78% | **100%** |
+| All fields | 74% | 95% | **100%** |
+
+- **Recipe cost:** 5 brain calls in total, then 0.63 s to replay on all 105 pages with no AI.
+- **Recipe rule:** a field gets a recipe when its selector matches the brains' answers on all 5 samples but one.
+- **Why the rating recipe needs that rule:** on the 5th sample a brain read another book's stars from the "you might also like" list lower on the page, which is also most of the 22% per-page rating misses. The recipe always reads the main book's spot.
+- **Speed:** brains on every page run at 1.6 pages/s, down from 2.66. The fixed form and the longer numbered view (about 1,240 prompt tokens) cost speed. The recipe path makes that matter little: brains run only on 5 pages per kind of page, plus pages whose checks fail.
+- **Bug found and fixed while measuring:** the stock number 18 snapped to the price "£44.18". Numbers now snap only as whole numbers.
+- **Still one site and one page layout.** The council's first step, a test set from several different sites, is not built yet.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:
@@ -90,6 +126,7 @@ These were smaller, easier, static pages, so it isn't the same test. It shows th
 python -X utf8 bench/fetch.py
 python -X utf8 bench/fetch.py --b-only
 python -X utf8 bench/brains.py --np 53
+python -X utf8 bench/brains.py --np 53 --point
 python -X utf8 bench/brains.py --np 8
 python -X utf8 bench/brains.py --np 1 --recipe
 python -X utf8 bench/brains.py --np 1

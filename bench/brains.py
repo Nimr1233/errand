@@ -5,10 +5,16 @@ with N in flight, measures time, tokens and GPU memory, and scores answers again
 hand-written recipe (the ground truth). With --recipe it instead asks one brain to WRITE a
 recipe (CSS selectors) from a sample page and replays it on all 105 pages with zero AI calls.
 
+With --point ("point, don't write") brains read a numbered list of page pieces with their labels
+kept and answer with line numbers; code copies the exact text. Code then turns the pointed pieces
+on 5 sample pages into a recipe (the brain never writes CSS) and replays it on all pages.
+
 Run:  python -X utf8 bench/brains.py --np 53
+      python -X utf8 bench/brains.py --np 53 --point
       python -X utf8 bench/brains.py --np 1 --recipe
 """
 import argparse, json, pathlib, re, statistics, subprocess, threading, time, urllib.request
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from scrapling.parser import Selector
 
@@ -23,6 +29,19 @@ SYSTEM = ('You read one product page and fill in a form. Think in at most two sh
           'then output ONE JSON object with exactly these keys: "title" (the book title), '
           '"price" (as shown, with currency symbol), "availability" (integer number of copies in stock), '
           '"upc" (the UPC code), "rating" (integer number of stars, 1-5).')
+# Measured on 35 pages: asking a 2B brain for line NUMBERS scored 39% (64% with null not allowed),
+# writing the value and letting code snap it to the full line scored 96%. Small brains copy well
+# and count badly.
+POINT_SYSTEM = ('You read one product page, shown as numbered lines: [number] tag labels: text. Output ONE JSON object '
+                'with exactly these keys: "title" (copy the book title exactly as written), "price" (with currency '
+                'symbol), "availability" (integer copies in stock), "upc" (the UPC code), "rating" (integer 1-5 from '
+                'the class that names the star count, e.g. star-rating Three = 3).')
+POINT_SCHEMA = {'type': 'object', 'properties': {'title': {'type': 'string'}, 'price': {'type': 'string'},
+                'availability': {'type': 'integer'}, 'upc': {'type': 'string'},
+                'rating': {'type': 'integer', 'enum': [1, 2, 3, 4, 5]}},
+                'required': FIELDS, 'additionalProperties': False}
+WORDS = {v: k for k, v in STARS.items()}
+KEEP = ('class', 'title', 'alt', 'itemprop', 'content', 'aria-label')  # labels that can hold an answer
 RECIPE_SYSTEM = ('You write a scraping recipe. Given the HTML of one product page, output ONE JSON object '
                  'mapping each key to a CSS selector that selects the element holding that value on pages '
                  'with this layout. Keys: "title", "price", "availability", "upc", "rating". '
@@ -64,6 +83,58 @@ def page_text(html, limit=6000):
     return str(body)[:limit]
 
 
+def own_text(el):
+    return ' '.join(t.strip() for t in el.xpath('text()').getall() if t.strip())
+
+
+def numbered_view(html, width=120):
+    """One numbered line per page piece that holds text or a label. Containers whose text lives in
+    their children are skipped, and so are empty icons, to save the 4,096-token slot.
+    Returns (the text a brain reads, the elements in line order)."""
+    s = Selector(html)
+    block = s.css('article.product_page')
+    els, lines = [], []
+    for el in (block[0] if block else s).css('*'):
+        own = own_text(el)
+        labels = {k: v for k, v in el.attrib.items() if k in KEEP or k.startswith('data-')}
+        if not own:
+            if el.get_all_text(strip=True):  # a container: its children carry the text
+                continue
+            if not el.children and set(labels) <= {'class'}:  # an empty icon like <i class="icon-star">
+                continue
+            if not labels:
+                continue
+        els.append(el)
+        tag = ' '.join([el.tag] + [f'{k}={v}' for k, v in labels.items()])
+        lines.append(f'[{len(els)}] {tag}: {own[:width]}')
+    return '\n'.join(lines), els
+
+
+def snap(value, field, els):
+    """Write, then snap: the line number (1-based) of the first page piece holding the brain's
+    value, or None. Code then copies that whole piece, so a shortened title comes back in full."""
+    if value is None or value == '':
+        return None
+    for n, el in enumerate(els, 1):
+        if field == 'rating':
+            if WORDS.get(value) in el.attrib.get('class', '').split():
+                return n
+        elif field == 'availability':  # a whole number, not the ".18" inside a price like £44.18
+            if re.search(rf'(?<![\d.,]){value}(?!\d|[.,]\d)', own_text(el)):
+                return n
+        elif str(value).strip().casefold() in own_text(el).casefold():
+            return n
+    return None
+
+
+def pointed_value(el, field):
+    """Code, not the brain, reads the value out of the piece the brain pointed at."""
+    if field == 'rating':
+        words = el.attrib.get('class', '').split()
+        return STARS.get(words[-1]) if words else None
+    return own_text(el) or str(el.get_all_text(separator=' ', strip=True))
+
+
 def last_json(text):
     for m in reversed(list(re.finditer(r'\{[^{}]*\}', text or '', re.S))):
         try:
@@ -73,9 +144,9 @@ def last_json(text):
     return None
 
 
-def chat(system, user, max_tokens=300):
+def chat(system, user, max_tokens=300, **extra):
     body = json.dumps({'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}],
-                       'max_tokens': max_tokens, 'temperature': 0}).encode()
+                       'max_tokens': max_tokens, 'temperature': 0, **extra}).encode()
     req = urllib.request.Request(URL + '/v1/chat/completions', body, {'Content-Type': 'application/json'})
     t = time.perf_counter()
     with urllib.request.urlopen(req, timeout=900) as r:
@@ -125,19 +196,28 @@ def start_server(np_, ctx, log):
     raise SystemExit('llama-server did not become healthy in 3 minutes')
 
 
-def run_extract(np_):
+def run_extract(np_, point=False):
     htmls = [p.read_text(encoding='utf-8') for p in PAGES]
     gts = [truth(h) for h in htmls]
 
     def job(k):
         i = k % len(htmls)  # with more slots than pages, pages repeat so every slot is busy at once
-        data, secs = chat(SYSTEM, page_text(htmls[i]))
-        msg = data['choices'][0]['message']
-        answer = last_json(msg.get('content')) or {}
+        points = None
+        if point:  # the brain writes values in a fixed form; code snaps each to its page piece and copies it
+            view, els = numbered_view(htmls[i])
+            data, secs = chat(POINT_SYSTEM, view, max_tokens=200,
+                              response_format={'type': 'json_schema', 'json_schema': {'schema': POINT_SCHEMA}})
+            written = last_json(data['choices'][0]['message'].get('content')) or {}
+            points = {f: snap(written.get(f), f, els) for f in FIELDS} if written else {}
+            answer = {f: pointed_value(els[n - 1], f) if n else written.get(f) for f, n in points.items()}
+        else:
+            data, secs = chat(SYSTEM, page_text(htmls[i]))
+            answer = last_json(data['choices'][0]['message'].get('content')) or {}
         t = data.get('timings', {})
-        return {'i': i, 'seconds': round(secs, 2), 'parsed': bool(answer), 'score': score(answer, gts[i]),
-                'prompt_tokens': t.get('prompt_n'), 'gen_tokens': t.get('predicted_n'),
-                'gen_tok_s': t.get('predicted_per_second'), 'answer': answer}
+        return {'i': i, 'seconds': round(secs, 2), 'parsed': bool(points if point else answer),
+                'score': score(answer, gts[i]), 'prompt_tokens': t.get('prompt_n'), 'gen_tokens': t.get('predicted_n'),
+                'gen_tok_s': t.get('predicted_per_second'), 'answer': answer, 'points': points,
+                'written': written if point else None}
 
     t = time.perf_counter()
     with ThreadPoolExecutor(max_workers=np_) as pool:  # exactly np_ requests in flight
@@ -156,6 +236,40 @@ def run_extract(np_):
         'field_accuracy_excl_rating': round(statistics.mean(
             ok for r in rows for f, ok in r['score'].items() if f != 'rating'), 3),
         'per_field': {f: round(sum(r['score'][f] for r in rows) / len(rows), 3) for f in FIELDS}}
+
+
+def replay(html, selector, field):
+    el = Selector(html).css(selector)
+    return pointed_value(el[0], field) if el else None
+
+
+def recipe_from_points(rows, samples=5):
+    """The brain never writes CSS: code turns the pieces it pointed at on 5 sample pages into
+    selectors. A field gets a recipe if its selector gives back the brain's value on all samples
+    but one: a vote where the page test decides, so one brain slip (say, reading another book's
+    stars further down the page) can't block it. Consistent is not the same as correct, so Errand
+    will also ask you to OK 3 rows per new kind of page."""
+    htmls = [p.read_text(encoding='utf-8') for p in PAGES]
+    first = {}
+    for r in rows:
+        first.setdefault(r['i'], r)
+    ids = sorted(first)[:samples]
+    recipe = {}
+    for f in FIELDS:
+        votes = Counter()
+        for i in ids:
+            n, els = first[i]['points'].get(f), numbered_view(htmls[i])[1]
+            if isinstance(n, int) and 1 <= n <= len(els):
+                votes[els[n - 1].generate_css_selector] += 1
+        for sel, _ in votes.most_common():
+            if sum(replay(htmls[i], sel, f) == first[i]['answer'].get(f) for i in ids) >= max(3, len(ids) - 1):
+                recipe[f] = sel
+                break
+    t = time.perf_counter()
+    scored = [score({f: replay(h, s, f) for f, s in recipe.items()}, truth(h)) for h in htmls]
+    return {'recipe': recipe, 'fields_with_recipe': len(recipe), 'brain_calls': len(ids),
+            'replay_seconds_105_pages': round(time.perf_counter() - t, 3),
+            'per_field': {f: round(sum(r[f] for r in scored) / len(scored), 3) for f in FIELDS}}
 
 
 def run_recipe():
@@ -190,13 +304,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--np', type=int, required=True)
     ap.add_argument('--recipe', action='store_true')
+    ap.add_argument('--point', action='store_true', help="point, don't write")
     ap.add_argument('--ctx', type=int, default=4096, help='tokens of memory per slot')
     a = ap.parse_args()
     assert len(PAGES) == 105, f'run bench/fetch.py first: found {len(PAGES)} cached pages'
     for h in (PAGES[0], PAGES[50], PAGES[104]):  # self-check: ground truth parses on every layout sample
         print('truth sample:', truth(h.read_text(encoding='utf-8')))
 
-    name = 'recipe' if a.recipe else f"np{a.np}" + ('' if a.ctx == 4096 else f'-c{a.ctx}')
+    name = 'recipe' if a.recipe else f"np{a.np}" + ('' if a.ctx == 4096 else f'-c{a.ctx}') + ('-point' if a.point else '')
     with open(ROOT / f'server-{name}.log', 'w') as log:
         baseline_shared = GpuSampler.shared_mib()
         proc, cmd = start_server(a.np, a.ctx, log)
@@ -205,7 +320,9 @@ def main():
             if a.recipe:
                 summary, rows = run_recipe(), []
             else:
-                rows, summary = run_extract(a.np)
+                rows, summary = run_extract(a.np, a.point)
+                if a.point:
+                    summary['recipe_from_points'] = recipe_from_points(rows)
         finally:
             gpu.stop.set(); gpu.join(); proc.terminate(); proc.wait(30)
     summary.update({'np': a.np, 'ctx_per_slot': a.ctx, 'server_cmd': ' '.join(cmd), 'max_vram_mib': gpu.vram,
