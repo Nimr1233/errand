@@ -347,6 +347,74 @@ def engine(src, out_name='engine', samples=5, learn_on=None):
     return out
 
 
+# ---- piece 5: the checker brain, measured and dropped (bench/results.md section 11) ----
+# It catches most real mistakes but calls about a third of all answers wrong; re-reading those broke more
+# answers than it fixed on every set, so the engine has no checker. Kept here to re-run the test.
+def check_prompt(fields):
+    keys = ', '.join(f'"{k}" ({d})' for k, (d, _) in fields.items())
+    return ('You check answers another reader took from one web page, shown as numbered lines: [number] tag labels: '
+            'text. For each key, say "right" if the page shows that value for that field, or "wrong" if the value '
+            'belongs to something else, is cut short, or is not on the page. Output ONE JSON object with exactly these '
+            f'keys: {keys}, each "right" or "wrong".')
+
+
+def check_schema(fields):
+    return {'type': 'object', 'additionalProperties': False, 'required': list(fields),
+            'properties': {k: {'type': 'string', 'enum': ['right', 'wrong']} for k in fields}}
+
+
+def llama_checker(url='http://127.0.0.1:8080', max_tokens=200):
+    """A checker brain: given a page and answers, which fields look wrong? Returns {field: True if right}."""
+    def check(view, fields, answers):
+        data, _ = x.chat(url, check_prompt(fields), f'{view}\n\nAnswers to check: {json.dumps(answers, ensure_ascii=False)}',
+                       max_tokens, response_format={'type': 'json_schema', 'json_schema': {'schema': check_schema(fields)}})
+        said = x.last_json(data['choices'][0]['message'].get('content')) or {}
+        return {f: said.get(f) != 'wrong' for f in fields}
+    return check
+
+
+def check(src, np_=53):
+    """Piece 5's measure: a checker brain judges every page's answers (the engine's own finish()), then
+    the fields it calls wrong are re-read alone. Counted per set against the key, with no recipe vote,
+    so the checker is seen by itself. Writes score-check.json."""
+    A = json.loads((ROOT / f'score-{src}.json').read_text(encoding='utf-8'))
+    fixes = VARIANTS[src][2]
+
+    def one(r):
+        view, els = page_view(r['set'], r['site'], r['page'], fixes)
+        fields = typed(r['site'])
+        a = x.finish(fields, r['written'], view, els)
+        right = llama_checker(b.URL)(view, fields, a)
+        flagged = [f for f in fields if not right[f]]
+        c = {}
+        if flagged:
+            sub = {f: fields[f] for f in flagged}
+            c = x.finish(sub, x.llama_brain(b.URL)(view, sub), view, els)
+        new = {**a, **{f: v for f, v in c.items() if v not in (None, '') and v != a[f]}}
+        return {**r, 'answers': new, 'first': a, 'flagged': flagged}
+
+    with open(ROOT / 'server-score-check.log', 'w') as log:
+        proc, _ = b.start_server(np_, 4096, log, b.FLAGS)
+        try:
+            with ThreadPoolExecutor(np_) as pool:
+                rows = list(pool.map(one, A['rows']))
+        finally:
+            proc.terminate(); proc.wait(30)
+    out = {**A, 'variant': 'check', 'checked_from': src, 'sets': report(rows, A['runs']), 'rows': rows}
+    (ROOT / 'score-check.json').write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
+    for s in TRUTHS:
+        mine = of_set(rows, s)
+        cells = [(f, r['first'].get(f), r['answers'].get(f), TRUTHS[s][r['site']][r['page']]['answers'][f], f in r['flagged'])
+                 for r in mine for f in FIELDS[r['site']]]
+        wrong_first = [c for c in cells if not correct(c[0], c[1], c[3])]
+        flagged = [c for c in cells if c[4]]
+        print(f"{s}: {len(cells)} answers, {len(wrong_first)} wrong · checker flagged {len(flagged)} "
+              f"({sum(not correct(c[0], c[1], c[3]) for c in flagged)} really wrong) · after re-reading: "
+              f"{sum(not correct(c[0], c[1], c[3]) and correct(c[0], c[2], c[3]) for c in cells)} fixed, "
+              f"{sum(correct(c[0], c[1], c[3]) and not correct(c[0], c[2], c[3]) for c in cells)} broken")
+    return out
+
+
 def compare(a, b_):
     """Per set, paired on the same items: majority-vote right/wrong per item, exact McNemar, page-bootstrap gap."""
     A, B = (json.loads((ROOT / f'score-{v}.json').read_text(encoding='utf-8')) for v in (a, b_))
@@ -383,6 +451,7 @@ def main():
     ap.add_argument('--compare', nargs=2, metavar=('A', 'B'))
     ap.add_argument('--rescore', nargs=2, metavar=('FROM', 'TO'))
     ap.add_argument('--engine', metavar='FROM', help="the engine's read_pages() flow on a saved run's answers")
+    ap.add_argument('--check', metavar='FROM', help='a checker brain on a saved run, then flagged fields re-read')
     ap.add_argument('--perfect-brain', action='store_true', help='how many right answers code spoils, per fix')
     a = ap.parse_args()
     if a.perfect_brain:
@@ -392,6 +461,9 @@ def main():
         return
     if a.compare:
         print(json.dumps(compare(*a.compare), indent=1))
+        return
+    if a.check:
+        check(a.check)
         return
     out = engine(a.engine) if a.engine else rescore(*a.rescore) if a.rescore else run(a.variant, a.runs)
     if a.engine:

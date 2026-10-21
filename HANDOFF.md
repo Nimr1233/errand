@@ -314,12 +314,16 @@ From `reports/Full feature free Errand plan.md`:
   - The shelf and hand-offs; window pictures on room tiles (`/api/agents/{n}/shot`).
   - Live on quotes.toscrape.com/js: quotes 6/6, authors 4/6. The two misses are brain slips, for the checker in piece 5.
   - Fixed on the way: the app-shell rule, quote marks in snapping, and numbers with a thousands comma. Fresh pages now score 98.3%.
+- **Piece 5** (`bench/results.md` section 11):
+  - **Checker brain:** measured on the 3 bench sets and dropped. It broke more answers than it fixed, so its code is kept only in `bench/score.py --check`.
+  - **Real huddles** for a recipe that stops working mid-job: after 3 broken pages, rounds of 3, then 9, then everyone re-read pages and learn a new recipe; otherwise the problem goes to you (approve: brains read those fields; skip: that kind's pages are skipped).
+  - Room and connector show it. `tests/test_huddle.py` adds 4 tests.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
   3. saved data (done)
   4. browser windows with the stealth and JavaScript steps (done)
-  5. checker, fixer and huddles
+  5. checker (measured, dropped), fixer and huddles (done)
   6. safe clicking, record and replay
   7. Telegram
   8. schedules

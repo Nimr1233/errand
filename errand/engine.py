@@ -15,9 +15,13 @@ room and the Errand connector work with either.
   pages instead of learned from 10; if the site changed and it no longer holds, it is learned afresh.
 - fix: a page left without a field that most pages of its kind have (4 in 5 samples) is read again
   by Gemini (errand/gemini.py), only for public jobs and only within the daily budget.
+- huddle: when a recipe stops working (3 pages of its kind come back empty where the samples weren't),
+  its new pages wait while agents gather: 3 re-read 3 pages with their brains and a new recipe is
+  learned from them, then 9, then everyone. If no round fixes it, it goes to you: the brains read those
+  fields page by page from then on (approve), or that kind's pages are skipped.
 Results go to jobs/<job>.csv: one row per link, with its status ("ok", "blocked: bot check", ...).
 A finished job leaves a short note in the chief's memory (errand/memory.py, gbrain) when gbrain is installed.
-Not built yet: checker brains, huddles.
+No checker brain: measured, it broke more answers than it fixed (bench/results.md section 11).
 """
 import csv, pathlib, re, threading, time, urllib.parse
 from collections import deque
@@ -36,6 +40,8 @@ SAMPLES = 10  # bench/results.md section 8: 5 samples broke fresh Wikipedia page
 SAVE_EVERY = 20  # rows between rewrites of the results file
 CHECK = 3  # pages a saved recipe is checked on before it is trusted again
 WINDOW = ('render', 'stealth')  # tasks that need a browser window
+HUDDLE_AT = 3  # broken pages of one kind before agents huddle on its recipe
+HUDDLE_SIZES = (3, 9, None)  # pages re-read per round; None: every page of that kind at hand
 
 
 def parse_fields(fields):
@@ -70,14 +76,17 @@ class Agent:
         self.window = self.used_window = False
         self.passes = 0  # pages it took from the shelf in a window it kept
         self.shot, self.shot_n = None, 0  # its window's last picture, for the room
+        self.huddle = self.board_pid = None  # the problem it huddles on / waits on you for
+        self.reason = ''
+        self.fix_ok = self.fix_tried = 0
 
     def view(self):
         kind, url = self.task or (None, '')
         return {'n': self.n, 'state': self.state, 'task': kind, 'site': site(url) if '://' in url else url,
                 'pages': self.pages, 'window': self.window, 'used_window': self.used_window, 'passes': self.passes,
-                'reason': '', 'shot': self.shot_n,
-                'prog': 0.5 if self.task else 0.0, 'log': self.steps[-1] if self.steps else '', 'huddle': None,
-                'fix_ok': 0, 'fix_tried': 0}
+                'reason': self.reason, 'shot': self.shot_n,
+                'prog': 0.5 if self.task else 0.0, 'log': self.steps[-1] if self.steps else '', 'huddle': self.huddle,
+                'fix_ok': self.fix_ok, 'fix_tried': self.fix_tried}
 
 
 class Engine:
@@ -96,6 +105,7 @@ class Engine:
         self.pool = Pool() if pool is ... else pool  # None: no browser steps (plain downloads only)
         self.handoffs, self.last_hand, self.why = 0, '', {}
         self.job_id, self.reused = None, 0
+        self.board, self.huddle, self.problems, self.pid, self.raised, self.fixed = deque(), None, {}, 0, 0, 0
         self.private, self.gemini_calls, self.gemini_fixed = False, 0, 0
         self.threads, self.closed, self.paused = [], False, False
         self.job, self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = None, 0, 0, 0, 0, 0, 0
@@ -121,7 +131,8 @@ class Engine:
             self.rows, self.html, self.groups = {u: None for u in urls}, {}, {}
             for u in urls:
                 g = self.groups.setdefault(kind_of_page(u), {'recipe': None, 'samples': {}, 'sampling': set(),
-                                                            'waiting': [], 'unfetched': 0, 'learning': False})
+                                                            'waiting': [], 'unfetched': 0, 'learning': False,
+                                                            'broken': [], 'hold': False})
                 g['unfetched'] += 1
             for kind, g in self.groups.items():  # a saved recipe for every field: check it on 3 pages, not 10
                 saved = self.store.recipes(kind, fields)
@@ -129,6 +140,7 @@ class Engine:
                 g['target'] = CHECK if g['saved'] else self.samples
             self.job_id, self.reused = self.store.start_job(self.job, self.total, fields, self.private), 0
             self.handoffs, self.last_hand, self.why = 0, '', {}
+            self.board, self.huddle, self.problems, self.raised, self.fixed = deque(), None, {}, 0, 0
             self.out, self.announced, self.saved_at = self._free_name(slug(self.job)), False, 0
             self.hist, self.rate = [0], 0.0
             for a in self.agents:
@@ -141,7 +153,28 @@ class Engine:
         return {'job': self.job, 'pages': self.total}
 
     def answer_problem(self, n, approve):
-        return {'ok': False, 'error': f'agent #{n} has no problem waiting'}  # read-only jobs never ask you
+        """A huddle couldn't fix a recipe: approve lets the brains read those fields page by page; no skips
+        that kind's pages."""
+        with self.lock:
+            a = self._agent(n)
+            if a is None or a.state != 'needs_you' or not a.board_pid:
+                return {'ok': False, 'error': f'agent #{n} has no problem waiting'}
+            p = self.problems[a.board_pid]
+            g = self.groups[p['site']]
+            pages = list(dict.fromkeys(g['broken'] + g['waiting']))
+            if approve:
+                self.tasks.extendleft(('read', u) for u in reversed(pages))  # brains read what the recipe can't
+            else:  # pages the broken recipe already read are unreliable too
+                for u in pages:
+                    self._row(u, {'status': 'skipped by you'}, by_brain=False)
+                    self.html.pop(u, None)
+            g['broken'], g['waiting'], g['hold'] = [], [], False
+            p['state'], a.state, a.board_pid, a.reason = 'answered', 'idle', None, ''
+            self.updates.add('cleared', f"#{n} {'approved: brains read ' + ', '.join(p['fields']) + ' on ' + p['site'] if approve else 'skipped ' + p['site']}"
+                                        f' ({len(pages)} pages)', n)
+            self._finish_check()
+            self.lock.notify_all()
+        return {'ok': True}
 
     def stop_agent(self, n):
         a = self._agent(n)
@@ -186,10 +219,12 @@ class Engine:
                 'job': self.job or 'No job yet', 'total': self.total, 'pages_done': self.done,
                 'speed': round(self.rate, 1), 'seconds_left': round(left / self.rate) if self.rate else None,
                 'agents': N, 'finished': sum(a.state == 'finished' for a in self.agents), 'handoffs': self.handoffs,
-                'shelf': len(shelf), 'problems': 0, 'raised': 0, 'blocked': self.blocked, 'windows': size,
+                'shelf': len(shelf), 'problems': sum(a.state == 'needs_you' for a in self.agents), 'raised': self.raised,
+                'blocked': self.blocked, 'windows': size,
                 'windows_in_use': in_use, 'next_on_shelf': [u.rstrip('/').rsplit('/', 1)[-1][:30] for u in shelf[:3]],
                 'last_handoff': self.last_hand, 'brains': N, 'paused': self.paused, 'complete': self.complete(),
-                'huddle': None, 'board': 0, 'fixed_by_huddles': 0, 'set_aside': 0,
+                'huddle': self._huddle_view(), 'board': len(self.board), 'fixed_by_huddles': self.fixed,
+                'set_aside': sum(len(g['waiting']) for g in self.groups.values() if g['hold']),
                 'results': str(self.out) if self.out else 'no job yet',
                 'mode': 'real', 'brains_state': self.brains, 'fetched': fetched, 'recipes': len(recipes),
                 'brain_calls': calls, 'by_code': by_code, 'private': self.private, 'recipes_reused': self.reused,
@@ -218,13 +253,24 @@ class Engine:
             return {**a.view(), 'steps': list(a.steps), 'logged_in': False, 'page_excerpt': a.excerpt[:600]}
 
     def board_view(self):
-        return {'huddle': None, 'waiting': [], 'recent': []}
+        """The problem board: the running huddle, problems waiting their turn, the newest 10 others."""
+        short = lambda p: {k: p[k] for k in ('id', 'kind', 'site', 'by', 'state')} | {'rounds': len(p['rounds'])}
+        with self.lock:
+            return {'huddle': self._huddle_view(), 'waiting': [short(p) for p in self.board],
+                    'recent': [short(p) for p in reversed(self.problems.values()) if p['state'] not in ('huddle', 'waiting')][:10]}
+
+    def _huddle_view(self):
+        h = self.huddle
+        if not h:
+            return None
+        p = h['p']
+        return {'id': p['id'], 'kind': p['kind'], 'site': p['site'], 'round': h['round'], 'size': len(h['pages'])}
 
     def history(self, limit=20):
         return self.store.jobs(limit)
 
     def problem_detail(self, pid):
-        return None
+        return self.problems.get(pid)
 
     def complete(self):
         return bool(self.job) and self.done >= self.total and not self.tasks and not self.inflight
@@ -282,12 +328,13 @@ class Engine:
         while True:
             with self.lock:
                 while t is None and not self.closed and (t := self._take(a)) is None:
-                    if a.state != 'stopped':
+                    if a.state not in ('stopped', 'needs_you'):
                         a.state = 'finished' if self.job and not self.tasks and self._all_assigned() else 'idle'
                     self.lock.wait(0.5)
                 if self.closed:
                     return
-                a.task, a.state = t, 'working'
+                a.task, a.state = t, 'huddle' if t[0] in ('hread', 'hlearn') else 'working'
+                a.huddle = self.huddle['p']['id'] if a.state == 'huddle' and self.huddle else None
                 self.inflight += 1
             try:
                 result = self._do(a, t)
@@ -296,8 +343,8 @@ class Engine:
             with self.lock:
                 self.inflight -= 1
                 self._record(a, t, result)
-                a.task = None
-                if a.state == 'working':
+                a.task, a.huddle = None, None
+                if a.state in ('working', 'huddle'):
                     a.state = 'idle'
                 t = self._hand_off(a) if a.window else None
                 self.lock.notify_all()
@@ -319,14 +366,15 @@ class Engine:
         return None
 
     def _all_assigned(self):
-        return all(not g['waiting'] and not g['sampling'] and not g['learning'] for g in self.groups.values())
+        return not self.huddle and not self.board and \
+            all(not g['waiting'] and not g['sampling'] and not g['learning'] for g in self.groups.values())
 
     def _take(self, a):
-        if self.paused or a.state == 'stopped' or not self.job:
+        if self.paused or a.state in ('stopped', 'needs_you') or not self.job:
             return None
         busy, no_window = set(), False
         for i, t in enumerate(self.tasks):
-            if t[0] == 'read' and self.brains != 'ready' and self._needs_brain(t[1]):
+            if (t[0] == 'read' and self._needs_brain(t[1]) or t[0] == 'hread') and self.brains != 'ready':
                 continue
             if t[0] in WINDOW and no_window:
                 continue  # every window is busy: browser pages wait on the shelf, the agent takes other work
@@ -357,6 +405,13 @@ class Engine:
             if r.get('shot'):
                 a.shot, a.shot_n = r['shot'], a.shot_n + 1
             return r
+        if kind == 'hlearn':  # the huddle's fix: a new recipe from the pages its members just re-read
+            h = self.huddle
+            pages = [(self.html[u], ans) for u, ans in h['answers'].items()]
+            recipe = x.learn_recipe(pages, self.fields, focus=self.focus)
+            ok = sum(all(x.same(self.fields[f][1], x.replay(p, {f: recipe[f]}, self.fields)[f], ans.get(f))
+                         for f in h['p']['fields'] if f in recipe) for p, ans in pages)
+            return {'recipe': recipe, 'pages_ok': ok if all(f in recipe for f in h['p']['fields']) else 0}
         if kind == 'learn':
             g = self.groups[key]
             pages = [(self.html[u], ans) for u, ans in g['samples'].items()]
@@ -371,7 +426,7 @@ class Engine:
             a.excerpt = view
             used.append(1)
             return helper(view, fields)
-        recipe = None if kind == 'fix' else g['recipe']  # Gemini reads the whole page afresh
+        recipe = None if kind in ('fix', 'hread') else g['recipe']  # Gemini and huddles read the whole page afresh
         return {'answers': x.read_page(self.html[key], self.fields, brain, recipe, focus=self.focus),
                 'brain': bool(used)}
 
@@ -408,6 +463,16 @@ class Engine:
                 html, status = self.html[key], 'ok'
             a.steps.append(f'{kind} {key[-60:]}: {status}')
             self._page(a, key, html, status)
+        elif kind == 'hread':
+            h = self.huddle
+            h['answers'][key] = r.get('answers', {})
+            h['members'].add(a.n)
+            self.brain_calls += r.get('brain', False)
+            a.fix_tried, a.fix_ok = 1, int(bool(r.get('answers')))
+            if len(h['answers']) == len(h['pages']):
+                self.tasks.appendleft(('hlearn', h['p']['site']))
+        elif kind == 'hlearn':
+            self._end_round(a, r)
         elif kind == 'learn' and r.get('changed'):  # the saved recipe no longer holds: learn from 10 pages
             g = self.groups[key]
             g['saved'], g['target'], g['learning'] = None, self.samples, False
@@ -460,7 +525,14 @@ class Engine:
                 self._row(key, {'status': 'ok', **r['answers']}, by_brain=True)  # html kept for the vote
             else:
                 self._row(key, {'status': 'ok', **r['answers']}, by_brain=r['brain'])
-                if not self._maybe_fix(g, key):
+                bad = self._broken(g, key)
+                if bad and not g['hold']:  # the recipe read nothing where the samples had something
+                    g['broken'].append(key)  # html kept: a huddle may re-read it
+                    if len(g['broken']) >= HUDDLE_AT:
+                        self._raise(a, kind_of_page(key), g, bad)
+                    else:
+                        self._maybe_fix(g, key)
+                elif not self._maybe_fix(g, key):
                     self.html.pop(key, None)
             a.pages += kind != 'fix'
             a.steps.append(f"read {key[-60:]}: {'brain' if r.get('brain') else 'code'}")
@@ -493,14 +565,94 @@ class Engine:
             self.html[key] = html
             if not self.private:
                 self.store.cache_page(key, html)
-            if g['recipe'] is not None:
+            if g['hold']:
+                g['waiting'].append(key)  # its recipe is being fixed by a huddle, or waits on you
+            elif g['recipe'] is not None:
                 self.tasks.appendleft(('read', key))  # reads go first: brains work while sites pause
             elif len(g['samples']) + len(g['sampling']) < g['target']:
                 g['sampling'].add(key)
                 self.tasks.appendleft(('read', key))
             else:
                 g['waiting'].append(key)  # waits for its kind's recipe
+        if self.huddle and self.huddle['wanting'] and self.huddle['p']['site'] == kind_of_page(key):
+            self._round()  # a waiting round starts once the pages it needs arrived, or no more can come
         self._maybe_learn(g, kind_of_page(key))
+
+    def _broken(self, g, url):
+        """Fields the recipe should read but gave nothing for, where 4 in 5 samples had a value."""
+        row = self.rows[url]
+        return [f for f in (g['recipe'] or {}) if row.get(f) in (None, '') and g.get('filled', {}).get(f, 0) >= 0.8]
+
+    def _raise(self, a, kind, g, fields):
+        """A recipe stopped working: a problem on the board, and that kind's new pages wait."""
+        self.pid += 1
+        self.raised += 1
+        p = {'id': f'P-{self.pid}', 'kind': 'recipe stopped working', 'site': kind, 'by': a.n, 'state': 'waiting',
+             'rounds': [], 'fields': fields}
+        self.problems[p['id']] = p
+        self.board.append(p)
+        g['hold'] = True
+        self.updates.add('huddle', f"{p['id']} raised by #{a.n}: the recipe for {kind} stopped reading {', '.join(fields)}", a.n)
+        self._next_huddle()
+
+    def _next_huddle(self):
+        if self.huddle is None and self.board:
+            p = self.board.popleft()
+            p['state'] = 'huddle'
+            self.huddle = {'p': p, 'round': 0, 'pages': [], 'answers': {}, 'members': set(), 'wanting': False}
+            self._round()
+
+    def _round(self):
+        """The next round: more agents re-read more pages of the broken kind with their brains."""
+        h = self.huddle
+        g = self.groups[h['p']['site']]
+        size = HUDDLE_SIZES[h['round']]
+        at_hand = [u for u in dict.fromkeys(g['broken'] + g['waiting']) if u in self.html]
+        h['wanting'] = len(at_hand) < (size or len(at_hand) + 1) and g['unfetched'] > 0
+        if h['wanting']:
+            return  # more pages of this kind are still being fetched: the round starts when they arrive
+        pages = at_hand if size is None else at_hand[:size]
+        if len(pages) < x.MIN_HITS or len(pages) <= len(h['pages']):  # no more pages to learn from
+            return self._to_you()
+        h['round'] += 1
+        h['pages'], h['answers'], h['members'] = pages, {}, set()
+        self.tasks.extendleft(('hread', u) for u in reversed(pages))
+        self.updates.add('huddle', f"{h['p']['id']} round {h['round']}: {len(pages)} agents re-read {len(pages)} pages of "
+                                   f"{h['p']['site']}")
+
+    def _end_round(self, a, r):
+        h = self.huddle
+        p, g = h['p'], self.groups[h['p']['site']]
+        ok, recipe = r.get('pages_ok', 0), r.get('recipe', {})
+        p['rounds'].append({'round': h['round'], 'agents': len(h['members']), 'pages': len(h['pages']),
+                            'winner': a.n if ok else None, 'best': ok, 'fixes': [{'agent': a.n, 'pages_ok': ok}]})
+        if not ok:
+            return self._round() if h['round'] < len(HUDDLE_SIZES) else self._to_you()
+        g['recipe'], g['hold'] = recipe, False  # the site changed: the new recipe replaces the old one
+        self.store.forget_recipe(p['site'], self.fields)
+        if not self.private:
+            self.store.save_recipe(p['site'], recipe, self.fields, self.job_id)
+        self.tasks.extendleft(('read', u) for u in reversed(list(dict.fromkeys(g['broken'] + g['waiting']))))
+        g['broken'], g['waiting'] = [], []
+        p['state'] = 'fixed'
+        self.fixed += 1
+        self.updates.add('huddle', f"{p['id']} fixed by the huddle in round {h['round']}: a new recipe for {p['site']} "
+                                   f"reads {ok}/{len(h['pages'])} pages right", a.n)
+        self.huddle = None
+        self._next_huddle()
+
+    def _to_you(self):
+        """No round fixed it: one agent waits on you, and that kind's pages wait with it."""
+        p = self.huddle['p']
+        g = self.groups[p['site']]
+        g['recipe'] = {f: k for f, k in (g['recipe'] or {}).items() if f not in p['fields']}  # brains read those now
+        a = next((a for a in self.agents if a.state in ('idle', 'finished')), self._agent(p['by']))
+        a.state, a.board_pid = 'needs_you', p['id']
+        a.reason = f"couldn't fix the recipe for {p['site']}: brains read {', '.join(p['fields'])} page by page if you approve"
+        p['state'] = 'yours'
+        self.updates.add('problem', f"#{a.n} needs you: {a.reason}", a.n)
+        self.huddle = None
+        self._next_huddle()
 
     def _maybe_fix(self, g, url):
         """Queue a Gemini fix when a field most pages of this kind have came back empty here."""

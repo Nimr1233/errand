@@ -372,6 +372,40 @@ Idle agents show "picking up the next task" while a site pauses.
 
 **Not done yet:** a checker for brain slips like the two authors above, which is piece 5.
 
+## 11. Checker brains (measured, dropped) and real huddles (2026-10-21)
+
+**The checker idea, measured before building** (`bench/score.py --check p3-engine-run`):
+- A second brain judged every answer "right" or "wrong", using the spec's own checker role with a different prompt.
+- The fields it called wrong were re-read alone. That is the spec's 2-of-3 vote: the re-read wins when it differs.
+- It ran on all three sets with the same saved answers, 950 answers per set over 5 runs.
+
+| Set | Wrong answers | Checker said "wrong" | Of those, really wrong | After re-reading |
+|---|---|---|---|---|
+| Test set | 35 | 349 | 30 | 17 fixed, **43 broken** |
+| Held-out | 21 | 324 | 15 | 0 fixed, **43 broken** |
+| Fresh | 46 | 343 | 41 | 7 fixed, **23 broken** |
+
+- **Dropped:** it does find most real mistakes, but it calls about a third of all answers wrong, nearly all of them correct, and re-reading those breaks good answers on every set. The engine has no checker.
+- **The vote across pages stays the main guard against slips.** The checker code lives only in the bench, to re-run the test.
+
+**Real huddles** (`errand/engine.py`), for a recipe that stops working in the middle of a job, like a site redesign:
+1. **Noticing:** a page "breaks" when a field the recipe reads comes back empty while 4 in 5 samples had it.
+2. **Raising:** after 3 broken pages, a problem goes on the board. That kind's new pages wait; agents keep working on everything else.
+3. **Rounds:** 3 agents re-read 3 broken pages with their brains, and the vote learns a recipe from just those. If it doesn't read every broken field, 9 agents try, then everyone. A round waits while more pages of that kind are still being fetched.
+4. **Fixed:** the new recipe replaces the old one and is saved, and every broken and waiting page is read again.
+5. **Not fixed:** one agent waits on you. Approve, and brains read those fields page by page. Skip, and that kind's pages are marked "skipped by you", including the ones the broken recipe already read.
+6. **Where it shows:** the room's huddle screens and the connector's `list_problems` and `problem_detail` show the rounds.
+
+**Tests** (`tests/test_huddle.py`), on a fake site that changes layout halfway through 24 pages:
+- One wrapper added: fixed in round 1, with all 24 rows right.
+- A different nesting on every page: no round fixes it, so it goes to you, and approving gives all rows right.
+- Skipping ends the job.
+- A round waiting for pages that then fail to download still ends.
+
+The whole suite: 73 tests.
+
+**Not built:** a 2B retry for empty fields on private jobs, where Gemini is off. The bench's remaining mistakes are wrong values, not empty ones, so it would rarely run.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:

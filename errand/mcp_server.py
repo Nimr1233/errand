@@ -214,9 +214,9 @@ def problem_detail(problem: str) -> str:
     out = [f"{p['id']} · {p['kind']} on {p['site']} · found by #{p['by']} · {PROBLEM_STATES.get(p['state'], p['state'])}"]
     for r in p['rounds']:
         fixes = sorted(r['fixes'], key=lambda f: -f['pages_ok'])
-        out.append(f"Round {r['round']} ({r['agents']} agents): best fix read {r['best']}/5"
+        out.append(f"Round {r['round']} ({r['agents']} agents): best fix read {r['best']}/{r.get('pages', 5)}"
                    + (f", winner #{r['winner']}" if r['winner'] else '') + ' · '
-                   + ', '.join(f"#{f['agent']} {f['pages_ok']}/5" for f in fixes[:15])
+                   + ', '.join(f"#{f['agent']} {f['pages_ok']}/{r.get('pages', 5)}" for f in fixes[:15])
                    + (f" … and {len(fixes) - 15} more" if len(fixes) > 15 else ''))
     return '\n'.join(out)
 
