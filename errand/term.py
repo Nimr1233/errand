@@ -38,8 +38,10 @@ def find_claude():
     path = os.environ.get('ERRAND_CLAUDE') or shutil.which('claude')
     if path:
         return path
-    # The Claude desktop app bundles Claude Code; use its newest copy.
-    found = glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\Claude-Data\*\claude-code\*\*\claude.exe'))
+    # The Claude desktop app bundles Claude Code; use its newest copy (it moved to Roaming in October 2026).
+    found = [p for pattern in (r'%APPDATA%\Claude\claude-code\*\*\claude.exe',
+                               r'%LOCALAPPDATA%\Claude-Data\*\claude-code\*\*\claude.exe')
+             for p in glob.glob(os.path.expandvars(pattern))]
     return max(found, key=os.path.getmtime) if found else None
 
 

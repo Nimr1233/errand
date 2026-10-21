@@ -9,12 +9,13 @@ room and the Errand connector work with either.
 - learn: the vote across pages learns a recipe from the samples' answers. Later pages of that kind
   are read by code, with a brain only for the fields no recipe covers (bench/results.md sections 7-8).
 Results go to jobs/<job>.csv: one row per link, with its status ("ok", "blocked: bot check", ...).
+A finished job leaves a short note in the chief's memory (errand/memory.py, gbrain) when gbrain is installed.
 Not built yet: browser windows (the stealth and JavaScript fetch steps), checker brains, huddles.
 """
 import csv, pathlib, re, threading, time, urllib.parse
 from collections import deque
 
-from . import extract as x
+from . import extract as x, memory
 from .brains import URL as BRAIN_URL, BrainServer
 from .demo import N, STEP, slug
 from .fetch import Polite, site
@@ -64,7 +65,8 @@ class Agent:
 
 
 class Engine:
-    def __init__(self, brain=None, fetcher=None, results=RESULTS, samples=SAMPLES, log_path=None, server_log=None):
+    def __init__(self, brain=None, fetcher=None, results=RESULTS, samples=SAMPLES, log_path=None, server_log=None,
+                 remember=True):
         self.lock = threading.Condition()
         self.agents = [Agent(i + 1) for i in range(N)]
         self.updates = UpdateLog(log_path)
@@ -72,7 +74,7 @@ class Engine:
         self.brain = brain  # brain(view_text, fields) -> answers; None: start llama-server on the first job
         self.server = None if brain else BrainServer(server_log)
         self.brains = 'ready' if brain else 'off'  # off | starting | ready | failed: why
-        self.results, self.samples = results, samples
+        self.results, self.samples, self.remember = results, samples, remember
         self.threads, self.closed, self.paused = [], False, False
         self.job, self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = None, 0, 0, 0, 0, 0, 0
         self.tasks, self.rows, self.html, self.groups = deque(), {}, {}, {}
@@ -356,6 +358,9 @@ class Engine:
             self._save()
             self.updates.add('job', f"Job '{self.job}' finished · {self.done} pages · {self.blocked} blocked · "
                                     f'{self.by_code} read by code · results: {self.out}')
+            if self.remember:  # the chief's memory (gbrain): what ran, which sites blocked, where results are
+                memory.save_job(self.job, time.strftime('%Y-%m-%d %H:%M'), self.done, list(self.fields),
+                                self.by_code, self.brain_calls, self.out, dict(self.rows))
 
     def _maybe_learn(self, g, key):
         if g['recipe'] is None and not g['learning'] and not g['sampling'] and g['samples'] and \

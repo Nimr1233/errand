@@ -289,6 +289,26 @@ From `reports/Full feature free Errand plan.md`:
   - Live check: 20 books.toscrape pages, 100/100 fields right, 10 brain calls.
   - The live run found a bug: without `focus`, the `<title>` won the snap. It is fixed: the view is the body.
   - Tests: `tests/test_engine.py` (fake site, fake brain), plus `tests/conftest.py`, which keeps the other tests on the demo.
+- **gbrain, the chief's memory** (the user approved the download):
+  - **Install:** Bun 1.4.3 in `~/.bun/bin` (SHA-256 checked against Bun's release), then gbrain 0.60.339.0 from github:garrytan/gbrain, never from npm. It takes 435 MB.
+  - **Settings:** keyless PGLite brain with conservative search; `memory.auto_writeback off`; the blocked postinstall left blocked (it only runs migrations).
+  - **Connection:** `claude mcp add -s local gbrain -- gbrain.exe serve --surface verbs`, run in the home folder, so only the room's Claude (which runs there) gets the 7 memory tools, with no hooks.
+  - **What Errand saves:** after each job, `errand/memory.py` saves one fact (pages, sites, fields, results file) plus one per site that blocked. Never page text.
+  - **Tests:** `tests/conftest.py` keeps every test away from the real brain.
+  - **Found on the way:** the desktop app moved Claude Code to `%APPDATA%\Claude\claude-code\...`. `term.find_claude` now looks there too; without it the room's Claude couldn't start.
+- **Build order the user approved ("execution time"), each piece tested and committed:**
+  1. gbrain (done)
+  2. Gemini helper for public pages (the user is getting an AI Studio key)
+  3. saved data
+  4. browser windows with the stealth and JavaScript steps
+  5. checker, fixer and huddles
+  6. safe clicking, record and replay
+  7. Telegram
+  8. schedules
+  9. phone over Tailscale
+  10. Cloudflare inbox and website helper
+  11. Sheets, Slack and Notion
+  12. "For You"
 - **Next (needs the user's go-ahead):**
   - the stealth and JavaScript browser steps, and the windows
   - why prompt caching dropped in the 600-question run
