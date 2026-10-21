@@ -341,6 +341,11 @@ From `reports/Full feature free Errand plan.md`:
   - **The page:** the phone gets `/list`, a light page with job, Approve/Skip, problems and updates; `/` redirects there.
   - **Tests:** `tests/test_phone.py`, 4 tests.
   - **Not live yet:** Tailscale isn't installed.
+- **Piece 10, Cloudflare** (`cloud/`, `errand/inbox.py`); written and tested, not deployed (no Cloudflare account):
+  - **Inbox Worker:** D1 storage. Services POST `/hook/<name>` with `X-Errand-Secret`; Errand collects `/events` each minute while running, runs one skill per minute when idle, and acknowledges each request.
+  - **Helper Worker:** a chat box for the user's site via Gemini 3.5 Flash-Lite with the key as a Worker secret. It is hidden in the EU/EEA, UK and Switzerland, carries an 18+ and Google-reviewers notice, only answers the user's own site, and has a daily cap.
+  - **Setup:** `python -m errand inbox` makes the secret and prints the wrangler steps.
+  - **Tests:** `tests/test_cloud.py` runs both Workers under Node with stand-ins.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
@@ -351,7 +356,7 @@ From `reports/Full feature free Errand plan.md`:
   7. Telegram (done; needs the user's bot token)
   8. schedules (done)
   9. phone over Tailscale (done; needs Tailscale installed)
-  10. Cloudflare inbox and website helper
+  10. Cloudflare inbox and website helper (done; needs the user's Cloudflare account to deploy)
   11. Sheets, Slack and Notion
   12. "For You"
 - **Next (needs the user's go-ahead):**

@@ -1,4 +1,4 @@
-"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram | autostart | phone."""
+"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram | autostart | phone | inbox."""
 import argparse
 import asyncio
 import pathlib
@@ -74,17 +74,20 @@ def login():
 
 def main(argv=None):
     p = argparse.ArgumentParser(prog='errand', description='Errand: 53 free browser agents on this laptop.')
-    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram', 'autostart', 'phone'],
+    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram', 'autostart', 'phone', 'inbox'],
                    help='start: run mission control · mcp: the Claude Code connector · setup: how to connect it'
                         ' · login: log in to Claude Code here · gemini: check your Gemini key'
                         ' · telegram: pair your Telegram bot · autostart: how to start Errand with Windows'
-                        ' · phone: make a new phone PIN')
+                        ' · phone: make a new phone PIN · inbox: set up the webhook inbox')
     p.add_argument('--demo', action='store_true', help='start: fake agents instead of the real engine')
     p.add_argument('--phone', action='store_true', help='start: also reachable from your phone over Tailscale, with a PIN')
     a = p.parse_args(argv)
     cmd = a.command
     if cmd == 'start':
         start(a.demo, a.phone)
+    elif cmd == 'inbox':
+        from .inbox import setup_text
+        print(setup_text())
     elif cmd == 'phone':
         from .phone import set_pin
         print(f'Your new phone PIN: {set_pin()}  (only a hash is kept; the old PIN stops working)')

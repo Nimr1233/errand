@@ -1,0 +1,9 @@
+name = "errand-inbox"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# Make the database once with `npx wrangler d1 create errand-inbox`, then paste its id here.
+[[d1_databases]]
+binding = "DB"
+database_name = "errand-inbox"
+database_id = "PASTE-THE-ID-WRANGLER-PRINTS"

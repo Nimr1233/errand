@@ -20,6 +20,7 @@ from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket
 from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, Response
 
 from . import demo, engine as real, phone
+from .inbox import Inbox
 from .schedule import Scheduler
 from .telegram import Telegram
 
@@ -77,6 +78,7 @@ async def lifespan(app):
     bot = Telegram(engine).start()  # does nothing until you give it a bot token (errand/telegram.py)
     if scheduler:
         scheduler.start()
+        Inbox(engine).start()  # does nothing until the Cloudflare inbox is set up (errand/inbox.py)
     yield
     bot.stop.set()
     task.cancel()

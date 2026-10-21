@@ -1,0 +1,16 @@
+name = "errand-helper"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+SITE_ORIGIN = "https://your-site.example"   # your site's address
+DAILY_CAP = "100"                           # answers a day, out of the one Gemini allowance
+FACTS = "Write your site's facts here: what you sell, opening hours, prices, contact."
+
+# `npx wrangler d1 create errand-helper`, paste the id below, then
+# `npx wrangler d1 execute errand-helper --remote --command "create table usage (day text primary key, n int)"`
+# and `npx wrangler secret put GEMINI_KEY` (paste your key there; it never goes in this file).
+[[d1_databases]]
+binding = "DB"
+database_name = "errand-helper"
+database_id = "PASTE-THE-ID-WRANGLER-PRINTS"
