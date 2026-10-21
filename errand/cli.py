@@ -1,4 +1,4 @@
-"""Errand's command line: python -m errand start | mcp | setup | login | gemini."""
+"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram."""
 import argparse
 import asyncio
 import pathlib
@@ -58,9 +58,10 @@ def login():
 
 def main(argv=None):
     p = argparse.ArgumentParser(prog='errand', description='Errand: 53 free browser agents on this laptop.')
-    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini'],
+    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram'],
                    help='start: run mission control · mcp: the Claude Code connector · setup: how to connect it'
-                        ' · login: log in to Claude Code here · gemini: check your Gemini key')
+                        ' · login: log in to Claude Code here · gemini: check your Gemini key'
+                        ' · telegram: pair your Telegram bot')
     p.add_argument('--demo', action='store_true', help='start: fake agents instead of the real engine')
     a = p.parse_args(argv)
     cmd = a.command
@@ -70,6 +71,9 @@ def main(argv=None):
         setup()
     elif cmd == 'login':
         login()
+    elif cmd == 'telegram':
+        from .telegram import pairing_code
+        print(pairing_code())
     elif cmd == 'gemini':
         from .gemini import check
         print(check())

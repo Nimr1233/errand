@@ -17,6 +17,7 @@ from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket
 from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 
 from . import demo, engine as real
+from .telegram import Telegram
 
 PORT = 8765
 # shortcut: laptop only for now; the phone (Tailscale Host header + pairing, section 17) comes later
@@ -60,7 +61,9 @@ async def lifespan(app):
     if DEMO:
         engine.fast_forward(612, problems=2, huddles=1)  # demo: open mid-job with problems, like the mockup
     task = asyncio.create_task(clock())
+    bot = Telegram(engine).start()  # does nothing until you give it a bot token (errand/telegram.py)
     yield
+    bot.stop.set()
     task.cancel()
     if not DEMO:
         engine.close()  # stops the agents and the brain server it started

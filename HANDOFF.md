@@ -324,6 +324,13 @@ From `reports/Full feature free Errand plan.md`:
   - **Replay:** clicks are recorded per kind of page and replayed by name with no AI.
   - **Skills:** saved jobs with {blanks}; connector tools `save_skill`, `run_skill`, `list_skills` (15 tools now).
   - **Live:** webscraper.io laptops with "click the 256 option" gave 5/5 prices exactly +$20.
+- **Piece 7, Telegram** (`errand/telegram.py`): it starts with Errand but does nothing until `~/.errand/telegram_token` exists (a bot from @BotFather).
+  - **Pairing:** `python -m errand telegram` gives a 10-minute code to send as `/pair CODE`; only that chat is ever answered.
+  - **Alerts:** needs-you problems, huddles, finished jobs.
+  - **Chat:** /status, /problems, /approve N, /skip N, /pause, /resume.
+  - **Pace:** one message a second, status only.
+  - **Tests:** 3, against a stand-in Bot API.
+  - **Not live yet:** the user hasn't made a bot.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
@@ -331,7 +338,7 @@ From `reports/Full feature free Errand plan.md`:
   4. browser windows with the stealth and JavaScript steps (done)
   5. checker (measured, dropped), fixer and huddles (done)
   6. safe clicking, record and replay (done)
-  7. Telegram
+  7. Telegram (done; needs the user's bot token)
   8. schedules
   9. phone over Tailscale
   10. Cloudflare inbox and website helper
