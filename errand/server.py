@@ -2,9 +2,11 @@
 state over /ws, and offers the local API that the Errand connector (MCP) calls. It runs the real
 engine (errand/engine.py); with ERRAND_DEMO=1 (`errand start --demo`, and the tests) the demo engine.
 
-Listens on 127.0.0.1:8765. Every request must carry the right Host (blocks DNS rebinding), and
-/api and /ws also need the token, which is made at each start, embedded in the room page and written
-to ~/.errand/token for the connector. Without the token no website can approve or stop anything.
+Listens on 127.0.0.1:8765 (and on this laptop's Tailscale address with `errand start --phone`).
+Every request must carry the right Host (blocks DNS rebinding), and /api and /ws also need the
+token, which is made at each start, embedded in the room page and written to ~/.errand/token for the
+connector. Without the token no website can approve or stop anything. From the phone everything
+also needs a session from the PIN (errand/phone.py).
 """
 import asyncio
 import json
@@ -12,19 +14,28 @@ import os
 import pathlib
 import secrets
 from contextlib import asynccontextmanager
+from urllib.parse import parse_qs
 
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket
-from fastapi.responses import HTMLResponse, PlainTextResponse, Response
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, Response
 
-from . import demo, engine as real
+from . import demo, engine as real, phone
 from .schedule import Scheduler
 from .telegram import Telegram
 
 PORT = 8765
-# shortcut: laptop only for now; the phone (Tailscale Host header + pairing, section 17) comes later
 HOSTS = {f'127.0.0.1:{PORT}', f'localhost:{PORT}'}
+PHONE_HOSTS = set()  # this laptop's Tailscale names, added by `errand start --phone` (errand/phone.py)
 TOKEN_FILE = pathlib.Path.home() / '.errand' / 'token'
 ROOM = pathlib.Path(__file__).with_name('static') / 'room.html'
+LIST = pathlib.Path(__file__).with_name('static') / 'list.html'
+LOGIN = '''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,
+initial-scale=1"><title>Errand</title><style>body{{margin:0;background:#021316;color:#CFF6F8;font:18px system-ui;
+display:grid;place-items:center;min-height:100vh}}form{{display:grid;gap:12px;padding:16px;width:min(320px,100%)}}
+input,button{{font:inherit;min-height:48px;border-radius:8px;border:1px solid #3FC8D0;background:#06262B;color:inherit;
+padding:0 12px}}button{{background:#3FC8D0;color:#021316;font-weight:600}}</style></head><body><form method="post"
+action="/login"><label for="pin">Errand PIN</label><input id="pin" name="pin" inputmode="numeric" autocomplete="one-time-code"
+autofocus required><button type="submit">Open</button><p>{note}</p></form></body></html>'''
 
 TOKEN = secrets.token_urlsafe(32)
 DEMO = os.environ.get('ERRAND_DEMO') == '1'
@@ -74,6 +85,44 @@ async def lifespan(app):
 
 
 app = FastAPI(lifespan=lifespan)
+lock = phone.Lock()
+
+
+@app.middleware('http')
+async def phone_gate(request: Request, call_next):
+    """From the phone (a Tailscale host) everything but the PIN page needs a session from the PIN."""
+    if request.headers.get('host') in PHONE_HOSTS and request.url.path != '/login' and \
+            not lock.ok(request.cookies.get(phone.COOKIE)):
+        if request.url.path.startswith('/api'):
+            return PlainTextResponse('enter your PIN first', status_code=401)
+        return RedirectResponse('/login', status_code=303)
+    return await call_next(request)
+
+
+@app.get('/login')
+def login_page():
+    return HTMLResponse(LOGIN.format(note=''))
+
+
+@app.post('/login')
+async def login(request: Request):
+    sid = lock.login(parse_qs((await request.body()).decode()).get('pin', [''])[0].strip())
+    if sid == 'locked':
+        return HTMLResponse(LOGIN.format(note='Too many wrong PINs. Try again in 10 minutes.'), status_code=429)
+    if not sid:
+        return HTMLResponse(LOGIN.format(note='Wrong PIN.'), status_code=401)
+    r = RedirectResponse('/list', status_code=303)
+    r.set_cookie(phone.COOKIE, sid, max_age=phone.DAYS * 86400, httponly=True, samesite='strict')
+    return r
+
+
+@app.get('/list')
+def list_view(request: Request):
+    """The phone layout: job, what needs you, problems, updates. No 3D, no terminal."""
+    if request.headers.get('host') not in HOSTS:
+        return PlainTextResponse('Forbidden', status_code=403)
+    return HTMLResponse(LIST.read_text(encoding='utf-8').replace('__TOKEN__', TOKEN),
+                        headers={'Content-Security-Policy': "frame-ancestors 'none'"})
 
 
 def guard(request: Request):
@@ -88,6 +137,8 @@ def guard(request: Request):
 async def room(request: Request):
     if request.headers.get('host') not in HOSTS:
         return PlainTextResponse('Forbidden', status_code=403)
+    if request.headers.get('host') in PHONE_HOSTS:
+        return RedirectResponse('/list', status_code=303)  # the 3D room and its terminal stay on the laptop
     # no other site may frame this page: it holds the token and the Approve buttons
     return HTMLResponse(ROOM.read_text(encoding='utf-8').replace('__TOKEN__', TOKEN),
                         headers={'Content-Security-Policy': "frame-ancestors 'none'"})
@@ -97,7 +148,8 @@ async def room(request: Request):
 async def ws_live(ws: WebSocket):
     origin_ok = ws.headers.get('origin') in {f'http://{h}' for h in HOSTS}
     if ws.headers.get('host') not in HOSTS or not origin_ok or \
-            not secrets.compare_digest(ws.query_params.get('token', ''), TOKEN):
+            not secrets.compare_digest(ws.query_params.get('token', ''), TOKEN) or \
+            ws.headers.get('host') in PHONE_HOSTS and not lock.ok(ws.cookies.get(phone.COOKIE)):
         await ws.close(code=1008)
         return
     await ws.accept()

@@ -1,4 +1,4 @@
-"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram | autostart."""
+"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram | autostart | phone."""
 import argparse
 import asyncio
 import pathlib
@@ -8,16 +8,32 @@ LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates', 'list_p
              'list_skills', 'list_schedules')
 
 
-def start(demo=False):
-    """Run mission control (8765) and the terminal bridge (8766) together. demo: fake agents."""
+def start(demo=False, phone=False):
+    """Run mission control (8765) and the terminal bridge (8766) together. demo: fake agents.
+    phone: mission control also listens on this laptop's Tailscale address, behind the PIN; the
+    terminal bridge never does."""
     import os
     import uvicorn
     if demo:
         os.environ['ERRAND_DEMO'] = '1'  # read when the server module loads, just below
     from . import server, term
     # warnings only: uvicorn's info lines print /ws?token=... and /term?token=..., token included
-    servers = [uvicorn.Server(uvicorn.Config(app, host='127.0.0.1', port=port, access_log=False, log_level='warning'))
-               for app, port in ((server.app, server.PORT), (term.app, term.PORT))]
+    places = [(server.app, '127.0.0.1', server.PORT), (term.app, '127.0.0.1', term.PORT)]
+    if phone:
+        from . import phone as ph
+        ip = ph.tailscale_ip()
+        if not ip:
+            print("Tailscale isn't installed or connected, so the phone can't reach Errand yet. Install it free from "
+                  'tailscale.com on this laptop and your phone, sign in on both, then run errand start --phone again.')
+        else:
+            if not ph.FILE.exists():
+                print(f'Your phone PIN is {ph.set_pin()} (only a hash is kept; python -m errand phone makes a new one).')
+            server.HOSTS.add(f'{ip}:{server.PORT}')
+            server.PHONE_HOSTS.add(f'{ip}:{server.PORT}')
+            places.append((server.app, ip, server.PORT))  # mission control only: never the terminal bridge
+            print(f'On your phone (with Tailscale on), open http://{ip}:{server.PORT}/ and enter your PIN.')
+    servers = [uvicorn.Server(uvicorn.Config(app, host=host, port=port, access_log=False, log_level='warning'))
+               for app, host, port in places]
     print(f"Errand is running{' (demo agents)' if server.DEMO else ''}. Mission control: "
           f'http://127.0.0.1:{server.PORT}/   (Ctrl+C stops it)', flush=True)
 
@@ -58,15 +74,20 @@ def login():
 
 def main(argv=None):
     p = argparse.ArgumentParser(prog='errand', description='Errand: 53 free browser agents on this laptop.')
-    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram', 'autostart'],
+    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram', 'autostart', 'phone'],
                    help='start: run mission control · mcp: the Claude Code connector · setup: how to connect it'
                         ' · login: log in to Claude Code here · gemini: check your Gemini key'
-                        ' · telegram: pair your Telegram bot · autostart: how to start Errand with Windows')
+                        ' · telegram: pair your Telegram bot · autostart: how to start Errand with Windows'
+                        ' · phone: make a new phone PIN')
     p.add_argument('--demo', action='store_true', help='start: fake agents instead of the real engine')
+    p.add_argument('--phone', action='store_true', help='start: also reachable from your phone over Tailscale, with a PIN')
     a = p.parse_args(argv)
     cmd = a.command
     if cmd == 'start':
-        start(a.demo)
+        start(a.demo, a.phone)
+    elif cmd == 'phone':
+        from .phone import set_pin
+        print(f'Your new phone PIN: {set_pin()}  (only a hash is kept; the old PIN stops working)')
     elif cmd == 'setup':
         setup()
     elif cmd == 'login':

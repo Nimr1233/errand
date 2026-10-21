@@ -12,7 +12,8 @@ os.environ.setdefault('ERRAND_DEMO', '1')
 def no_real_memory_or_gemini(monkeypatch, tmp_path):
     """No test ever writes into your real gbrain or spends your real Gemini allowance: test_memory.py
     and test_gemini.py bring their own stand-ins."""
-    from errand import gemini, memory, store, telegram
+    from errand import gemini, memory, phone, store, telegram
+    monkeypatch.setattr(phone, 'FILE', tmp_path / 'phone.json')  # never touches your real phone PIN
     for name in ('TOKEN_FILE', 'CHAT_FILE', 'PAIR_FILE'):  # and never messages you through your real bot
         monkeypatch.setattr(telegram, name, tmp_path / name.lower())
     monkeypatch.setattr(memory, 'CMD', [])

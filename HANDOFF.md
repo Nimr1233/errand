@@ -335,6 +335,12 @@ From `reports/Full feature free Errand plan.md`:
   - **What runs:** saved skills run on their links "every N hours", "hourly" or "daily HH:MM", checked every 30 s while Errand runs. A missed run happens once on start, and a due run waits while a job runs.
   - **Where:** stored in SQLite; API `/api/schedules`; connector `schedule_skill`, `list_schedules`, `remove_schedule` (18 tools).
   - **Windows start-up:** `python -m errand autostart` prints the `schtasks` command for the user to run; Errand changes no Windows setting.
+- **Piece 9, phone** (`errand/phone.py`, `errand/static/list.html`):
+  - **Over Tailscale:** `errand start --phone` also serves mission control on this laptop's Tailscale address, never the terminal bridge.
+  - **The PIN:** from that address everything needs a session from the PIN (`python -m errand phone`, salted hash, locked 10 min after 5 wrong). The session cookie is HttpOnly and SameSite=Strict, and lasts 30 days.
+  - **The page:** the phone gets `/list`, a light page with job, Approve/Skip, problems and updates; `/` redirects there.
+  - **Tests:** `tests/test_phone.py`, 4 tests.
+  - **Not live yet:** Tailscale isn't installed.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
@@ -344,7 +350,7 @@ From `reports/Full feature free Errand plan.md`:
   6. safe clicking, record and replay (done)
   7. Telegram (done; needs the user's bot token)
   8. schedules (done)
-  9. phone over Tailscale
+  9. phone over Tailscale (done; needs Tailscale installed)
   10. Cloudflare inbox and website helper
   11. Sheets, Slack and Notion
   12. "For You"
