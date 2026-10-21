@@ -4,6 +4,9 @@ room and the Errand connector work with either.
 
 53 agents share one task list and never wait in line: an agent takes the first task it can do now.
 - fetch: one page, politely (errand/fetch.py). A page whose site is pausing waits; agents do other work.
+- act: with clicking steps ("click the 256 GB option"), every page opens in a window, the steps are
+  done safely (errand/clicks.py), and the page is read after them. A click that worked is replayed
+  on later pages of that kind with no brain.
 - render / stealth: a page the plain download couldn't read, in one of 25 shared browser windows
   (errand/browser.py). With every window busy the page waits on the shelf and the agent takes other
   work; an agent that finishes in a window hands it straight to the next page on the shelf.
@@ -26,7 +29,7 @@ No checker brain: measured, it broke more answers than it fixed (bench/results.m
 import csv, pathlib, re, threading, time, urllib.parse
 from collections import deque
 
-from . import extract as x, memory
+from . import clicks, extract as x, memory
 from .gemini import Gemini
 from .store import Store
 from .brains import URL as BRAIN_URL, BrainServer
@@ -39,7 +42,7 @@ RESULTS = pathlib.Path(__file__).resolve().parent.parent / 'jobs'
 SAMPLES = 10  # bench/results.md section 8: 5 samples broke fresh Wikipedia pages, 10 didn't
 SAVE_EVERY = 20  # rows between rewrites of the results file
 CHECK = 3  # pages a saved recipe is checked on before it is trusted again
-WINDOW = ('render', 'stealth')  # tasks that need a browser window
+WINDOW = ('render', 'stealth', 'act')  # tasks that need a browser window
 HUDDLE_AT = 3  # broken pages of one kind before agents huddle on its recipe
 HUDDLE_SIZES = (3, 9, None)  # pages re-read per round; None: every page of that kind at hand
 
@@ -91,12 +94,13 @@ class Agent:
 
 class Engine:
     def __init__(self, brain=None, fetcher=None, results=RESULTS, samples=SAMPLES, log_path=None, server_log=None,
-                 remember=True, gemini=None, store=None, pool=...):
+                 remember=True, gemini=None, store=None, pool=..., chooser=None):
         self.lock = threading.Condition()
         self.agents = [Agent(i + 1) for i in range(N)]
         self.updates = UpdateLog(log_path)
         self.fetcher = fetcher or Polite()
         self.brain = brain  # brain(view_text, fields) -> answers; None: start llama-server on the first job
+        self.chooser = chooser  # chooser(step, offered) -> name to click; made with the brains when None
         self.server = None if brain else BrainServer(server_log)
         self.brains = 'ready' if brain else 'off'  # off | starting | ready | failed: why
         self.results, self.samples, self.remember = results, samples, remember
@@ -107,6 +111,7 @@ class Engine:
         self.job_id, self.reused = None, 0
         self.board, self.huddle, self.problems, self.pid, self.raised, self.fixed = deque(), None, {}, 0, 0, 0
         self.private, self.gemini_calls, self.gemini_fixed = False, 0, 0
+        self.steps, self.spec, self.clicks_by_brain, self.clicks_replayed = [], {}, 0, 0
         self.threads, self.closed, self.paused = [], False, False
         self.job, self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = None, 0, 0, 0, 0, 0, 0
         self.tasks, self.rows, self.html, self.groups = deque(), {}, {}, {}
@@ -114,8 +119,11 @@ class Engine:
         self.out = None
 
     # ---- commands (the local API and the Errand connector call these) ----
-    def start_job(self, prompt, urls, fields, focus=None, private=False):
+    def start_job(self, prompt, urls, fields, focus=None, private=False, steps=None):
+        spec = {'fields': dict(fields or {}), 'steps': [str(s).strip() for s in steps or [] if str(s).strip()][:10]}
         fields = parse_fields(fields)
+        if spec['steps'] and not self.pool:
+            raise ValueError('clicking steps need browser windows, and this Errand runs without them')
         if not fields:
             raise ValueError('say which fields to read, like {"price": "the price", "stock": "number: copies in stock"}')
         urls = list(dict.fromkeys(u.strip() for u in urls or [] if u and u.strip()))
@@ -126,6 +134,7 @@ class Engine:
                 raise ValueError(f"job '{self.job}' is still running")
             self.job, self.fields, self.focus = prompt.strip()[:60] or 'Untitled job', fields, focus or None
             self.private, self.gemini_calls, self.gemini_fixed = bool(private), 0, 0  # private: Gemini never sees it
+            self.spec, self.steps, self.clicks_by_brain, self.clicks_replayed = spec, spec['steps'], 0, 0
             self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = len(urls), 0, 0, 0, 0, 0
             self.tasks = deque(('fetch', u) for u in urls)
             self.rows, self.html, self.groups = {u: None for u in urls}, {}, {}
@@ -135,6 +144,7 @@ class Engine:
                                                             'broken': [], 'hold': False})
                 g['unfetched'] += 1
             for kind, g in self.groups.items():  # a saved recipe for every field: check it on 3 pages, not 10
+                g['clicks'] = {s: n for s, n in self.store.clicks(kind).items() if s in self.steps}
                 saved = self.store.recipes(kind, fields)
                 g['saved'] = saved if set(saved) == set(fields) else None
                 g['target'] = CHECK if g['saved'] else self.samples
@@ -146,7 +156,8 @@ class Engine:
             for a in self.agents:
                 a.reset()
             self.updates.add('job', f"Job '{self.job}' started · {self.total} pages · reading "
-                                    + ', '.join(f'{k} ({kind})' if kind != 'text' else k for k, (_, kind) in fields.items()))
+                                    + ', '.join(f'{k} ({kind})' if kind != 'text' else k for k, (_, kind) in fields.items())
+                                    + (f" · after: {'; '.join(self.steps)}" if self.steps else ''))
             self._start_brains()
             self._start_agents()
             self.lock.notify_all()
@@ -229,7 +240,8 @@ class Engine:
                 'mode': 'real', 'brains_state': self.brains, 'fetched': fetched, 'recipes': len(recipes),
                 'brain_calls': calls, 'by_code': by_code, 'private': self.private, 'recipes_reused': self.reused,
                 'gemini': 'off: private job' if self.private else self.gemini.state(),
-                'gemini_calls': self.gemini_calls, 'gemini_fixed': self.gemini_fixed,
+                'gemini_calls': self.gemini_calls, 'gemini_fixed': self.gemini_fixed, 'steps': self.steps,
+                'clicks_by_brain': self.clicks_by_brain, 'clicks_replayed': self.clicks_replayed,
                 # the room's middle TV and desk monitors
                 'tv_hand': {'label': '// PAGES READ BY CODE', 'val': by_code, 'of': f'/{self.done}',
                             'sub': f'{len(recipes)} recipe{"s" * (len(recipes) != 1)} learned from the brains'},
@@ -269,6 +281,21 @@ class Engine:
     def history(self, limit=20):
         return self.store.jobs(limit)
 
+    def save_skill(self, name, description):
+        """Keep the current job's fields and steps under a name; {blanks} in them are filled when it runs."""
+        if not self.spec:
+            raise ValueError('run a job first: a skill is saved from the current job')
+        self.store.save_skill(name.strip()[:60], description.strip()[:300], self.spec['fields'], self.spec['steps'])
+        return {'ok': True, 'skill': name.strip()[:60]}
+
+    def run_skill(self, name, urls, values=None):
+        k = self.store.skill(name)
+        if k is None:
+            raise ValueError(f"there's no skill called '{name}'")
+        v = values or {}
+        return self.start_job(clicks.fill(k['name'], v), urls, {f: clicks.fill(d, v) for f, d in k['fields'].items()},
+                              steps=[clicks.fill(s, v) for s in k['steps']])
+
     def problem_detail(self, pid):
         return self.problems.get(pid)
 
@@ -302,6 +329,7 @@ class Engine:
             try:
                 self.server.start()
                 self.brain, state = x.llama_brain(BRAIN_URL), 'ready'
+                self.chooser = self.chooser or clicks.llama_chooser(BRAIN_URL)
                 self.updates.add('job', f'Brains ready · {N} slots')
             except Exception as e:
                 state = f'failed: {e}'
@@ -374,7 +402,8 @@ class Engine:
             return None
         busy, no_window = set(), False
         for i, t in enumerate(self.tasks):
-            if (t[0] == 'read' and self._needs_brain(t[1]) or t[0] == 'hread') and self.brains != 'ready':
+            if (t[0] == 'read' and self._needs_brain(t[1]) or t[0] == 'hread' or
+                    t[0] == 'act' and set(self.steps) - set(self.groups[kind_of_page(t[1])]['clicks'])) and self.brains != 'ready':
                 continue
             if t[0] in WINDOW and no_window:
                 continue  # every window is busy: browser pages wait on the shelf, the agent takes other work
@@ -399,7 +428,8 @@ class Engine:
             return self.fetcher.fetch(key)
         if kind in WINDOW:
             try:
-                r = self.pool.render(key, UA) if kind == 'render' else self.pool.stealth(key)
+                r = self.pool.render(key, UA) if kind == 'render' else self.pool.stealth(key) if kind == 'stealth' else \
+                    self.pool.act(key, UA, self.steps, dict(self.groups[kind_of_page(key)]['clicks']), self.chooser)
             finally:
                 self.fetcher.release(key)
             if r.get('shot'):
@@ -440,6 +470,9 @@ class Engine:
                     self.updates.add('blocked', f"{site(key)} asked us to slow down: pausing it {r['pause']} s", a.n)
                 return
             a.steps.append(f"fetch {key[-60:]}: {r['status']}")
+            if self.steps and r['status'] in ('ok', 'needs browser'):  # clicking needs the page in a window
+                self.tasks.append(('act', key))
+                return
             if r['status'] == 'needs browser' and self.pool:  # a JavaScript page: up the ladder to a window
                 self.html[key] = r['html']  # the plain page, in case the window can't load it
                 self.tasks.append(('render', key))
@@ -453,6 +486,21 @@ class Engine:
             elif r['status'] == 'needs stealth':
                 r = {'status': r['why']}
             self._page(a, key, r.get('html'), r['status'])
+        elif kind == 'act':
+            g, done = self.groups[kind_of_page(key)], r.get('done', [])
+            for d in done:
+                if d['ok'] and d['how'] == 'brain':
+                    g['clicks'][d['step']] = d['name']  # replayed on this kind's next pages with no brain
+                    if not self.private:
+                        self.store.save_click(kind_of_page(key), d['step'], d['name'])
+            self.clicks_by_brain += sum(d['ok'] and d['how'] == 'brain' for d in done)
+            self.clicks_replayed += sum(d['ok'] and d['how'] == 'replay' for d in done)
+            failed = next((d for d in done if not d['ok']), None)
+            status = r['status'] if r['status'] != 'ok' else f"click failed: {failed['why']}" if failed else 'ok'
+            if status == 'ok' and (challenged(r.get('code') or 200, r['html']) or login_wall(r['html'])):
+                status = 'blocked: bot check' if challenged(r.get('code') or 200, r['html']) else 'blocked: login page'
+            a.steps.append(f'act {key[-50:]}: {clicks.describe(done) or status}')
+            self._page(a, key, r.get('html') if status == 'ok' else None, status)
         elif kind in WINDOW:
             html, status = (r.get('html'), 'ok') if r['status'] == 'ok' else (None, r['status'])
             if html and challenged(r.get('code') or 200, html):  # still a bot check: never solved

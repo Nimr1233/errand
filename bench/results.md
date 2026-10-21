@@ -406,6 +406,36 @@ The whole suite: 73 tests.
 
 **Not built:** a 2B retry for empty fields on private jobs, where Gemini is off. The bench's remaining mistakes are wrong values, not empty ones, so it would rarely run.
 
+## 12. Safe clicking, record and replay, skills (2026-10-21, `errand/clicks.py`)
+
+**How it works:**
+- **Steps:** a job can carry steps to do before reading, like `["click the 256 option"]`. Every page then opens in a browser window.
+- **Safety:** only same-site links, option and tab buttons, radios and checkboxes are offered to the brain. Never buy, cart, sign up, log in or out, submit, send, delete, download, accept, anything disabled, anything in a form that would send it, or links to other sites.
+- **Picking:** the brain writes the name of what to click, and code finds the one element with that name. Same-named elements count only if they go to the same place.
+- **Checking:** after the click, the page's text or address must change, and it must still be the same site.
+- **Record and replay:** a click that worked is saved for that kind of page (`errand/store.py`, table `clicks`). Later pages and later jobs replay it by the same name with no brain. Replays never use "the same spot": that could press a different option and read the wrong price.
+- **Skills:** a job's fields and steps saved under a name, with `{blanks}` filled in when it runs (connector: `save_skill`, `run_skill`, `list_skills`).
+
+**Live on webscraper.io's test shop** (5 laptops, step "click the 256 option", read the price):
+
+| Run | Result |
+|---|---|
+| First | 0 / 5. The 2B copied the menu line "256 (button)", label included, so nothing matched. |
+| **Fixed** | **5 / 5**: every price exactly $20 above its 128 GB default, the same as the research measured by hand ($295.99 → $315.99). The brain chose once, then 4 clicks replayed with no AI. |
+
+The fix: the menu shows names only, and a copied "(…)" label at the end is ignored.
+
+**Tests** (`tests/test_clicks.py`, real Chromium, fake shop):
+- The safety rules.
+- One brain choice, then 5 replays, with the next job reusing the saved click.
+- "Buy now", "Register" and a disabled option are never offered, and the shop never received a buy request.
+- A do-nothing button fails the step.
+- Skills fill their blanks.
+
+The whole suite: 77 tests.
+
+**Not built:** clicks on logged-in pages (Errand never logs in), and typing into search boxes (a form). Both were left out on purpose by the council's navigation-only rule.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:

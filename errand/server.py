@@ -170,7 +170,33 @@ def start_job(body: dict = Body(...)):
     if DEMO:
         return engine.start_job(body.get('prompt', ''), len(urls))
     try:
-        return engine.start_job(body.get('prompt', ''), urls, body.get('fields'), body.get('focus'), bool(body.get('private')))
+        return engine.start_job(body.get('prompt', ''), urls, body.get('fields'), body.get('focus'),
+                                bool(body.get('private')), body.get('steps'))
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.get('/api/skills', dependencies=[api])
+def skills():
+    return [] if DEMO else engine.store.skills()
+
+
+@app.post('/api/skills', dependencies=[api])
+def save_skill(body: dict = Body(...)):
+    if DEMO:
+        raise HTTPException(400, 'skills need the real engine')
+    try:
+        return engine.save_skill(str(body.get('name') or ''), str(body.get('description') or ''))
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.post('/api/skills/{name}/run', dependencies=[api])
+def run_skill(name: str, body: dict = Body(...)):
+    if DEMO:
+        raise HTTPException(400, 'skills need the real engine')
+    try:
+        return engine.run_skill(name, [u for u in body.get('urls') or [] if isinstance(u, str)], body.get('values'))
     except ValueError as e:
         raise HTTPException(400, str(e))
 

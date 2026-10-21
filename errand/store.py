@@ -16,6 +16,8 @@ create table if not exists jobs (id integer primary key, name text, started text
 create table if not exists results (job int, url text, status text, data text);
 create table if not exists recipes (kind text, field text, field_kind text, reader text, selector text,
     learned text, job int, primary key (kind, field, field_kind));
+create table if not exists clicks (kind text, step text, name text, learned text, primary key (kind, step));
+create table if not exists skills (name text primary key, description text, fields text, steps text, saved text);
 '''
 
 
@@ -64,6 +66,29 @@ class Store:
     def forget_recipe(self, kind, fields):
         with self.lock, self.db:
             self.db.executemany('delete from recipes where kind=? and field=?', [(kind, f) for f in fields])
+
+    def clicks(self, kind):
+        """The clicks that worked on this kind of page before: {step: name of what was clicked}."""
+        with self.lock:
+            return dict(self.db.execute('select step, name from clicks where kind=?', (kind,)).fetchall())
+
+    def save_click(self, kind, step, name):
+        with self.lock, self.db:
+            self.db.execute('insert or replace into clicks values (?, ?, ?, ?)', (kind, step, name, now()))
+
+    def save_skill(self, name, description, fields, steps):
+        """A skill: a job's fields and steps kept under a name, with {blanks} filled in when it runs."""
+        with self.lock, self.db:
+            self.db.execute('insert or replace into skills values (?, ?, ?, ?, ?)',
+                            (name, description, json.dumps(fields, ensure_ascii=False), json.dumps(steps, ensure_ascii=False), now()))
+
+    def skills(self):
+        with self.lock:
+            return [{'name': n, 'description': d, 'fields': json.loads(f), 'steps': json.loads(st), 'saved': sv}
+                    for n, d, f, st, sv in self.db.execute('select * from skills order by name')]
+
+    def skill(self, name):
+        return next((k for k in self.skills() if k['name'] == name), None)
 
     def cache_page(self, url, html):
         try:

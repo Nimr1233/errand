@@ -61,6 +61,16 @@ class Pool:
         except Exception as e:
             return {'status': f'error: {type(e).__name__}'}
 
+    def act(self, url, user_agent, steps, recorded, choose):
+        """Open a fresh window, do the job's clicking steps (errand/clicks.py), then read the page.
+        Returns render's answer plus 'done': what each step did."""
+        self._start()
+        try:
+            return asyncio.run_coroutine_threadsafe(self._act(url, user_agent, steps, recorded, choose),
+                                                    self.loop).result(self.timeout + 30 * (len(steps) + 1))
+        except Exception as e:
+            return {'status': f'error: {type(e).__name__}', 'done': []}
+
     def stealth(self, url):
         """Scrapling's stealth browser, CAPTCHA solving off. It runs its own browser, in this thread."""
         from scrapling.fetchers import StealthyFetcher
@@ -117,6 +127,30 @@ class Pool:
             return {'status': f'error: {type(e).__name__}'}
         finally:
             await ctx.close()  # the wipe: this window's cookies, storage and pages are gone
+
+    async def _act(self, url, user_agent, steps, recorded, choose):
+        from playwright.async_api import TimeoutError as Slow
+        from .clicks import do_steps
+        loop = asyncio.get_running_loop()
+        blocking = lambda fn, *a: loop.run_in_executor(None, fn, *a)  # the brain answers off this thread
+        ctx = await (await self._chromium()).new_context(user_agent=user_agent, viewport={'width': 1280, 'height': 800},
+                                                         device_scale_factor=0.5)
+        try:
+            page = await ctx.new_page()
+            resp = await page.goto(url, wait_until='load', timeout=self.timeout * 1000)
+            try:
+                await page.wait_for_load_state('networkidle', timeout=5000)
+            except Slow:
+                pass
+            done = await do_steps(page, url, steps, recorded, choose, blocking)
+            return {'status': 'ok', 'code': resp.status if resp else 0, 'html': await page.content(), 'done': done,
+                    'shot': await page.screenshot(type='jpeg', quality=40)}
+        except Slow:
+            return {'status': f'blocked: page did not load in {self.timeout} s', 'done': []}
+        except Exception as e:
+            return {'status': f'error: {type(e).__name__}', 'done': []}
+        finally:
+            await ctx.close()  # the wipe
 
     async def _close(self):
         if self.browser:

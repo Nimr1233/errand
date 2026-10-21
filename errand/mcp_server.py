@@ -93,7 +93,8 @@ def _agent_line(a):
 
 @tool
 def start_job(prompt: str, urls: list[str] | None = None, file: str | None = None,
-              fields: dict[str, str] | None = None, focus: str | None = None, private: bool = False) -> str:
+              fields: dict[str, str] | None = None, focus: str | None = None, private: bool = False,
+              steps: list[str] | None = None) -> str:
     """Start a job: read the same fields from many pages. Give `urls` (a list of links) or `file` (a
     text file on this laptop with one link per line), and `fields`: what to read from each page, as
     name -> what it is in plain words. Start a description with "number:" or "date:" for numbers and
@@ -102,7 +103,10 @@ def start_job(prompt: str, urls: list[str] | None = None, file: str | None = Non
     when the rest of the page is long. Pages are fetched politely (robots.txt, one request per site
     every 2-3 s); bot checks and logins are never passed. Set `private` for anything about the user's own
     accounts or personal data: then Gemini never sees those pages (otherwise Gemini may re-read a few
-    public pages the local brains left incomplete). Returns the job name and its page count."""
+    public pages the local brains left incomplete). Optional `steps`: clicks to make on every page before
+    reading it, in plain words, like ["click the 256 GB option"]. Only safe clicks are ever made: links
+    within the same site and option buttons, never buying, signing up, logging in or sending a form.
+    Returns the job name and its page count."""
     body = {'prompt': prompt}
     if urls:
         body['urls'] = urls
@@ -114,6 +118,8 @@ def start_job(prompt: str, urls: list[str] | None = None, file: str | None = Non
         body['focus'] = focus
     if private:
         body['private'] = True
+    if steps:
+        body['steps'] = steps
     j = _call('POST', '/api/jobs', json=body)
     return f"Started job '{j['job']}' · {j['pages']} pages. Follow it with job_status or get_updates."
 
@@ -261,6 +267,31 @@ def past_jobs(limit: int = 10) -> str:
     return '\n'.join(f"{j['started'][:16]} '{j['name']}': {j['done'] or 0}/{j['total']} pages · {j['blocked'] or 0} blocked"
                      f" · {j['by_code'] or 0} by code · {j['brain_calls'] or 0} brain calls"
                      + (f" · results: {j['results']}" if j['results'] else ' · not finished') for j in jobs)
+
+
+@tool
+def list_skills() -> str:
+    """Saved skills: jobs kept under a name, with {blanks} filled in when one runs."""
+    ks = _call('GET', '/api/skills')
+    if not ks:
+        return 'No skills saved yet. Run a job, then save_skill.'
+    return '\n'.join(f"{k['name']}: {k['description'] or '(no description)'} · fields {', '.join(k['fields'])}"
+                     + (f" · steps: {'; '.join(k['steps'])}" if k['steps'] else '') for k in ks)
+
+
+@tool
+def save_skill(name: str, description: str = '') -> str:
+    """Save the current job's fields and steps as a skill. Write {blanks} where a value changes from run to
+    run, like a step "click the {size} option"; run_skill fills them in."""
+    r = _call('POST', '/api/skills', json={'name': name, 'description': description})
+    return f"Saved the skill '{r['skill']}'."
+
+
+@tool
+def run_skill(name: str, urls: list[str], values: dict[str, str] | None = None) -> str:
+    """Run a saved skill on these links; `values` fills its {blanks}, like {"size": "256"}."""
+    j = _call('POST', f'/api/skills/{name}/run', json={'urls': urls, 'values': values or {}})
+    return f"Started job '{j['job']}' · {j['pages']} pages. Follow it with job_status or get_updates."
 
 
 @tool

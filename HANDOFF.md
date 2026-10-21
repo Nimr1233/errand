@@ -318,13 +318,19 @@ From `reports/Full feature free Errand plan.md`:
   - **Checker brain:** measured on the 3 bench sets and dropped. It broke more answers than it fixed, so its code is kept only in `bench/score.py --check`.
   - **Real huddles** for a recipe that stops working mid-job: after 3 broken pages, rounds of 3, then 9, then everyone re-read pages and learn a new recipe; otherwise the problem goes to you (approve: brains read those fields; skip: that kind's pages are skipped).
   - Room and connector show it. `tests/test_huddle.py` adds 4 tests.
+- **Piece 6, safe clicking** (`errand/clicks.py`, `bench/results.md` section 12):
+  - **Steps and safety:** jobs take `steps`; only same-site links and option buttons are offered, never buy, sign-up, login, forms or other sites.
+  - **Picking and checking:** the brain writes a name, code finds it, and the page must change.
+  - **Replay:** clicks are recorded per kind of page and replayed by name with no AI.
+  - **Skills:** saved jobs with {blanks}; connector tools `save_skill`, `run_skill`, `list_skills` (15 tools now).
+  - **Live:** webscraper.io laptops with "click the 256 option" gave 5/5 prices exactly +$20.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
   3. saved data (done)
   4. browser windows with the stealth and JavaScript steps (done)
   5. checker (measured, dropped), fixer and huddles (done)
-  6. safe clicking, record and replay
+  6. safe clicking, record and replay (done)
   7. Telegram
   8. schedules
   9. phone over Tailscale
