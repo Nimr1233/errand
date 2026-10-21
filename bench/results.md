@@ -161,6 +161,59 @@ A 2B brain copies well and counts badly. With "null" allowed, it answered null f
 
 These are the starting list for phase 3's fix loop. Fixing them is harness work, with a risk of tuning to these 40 pages, so each fix has to be checked on pages it wasn't made from.
 
+## 6. Harness tuner, phase 3 round 1: the fix loop (2026-10-21)
+
+**Held-out pages:**
+- `bench/testset.py --holdout` fetched the next 10 pages of each site, 190 more answers, with the same polite rules. None of them overlaps the test set.
+- Fixes were written only from the test set failures. Every run now asks both sets in one batch: 400 questions, 5 runs.
+
+**Two corrections to the held-out answer key, before any fix was scored:**
+- "Serialised 1860" counted as a date because any capitalised word was accepted as a month. Real month names only now.
+- 3 Wikipedia boxes name the publisher inside the "Published" row: "17 August 1945 (Secker and Warburg, London, England)". The key said "none" there. The brain answered "Secker and Warburg", which was right.
+- Neither change touches the test set key.
+
+**The rules, set before scoring:**
+- A fix is kept only when, on held-out pages, it makes more items right than wrong. Right or wrong is the majority over 5 runs.
+- **Code fixes** change what happens after the brain writes. They are re-scored on the very same brain answers (`--rescore`), so there is no noise.
+- **Prompt and view fixes** change what the brain reads, so they need a new brain run. Their net held-out gain must beat the wobble between two runs with identical settings. That wobble was 3 test set items and 1 held-out item.
+- **New check, "perfect brain":** the answer key goes in as if a brain wrote it, and anything code spoils is a harness bug. Before this round, code spoiled 5 perfect answers: the snap step stretched "July 1890" into "July 1890 Lippincott's Monthly Magazine". After it, 0.
+
+**The fixes tried** (each compared to the same base; "test set" is where it was made from):
+
+| Fix | Kind | Test set | Held-out | Verdict |
+|---|---|---|---|---|
+| **date**: a date field holds one date | code | +1, 0 broken | **+5, 0 broken** | **kept** |
+| **ground**: a number must be on the page (digits, ×N or a number word); else none | code | +2, 0 broken | **+1, 0 broken** | **kept** |
+| **nostyle**: hide `<style>`/`<script>` from the brain (Wikipedia's infobox CSS was being shown, and its "padding:0" hid a made-up 0) | view, bug fix | +1, 0 broken | 0, 1 broken (wobble) | **kept** as a bug fix; 5% shorter Wikipedia prompts |
+| tail: finish a cut-short place ("Paris" → "Paris, France") | code | +2, 0 broken | 0, **1 broken** | dropped: it glued a date onto a held-out publisher |
+| once: "a piece without ×N appears once" | prompt | +2, 2 broken | +1, 1 broken | dropped: wobble only, the lone stars stayed wrong |
+| heading: "take names from headings, not descriptions" | prompt | +2, **6 broken** | 0, **3 broken** | dropped: it made names worse |
+
+**All kept fixes together** (`p3-nostyle-date-ground` against `p3-base`):
+
+| | Before | After | Gap (95% range) | Items fixed / broken |
+|---|---|---|---|---|
+| Test set | 94.2% | **96.5%** | +2.3 pts [+0.6, +4.4] | 4 / 0 |
+| **Held-out** | 94.9% | **97.5%** | **+2.5 pts [+0.3, +4.9]** | 6 / 1 (the 1 is wobble) |
+
+On held-out Wikipedia alone: 83% → 98%. The held-out gain's error bar stays above zero. McNemar p = 0.125: 6 items against 1 is too few for that test.
+
+**Of the 9 items from section 5:**
+- 3 are fixed and checked on new pages: both made-up page counts, and Moby-Dick's two dates.
+- books/09 is right in this run, but that is wobble.
+- 5 are still wrong, and the held-out pages show the same kinds again:
+
+| Still wrong | Test set | Held-out | Why a single-page fix can't do it |
+|---|---|---|---|
+| Name taken from the description, then stretched to the whole sentence | Dr. Seuss | Elie Wiesel, Jim Henson | The brain writes the real full name; the heading prompt made it worse |
+| Star counts | books/00 (reads the 5 icons), webscraper/06 and 08 | webscraper/02 and 04 (a lone star read as 5, now "none" since 5 isn't on the page) | 3 vs 5 are both "on the page" |
+| Place cut short | quotes/04, 09 | none | the tail fix broke a held-out publisher |
+| "335 + 355" pages | | Little Women | two volumes |
+
+**The next fix is a vote across pages, not a better single page.** On most pages of a site, the brain takes the name from the heading and the stars from the right spot. A recipe built from that majority (section 4: 100% on books) reads the minority pages correctly too. It can be checked the same way: built on test set pages, replayed on held-out pages.
+
+**Speed:** 3.95–4.16 pages/s in these 400-question runs (more questions keep all 53 brains busy). The fixes change it by no more than the wobble.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:
@@ -183,6 +236,11 @@ python -X utf8 bench/brains.py --np 1
 python -X utf8 bench/testset.py
 python -X utf8 bench/score.py --variant base --runs 5
 python -X utf8 bench/score.py --compare base rea-off
+python -X utf8 bench/testset.py --holdout --fetch
+python -X utf8 bench/score.py --perfect-brain
+python -X utf8 bench/score.py --variant p3-nostyle --runs 5
+python -X utf8 bench/score.py --rescore p3-nostyle p3-nostyle-date-ground
+python -X utf8 bench/score.py --compare p3-base p3-nostyle-date-ground
 ```
 
 The server command is recorded in each `bench/brains-*.json` (`server_cmd`).

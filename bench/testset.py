@@ -12,8 +12,12 @@ Sites (robots.txt checked 2026-10-21):
 
 Requests say honestly who is asking (no browser disguise, no fake referer), one every 2-3 s.
 
+A second, held-out set (--holdout) takes the next 10 pages of each site, never looked at while
+writing fixes, so a fix is checked on pages it wasn't made from (bench/cache/holdout, bench/holdout_truth.json).
+
 Run:  python -X utf8 bench/testset.py --fetch    (downloads, slowly)
       python -X utf8 bench/testset.py            (answers from the cache, plus 3 rows per site to check)
+      python -X utf8 bench/testset.py --holdout --fetch
 """
 import argparse, json, pathlib, random, re, sys, time
 from scrapling.fetchers import Fetcher
@@ -26,12 +30,15 @@ from brains import truth as books_truth  # noqa: E402
 ROOT = pathlib.Path(__file__).parent
 CACHE = ROOT / 'cache' / 'testset'
 TRUTH = ROOT / 'testset_truth.json'
+HOLDOUT, HOLDOUT_TRUTH = ROOT / 'cache' / 'holdout', ROOT / 'holdout_truth.json'
 PER_SITE = 10
 HEADERS = {'User-Agent': 'ErrandTestSet/0.1 (personal non-commercial test set; 10 pages per site, '
                          'one request every 2-3 s; python scrapling)'}
 WIKI_BOOKS = ['Pride_and_Prejudice', 'Nineteen_Eighty-Four', 'The_Hobbit', 'To_Kill_a_Mockingbird',
               'The_Great_Gatsby', 'Moby-Dick', 'Frankenstein', 'Dracula', 'The_Catcher_in_the_Rye',
               'Brave_New_World']
+WIKI_HOLDOUT = ['Jane_Eyre', 'Wuthering_Heights', 'Great_Expectations', 'The_Picture_of_Dorian_Gray', 'Animal_Farm',
+                'Lord_of_the_Flies', 'Of_Mice_and_Men', 'The_Grapes_of_Wrath', 'Fahrenheit_451', 'Little_Women']
 
 
 def get(url):
@@ -43,36 +50,43 @@ def get(url):
     return page, html
 
 
-def discover():
-    """The pages to fetch: 10 per site, found from each site's own listing pages."""
-    urls = {'books': None, 'wikipedia': [f'https://en.wikipedia.org/wiki/{t}' for t in WIKI_BOOKS]}
-    seen = []
-    for n in (1, 2):
+def discover(holdout=False):
+    """The pages to fetch: 10 per site, found from each site's own listing pages. The held-out set
+    takes the next 10 of each listing."""
+    skip = PER_SITE if holdout else 0
+    urls = {'books': None, 'wikipedia': [f'https://en.wikipedia.org/wiki/{t}' for t in (WIKI_HOLDOUT if holdout else WIKI_BOOKS)]}
+    seen, n = [], 1
+    while len(seen) < skip + PER_SITE:
         page, _ = get(f'https://quotes.toscrape.com/page/{n}/')
         for href in page.css('div.quote span a::attr(href)').getall():
             u = page.urljoin(href)
             if u not in seen:
                 seen.append(u)
-    urls['quotes'] = seen[:PER_SITE]
+        n += 1
+    urls['quotes'] = seen[skip:skip + PER_SITE]
     page, _ = get('https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops')
     links = [page.urljoin(h) for h in page.css('a.title::attr(href)').getall()]
-    urls['webscraper'] = [u for u in dict.fromkeys(links) if '/test-sites/e-commerce/allinone/product/' in u][:PER_SITE]
+    urls['webscraper'] = [u for u in dict.fromkeys(links) if '/test-sites/e-commerce/allinone/product/' in u][skip:skip + PER_SITE]
     return urls
 
 
-def fetch():
-    urls = discover()
+def fetch(holdout=False):
+    urls, cache = discover(holdout), HOLDOUT if holdout else CACHE
     for site, lst in urls.items():
-        out = CACHE / site
+        out = cache / site
         out.mkdir(parents=True, exist_ok=True)
         if site == 'books':  # already downloaded for the 105-page benchmark: take 10 spread-out pages
             src = sorted((ROOT / 'cache' / 'A').glob('*.html'))
-            picked = src[::len(src) // PER_SITE][:PER_SITE]
+            step = len(src) // PER_SITE
+            picked = src[step // 2 if holdout else 0::step][:PER_SITE]
             for k, p in enumerate(picked):
                 (out / f'{k:02d}.html').write_text(p.read_text(encoding='utf-8'), encoding='utf-8')
             lst = [p.name for p in picked]
         else:
             assert len(lst) == PER_SITE, f'{site}: found {len(lst)} pages, want {PER_SITE}'
+            if holdout:
+                used = json.loads((CACHE / site / 'urls.json').read_text(encoding='utf-8'))
+                assert not set(lst) & set(used), f'{site}: held-out pages overlap the test set'
             for k, u in enumerate(lst):
                 _, html = get(u)
                 (out / f'{k:02d}.html').write_text(html, encoding='utf-8')
@@ -81,7 +95,9 @@ def fetch():
 
 
 # ---- the hand-written answer recipes, one per site (None = the page truly has no such field) ----
-DATE = re.compile(r'\d{1,2} [A-Z][a-z]+ \d{4}|[A-Z][a-z]+ \d{1,2}, \d{4}|[A-Z][a-z]+ \d{4}')
+MONTH = '(?:January|February|March|April|May|June|July|August|September|October|November|December)'
+# real month names only ("Serialised 1860" is not a date), then ISO dates, then a bare year
+DATE = re.compile(rf'\d{{1,2}} {MONTH} \d{{4}}|{MONTH} \d{{1,2}}, \d{{4}}|{MONTH} \d{{4}}|\d{{4}}-\d{{2}}-\d{{2}}|\d{{4}}')
 
 
 def clean(t):
@@ -118,11 +134,13 @@ def wikipedia(s):
         if th and td:
             rows.setdefault(th[0].get_all_text(separator=' ', strip=True), td[0].get_all_text(separator=' ', strip=True))
     pick = lambda *labels: next((clean(v) for k, v in rows.items() if k in labels), None)
-    pages = pick('Pages')
+    pages, published, publisher = pick('Pages'), pick('Publication date', 'Published'), pick('Publisher')
+    if publisher is None and published:  # some boxes name it in "Published": "17 August 1945 ( Secker and Warburg , London, England)"
+        rest = re.sub(r'[()]', ' ', DATE.sub('', published, count=1))
+        publisher = clean(rest.split(',')[0])
     return {'title': clean(box.css('caption').first.get_all_text(strip=True) if box.css('caption') else
                            box.css('.infobox-title').first.get_all_text(strip=True)),
-            'author': pick('Author'), 'publisher': pick('Publisher'),
-            'published': first_date(pick('Publication date', 'Published')),
+            'author': pick('Author'), 'publisher': publisher, 'published': first_date(published),
             'pages': int(re.search(r'\d[\d,]*', pages).group().replace(',', '')) if pages else None,
             'oclc': pick('OCLC')}  # none of these classics shows an ISBN; 6 of 10 show an OCLC number
 
@@ -131,10 +149,10 @@ RECIPES = {'books': lambda s: books_truth(str(s.html_content)), 'quotes': quotes
            'wikipedia': wikipedia}
 
 
-def build():
+def build(holdout=False):
     out = {}
     for site, recipe in RECIPES.items():
-        d = CACHE / site
+        d = (HOLDOUT if holdout else CACHE) / site
         urls = json.loads((d / 'urls.json').read_text(encoding='utf-8'))
         rows = []
         for k in range(PER_SITE):
@@ -146,23 +164,28 @@ def build():
         for f in rows[0]['answers']:
             vals = [r['answers'][f] for r in rows]
             assert any(v not in (None, '') for v in vals), f'{site}.{f} is empty on every page: recipe is broken'
-    TRUTH.write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
+    if holdout:
+        used = json.loads((CACHE / 'books' / 'urls.json').read_text(encoding='utf-8'))
+        assert not {r['url'] for r in out['books']} & set(used), 'books: held-out pages overlap the test set'
+    (HOLDOUT_TRUTH if holdout else TRUTH).write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
     return out
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--fetch', action='store_true')
-    if ap.parse_args().fetch:
-        fetch()
-    out = build()
+    ap.add_argument('--holdout', action='store_true')
+    a = ap.parse_args()
+    if a.fetch:
+        fetch(a.holdout)
+    out = build(a.holdout)
     for site, rows in out.items():
         empty = {f: sum(r['answers'][f] in (None, '') for r in rows) for f in rows[0]['answers']}
         print(f'\n== {site}: {len(rows)} pages · fields with "none" answers: {({f: n for f, n in empty.items() if n})}')
         for r in rows[:3]:  # 3 rows per site for you to check against the real page
             print(' ', r['url'])
             print('   ', json.dumps(r['answers'], ensure_ascii=False))
-    print(f'\nanswers -> {TRUTH}')
+    print(f'\nanswers -> {HOLDOUT_TRUTH if a.holdout else TRUTH}')
 
 
 if __name__ == '__main__':

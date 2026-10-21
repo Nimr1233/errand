@@ -1,4 +1,4 @@
-"""The scoreboard and guard (harness tuner, phase 1). Runs the brains on the frozen 4-site test set
+"""The scoreboard and guard (harness tuner). Runs the brains on the frozen 4-site test set
 (bench/testset_truth.json, pages saved in bench/cache/testset) several times in one mixed batch and
 scores every site with honest error bars.
 
@@ -15,18 +15,29 @@ Variants (A/B tests of server and answer settings) write bench/score-<variant>.j
   ctxcp4   -ctxcp 4, so the shared start of the prompt can stay cached
   noschema plain JSON answers parsed by code, no grammar (the grammar halves decode speed)
 
+Phase 3, the fix loop: runs also ask the held-out pages (bench/holdout_truth.json, made by
+testset.py --holdout), which were never looked at while writing fixes. A fix is kept only when, on
+the held-out pages, it makes more items right than it makes wrong (majority over the runs).
+  prompt and view fixes change what the brain reads, so they need a new brain run, and their held-out gain
+               must beat the wobble between two runs of the same settings (p3-base vs p3-base2)
+  post fixes   change what code does with the brain's written answer, so they are re-scored on the
+               very same answers (--rescore): no brain noise at all
+
 Run:  python -X utf8 bench/score.py --variant base --runs 5
       python -X utf8 bench/score.py --compare base rea-off
+      python -X utf8 bench/score.py --rescore p3-base p3-tail
 """
 import argparse, json, math, pathlib, random, re, statistics, sys, time
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import brains as b  # noqa: E402
+from testset import first_date  # noqa: E402
 
 ROOT = pathlib.Path(__file__).parent
-CACHE = ROOT / 'cache' / 'testset'
-TRUTH = json.loads((ROOT / 'testset_truth.json').read_text(encoding='utf-8'))
+SETS = {'testset': ROOT / 'cache' / 'testset', 'holdout': ROOT / 'cache' / 'holdout'}
+TRUTHS = {s: json.loads((ROOT / f'{s}_truth.json').read_text(encoding='utf-8')) for s in SETS
+          if (ROOT / f'{s}_truth.json').exists()}
 FOCUS = {'books': 'article.product_page', 'quotes': 'div.author-details', 'webscraper': 'div.thumbnail',
          'wikipedia': 'table.infobox'}  # each site's main block; a real engine finds this itself
 FIELDS = {  # what each field is, in the words the brain reads
@@ -42,18 +53,30 @@ FIELDS = {  # what each field is, in the words the brain reads
                   'publisher': 'the publisher as written', 'published': 'the first publication date as written',
                   'pages': 'integer page count', 'oclc': 'the OCLC number'}}
 NUMBERS = {'availability', 'rating', 'reviews', 'pages'}
+DATES = {'born_date', 'published'}
+PROMPT_FIXES = {  # written from the testset failures only
+    'once': 'A piece without ×N appears once.',  # webscraper/06: one star icon read as 5
+    'heading': 'Take names and titles from headings and short labelled pieces, not from long description text.'}  # quotes/09
+VIEW_FIXES = {'nostyle': ('style', 'script', 'noscript')}  # bug: Wikipedia's infobox CSS was shown to the brain
+POST_FIXES = {'tail', 'ground', 'date'}  # see finish()
 OLD = [f for f in b.FLAGS if f not in ('-rea', 'off')] + ['--reasoning-budget', '0']  # before phase 1
-VARIANTS = {
-    'base': (OLD, True),
-    'rea-off': (b.FLAGS, True),
-    'ctxcp4': ([('4' if f == '2' and OLD[i - 1] == '-ctxcp' else f) for i, f in enumerate(OLD)], True),
-    'noschema': (OLD, False)}
+VARIANTS = {  # name: (server flags, answer form on, fixes)
+    'base': (OLD, True, ()),
+    'rea-off': (b.FLAGS, True, ()),
+    'ctxcp4': ([('4' if f == '2' and OLD[i - 1] == '-ctxcp' else f) for i, f in enumerate(OLD)], True, ()),
+    'noschema': (OLD, False, ()),
+    # phase 3: today's settings on both sets, a second run of the same to measure wobble, then one fix each
+    'p3-base': (b.FLAGS, True, ()), 'p3-base2': (b.FLAGS, True, ()),
+    **{f'p3-{f}': (b.FLAGS, True, (f,)) for f in [*PROMPT_FIXES, *VIEW_FIXES, *sorted(POST_FIXES)]},
+    'p3-nostyle-date': (b.FLAGS, True, ('nostyle', 'date')),
+    'p3-nostyle-date-ground': (b.FLAGS, True, ('nostyle', 'date', 'ground'))}  # round 1's winner: start round 2 here
 
 
-def system_prompt(site):
+def system_prompt(site, fixes=()):
     keys = ', '.join(f'"{k}" ({v})' for k, v in FIELDS[site].items())
+    extra = ''.join(f' {PROMPT_FIXES[f]}' for f in fixes if f in PROMPT_FIXES)
     return ('You read one web page, shown as numbered lines: [number] tag labels: text. A repeated empty piece '
-            f'ends in ×N, the number of copies. Output ONE JSON object with exactly these keys: {keys}. '
+            f'ends in ×N, the number of copies.{extra} Output ONE JSON object with exactly these keys: {keys}. '
             'Copy text exactly as written on the page. Use null only when the page truly does not show it.')
 
 
@@ -62,16 +85,64 @@ def schema(site):
             'properties': {k: {'type': ['integer' if k in NUMBERS else 'string', 'null']} for k in FIELDS[site]}}
 
 
-def snap_text(value, els):
+TAIL = re.compile(r'(?:,\s*[^,.;:()\[\]]+)+')  # ", South Gloucestershire, England" up to the piece's end
+
+
+def snap_text(value, els, fixes=()):
     """Copy a whole page piece only when the brain's answer is how that piece starts (a cut-short
     title comes back whole). Otherwise keep the brain's words: on quotes one line holds both the
-    birth date and the place, and copying the line would spoil both."""
+    birth date and the place, and copying the line would spoil both.
+    'tail' fix: an answer found inside a piece and followed only by a comma list to the piece's end
+    ("Paris" in "Born: November 22, 1869 in Paris, France") comes back with that list."""
     v = re.sub(r'\s+', ' ', str(value)).strip().casefold()
-    for el in els:
-        t = re.sub(r'\s*\[\s*\w+\s*\]', '', b.piece_text(el))  # footnote marks like [ 1 ] are never data
+    pieces = [re.sub(r'\s*\[\s*\w+\s*\]', '', b.piece_text(el)) for el in els]  # footnote marks like [ 1 ] are never data
+    for t in pieces:
         if v and t.casefold().startswith(v):
             return t
+    if 'tail' in fixes and v:
+        for t in pieces:
+            for m in re.finditer(rf'(?<!\w){re.escape(v)}(?!\w)', t.casefold()):
+                if TAIL.fullmatch(t[m.end():]):
+                    return t[m.start():]
     return value
+
+
+def on_page(n, view):
+    """'ground' fix: a number answer must be shown on the page, as digits, a ×N count or a number
+    word in a label. Line numbers don't count."""
+    if n == 1:  # shortcut: a lone icon means 1 but shows no number, so 1 always passes; a made-up 1 slips through
+        return True
+    text = re.sub(r'^\[\d+\] ', '', view, flags=re.M)
+    words = [w for w, v in b.STARS.items() if v == n]
+    return bool(re.search(rf'(?<![\d.,]){n}(?!\d|[.,]\d)', text) or any(re.search(rf'\b{w}\b', text) for w in words))
+
+
+def finish(site, written, view, els, fixes=()):
+    """Code's part after the brain writes: snap text to its page piece, plus any post fixes."""
+    out = {}
+    for f, v in (written or {}).items():
+        if f not in FIELDS[site]:
+            continue
+        if f in NUMBERS:
+            if 'ground' in fixes and v is not None and not (isinstance(v, int) and on_page(v, view)):
+                v = None
+        elif isinstance(v, str):
+            v = snap_text(v, els, fixes)
+            if 'date' in fixes and f in DATES:  # a date field holds one date: Moby-Dick lists the UK and US dates
+                v = first_date(v)
+        out[f] = v
+    return out
+
+
+def perfect_brain(fixes=()):
+    """Feed the answer key in as if a brain wrote it: every item code's part spoils is a harness bug."""
+    lost = []
+    for s, truth in TRUTHS.items():
+        for site, rows in truth.items():
+            for k, r in enumerate(rows):
+                got = finish(site, r['answers'], *page_view(s, site, k, fixes), fixes)
+                lost += [f'{s} {site}/{k:02d} {f}' for f, t in r['answers'].items() if not correct(f, got[f], t)]
+    return lost
 
 
 def norm(v):  # case, spacing and a leading "in " don't count
@@ -91,18 +162,21 @@ def correct(field, answer, truth):
     return norm(answer) == norm(truth)
 
 
-def ask(site, k, use_schema):
-    html = (CACHE / site / f'{k:02d}.html').read_text(encoding='utf-8')
-    view, els = b.numbered_view(html, focus=FOCUS[site])
+def page_view(set_, site, k, fixes=()):
+    skip = tuple(t for f in fixes for t in VIEW_FIXES.get(f, ()))
+    return b.numbered_view((SETS[set_] / site / f'{k:02d}.html').read_text(encoding='utf-8'), focus=FOCUS[site], skip=skip)
+
+
+def ask(set_, site, k, use_schema, fixes=()):
+    view, els = page_view(set_, site, k, fixes)
     extra = {'response_format': {'type': 'json_schema', 'json_schema': {'schema': schema(site)}}} if use_schema else {}
-    data, secs = b.chat(system_prompt(site), view, max_tokens=300, **extra)
+    data, secs = b.chat(system_prompt(site, fixes), view, max_tokens=300, **extra)
     content = data['choices'][0]['message'].get('content') or ''
     written = b.last_json(content)
-    answers = {f: (snap_text(v, els) if f not in NUMBERS and isinstance(v, str) else v)
-               for f, v in (written or {}).items() if f in FIELDS[site]}
     t = data.get('timings', {})
-    return {'site': site, 'page': k, 'seconds': round(secs, 2), 'valid_json': written is not None,
-            'thinking_leak': '<think>' in content, 'answers': answers, 'raw': content[:400],
+    return {'set': set_, 'site': site, 'page': k, 'seconds': round(secs, 2), 'valid_json': written is not None,
+            'thinking_leak': '<think>' in content, 'written': written,
+            'answers': finish(site, written, view, els, fixes), 'raw': content[:400],
             'prompt_tokens': t.get('prompt_n'), 'cached_tokens': t.get('cache_n'), 'gen_tokens': t.get('predicted_n')}
 
 
@@ -114,8 +188,9 @@ def bootstrap(pages, draws=2000, seed=0):
     return accs[int(draws * 0.025)], accs[int(draws * 0.975)]
 
 
-def summarize(rows, runs):
-    """Per item: how often right over the runs. Per site: accuracy, page-bootstrap interval, wobble."""
+def summarize(rows, runs, TRUTH):
+    """Per item: how often right over the runs. Per site: accuracy, page-bootstrap interval, wobble.
+    `rows` and `TRUTH` belong to one set."""
     items = {}
     for r in rows:
         truth = TRUTH[r['site']][r['page']]['answers']
@@ -149,36 +224,70 @@ def summarize(rows, runs):
     return out, wrong, items
 
 
+def of_set(rows, s):
+    return [r for r in rows if r.get('set', 'testset') == s]  # runs from before phase 3 hold the testset only
+
+
+def report(rows, runs):
+    out = {}
+    for s, truth in TRUTHS.items():
+        if of_set(rows, s):
+            scores, wrong, _ = summarize(of_set(rows, s), runs, truth)
+            out[s] = {'scores': scores, 'wrong_most_runs': wrong}
+    return out
+
+
 def run(variant, runs, np_=53):
-    flags, use_schema = VARIANTS[variant]
-    jobs = [(site, k) for _ in range(runs) for site in TRUTH for k in range(len(TRUTH[site]))]
+    flags, use_schema, fixes = VARIANTS[variant]
+    jobs = [(s, site, k) for _ in range(runs) for s, truth in TRUTHS.items() for site in truth for k in range(len(truth[site]))]
     with open(ROOT / f'server-score-{variant}.log', 'w') as log:
         proc, cmd = b.start_server(np_, 4096, log, flags)
         try:
             t = time.perf_counter()
             with ThreadPoolExecutor(np_) as pool:
-                rows = list(pool.map(lambda j: ask(j[0], j[1], use_schema), jobs))
+                rows = list(pool.map(lambda j: ask(*j, use_schema, fixes), jobs))
             wall = time.perf_counter() - t
         finally:
             proc.terminate(); proc.wait(30)
-    scores, wrong, _ = summarize(rows, runs)
     speed = {'pages_per_second': round(len(rows) / wall, 2), 'wall_seconds': round(wall, 1),
              'valid_json': sum(r['valid_json'] for r in rows) / len(rows),
              'thinking_leaks': sum(r['thinking_leak'] for r in rows),
              'mean_prompt_tokens': round(statistics.mean(r['prompt_tokens'] or 0 for r in rows)),
              'mean_cached_tokens': round(statistics.mean(r['cached_tokens'] or 0 for r in rows), 1),
              'latency_p50': sorted(r['seconds'] for r in rows)[len(rows) // 2]}
-    out = {'variant': variant, 'runs': runs, 'server_cmd': ' '.join(cmd), 'scores': scores, 'speed': speed,
-           'wrong_most_runs': wrong, 'rows': rows}
+    out = {'variant': variant, 'runs': runs, 'server_cmd': ' '.join(cmd), 'fixes': list(fixes),
+           'sets': report(rows, runs), 'speed': speed, 'rows': rows}
     (ROOT / f'score-{variant}.json').write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
     return out
 
 
+def rescore(src, dst):
+    """A post fix, scored on the very same written answers as `src`: no new brain run, no brain noise."""
+    (fa, sa, xa), (fb, sb, xb) = VARIANTS[src], VARIANTS[dst]
+    assert (fa, sa) == (fb, sb) and set(xa) - POST_FIXES == set(xb) - POST_FIXES, 'only post fixes may differ'
+    A = json.loads((ROOT / f'score-{src}.json').read_text(encoding='utf-8'))
+    views, rows = {}, []
+    for r in A['rows']:
+        key = (r['set'], r['site'], r['page'])
+        if key not in views:
+            views[key] = page_view(*key, xb)
+        rows.append({**r, 'answers': finish(r['site'], r['written'], *views[key], xb)})
+    out = {**A, 'variant': dst, 'fixes': list(xb), 'rescored_from': src, 'sets': report(rows, A['runs']), 'rows': rows}
+    (ROOT / f'score-{dst}.json').write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
+    return out
+
+
 def compare(a, b_):
-    """Paired on the same items: majority-vote right/wrong per item, exact McNemar, page-bootstrap gap."""
+    """Per set, paired on the same items: majority-vote right/wrong per item, exact McNemar, page-bootstrap gap."""
     A, B = (json.loads((ROOT / f'score-{v}.json').read_text(encoding='utf-8')) for v in (a, b_))
-    _, _, ia = summarize(A['rows'], A['runs'])
-    _, _, ib = summarize(B['rows'], B['runs'])
+    out = {s: compare_set(of_set(A['rows'], s), A['runs'], of_set(B['rows'], s), B['runs'], truth)
+           for s, truth in TRUTHS.items() if of_set(A['rows'], s) and of_set(B['rows'], s)}
+    return {'a': a, 'b': b_, **out, 'speed_a': A['speed']['pages_per_second'], 'speed_b': B['speed']['pages_per_second']}
+
+
+def compare_set(rows_a, runs_a, rows_b, runs_b, truth):
+    sa, _, ia = summarize(rows_a, runs_a, truth)
+    sb, _, ib = summarize(rows_b, runs_b, truth)
     maj = lambda v: sum(v) * 2 > len(v)
     only_a = sum(maj(ia[k]) and not maj(ib[k]) for k in ia)
     only_b = sum(maj(ib[k]) and not maj(ia[k]) for k in ia)
@@ -189,10 +298,12 @@ def compare(a, b_):
              sum(1 for x in ia if x[:2] == pg)) for pg in pages]
     rng = random.Random(1)
     draws = sorted(sum(d for d, _ in s) / sum(c for _, c in s) for s in ([rng.choice(diff) for _ in diff] for _ in range(2000)))
-    return {'a': a, 'b': b_, 'accuracy_a': A['scores']['all']['accuracy'], 'accuracy_b': B['scores']['all']['accuracy'],
+    flips = lambda right_in_a: sorted(f'{s}/{pg:02d} {f}' for (s, pg, f), v in ia.items()
+                                      if maj(v) == right_in_a and maj(ib[(s, pg, f)]) != right_in_a)
+    return {'accuracy_a': sa['all']['accuracy'], 'accuracy_b': sb['all']['accuracy'],
             'gap_b_minus_a': round(sum(d for d, _ in diff) / sum(c for _, c in diff), 3),
             'gap_ci95': [round(draws[50], 3), round(draws[1949], 3)], 'right_only_in_a': only_a, 'right_only_in_b': only_b,
-            'mcnemar_p': round(p, 4), 'speed_a': A['speed']['pages_per_second'], 'speed_b': B['speed']['pages_per_second']}
+            'mcnemar_p': round(p, 4), 'fixed': flips(False), 'broken': flips(True)}
 
 
 def main():
@@ -200,15 +311,24 @@ def main():
     ap.add_argument('--variant', choices=list(VARIANTS))
     ap.add_argument('--runs', type=int, default=5)
     ap.add_argument('--compare', nargs=2, metavar=('A', 'B'))
+    ap.add_argument('--rescore', nargs=2, metavar=('FROM', 'TO'))
+    ap.add_argument('--perfect-brain', action='store_true', help='how many right answers code spoils, per fix')
     a = ap.parse_args()
+    if a.perfect_brain:
+        for fixes in [(), *[(f,) for f in sorted(POST_FIXES)], tuple(sorted(POST_FIXES))]:
+            lost = perfect_brain(fixes)
+            print(f"{'+'.join(fixes) or 'no fixes'}: a perfect brain loses {len(lost)}", lost)
+        return
     if a.compare:
         print(json.dumps(compare(*a.compare), indent=1))
         return
-    out = run(a.variant, a.runs)
-    print(json.dumps({k: out[k] for k in ('variant', 'scores', 'speed')}, indent=1, ensure_ascii=False))
-    print(f"wrong in most runs: {len(out['wrong_most_runs'])} items")
-    for w in out['wrong_most_runs']:
-        print(' ', json.dumps(w, ensure_ascii=False)[:220])
+    out = rescore(*a.rescore) if a.rescore else run(a.variant, a.runs)
+    print(json.dumps({'variant': out['variant'], 'speed': out['speed']}, ensure_ascii=False))
+    for s, rep in out['sets'].items():
+        print(f'== {s}:', json.dumps({k: v['accuracy'] for k, v in rep['scores'].items()}))
+        print(f"   wrong in most runs: {len(rep['wrong_most_runs'])} items")
+        for w in rep['wrong_most_runs']:
+            print('  ', json.dumps(w, ensure_ascii=False)[:220])
 
 
 if __name__ == '__main__':

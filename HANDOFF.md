@@ -266,7 +266,13 @@ From `reports/Full feature free Errand plan.md`:
   - phase 2: clicking
   - phase 3: a failure-fix loop with Claude, then a one-knob tuner, then a 4B fallback
   - cut: successive halving, few-shot examples, voting, quant search
-- **Next:** phase 2 or phase 3 need the user's go-ahead. Phase 3's first list is the 9 items still wrong, in `bench/results.md` section 5.
+- **Phase 3 round 1, the fix loop** (`bench/results.md` section 6), done at the user's request:
+  - A held-out set of 40 new pages (`testset.py --holdout`), never looked at while writing fixes.
+  - Each fix is kept only if, on held-out pages, it makes more items right than wrong.
+  - Kept: one date per date field, a number must be on the page, and hide CSS from the brain (a bug).
+  - Dropped: tail, once, heading.
+  - Result: held-out 94.9% → 97.5%, test set 94.2% → 96.5%. Round 1's winning variant is `p3-nostyle-date-ground`; start the next round from it.
+- **Next (needs the user's go-ahead):** round 2, a vote across pages (recipes for all 4 sites), for the names and star counts. Or phase 2, clicking.
 
 **Known limits (marked `shortcut:` in the code where it applies):**
 - With two pages open at once, both answer the terminal's live queries (Claude Code would get each answer twice). One room tab is fine.

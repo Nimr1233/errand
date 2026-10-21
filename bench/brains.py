@@ -106,16 +106,20 @@ def piece_text(el):
     return own_text(el)
 
 
-def numbered_view(html, width=120, focus='article.product_page', limit=9000):
+def numbered_view(html, width=120, focus='article.product_page', limit=9000, skip=()):
     """One numbered line per page piece that holds text or a label, inside the page's main block
     (`focus`). Containers whose text lives in their children are skipped. A run of identical
     empty pieces, like star icons, becomes one line ending in ×N: code counts, not the brain.
+    `skip`: tags never shown, like style and script (Wikipedia puts CSS inside its infobox).
     Returns (the text a brain reads, the elements in line order)."""
     s = Selector(html)
     block = s.css(focus) if focus else None
     els, lines, last, inside = [], [], None, set()
     for el in (block[0] if block else s).css('*'):
         if id(el._root) in inside:  # part of an inline piece already shown whole
+            continue
+        if el.tag in skip:
+            inside.update(id(d) for d in el._root.iterdescendants())
             continue
         own = piece_text(el)
         if inline_only(el):
