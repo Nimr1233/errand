@@ -18,6 +18,8 @@ create table if not exists recipes (kind text, field text, field_kind text, read
     learned text, job int, primary key (kind, field, field_kind));
 create table if not exists clicks (kind text, step text, name text, learned text, primary key (kind, step));
 create table if not exists skills (name text primary key, description text, fields text, steps text, saved text);
+create table if not exists schedules (id integer primary key, skill text, urls text, every text, vals text,
+    next_run text, last_run text);
 '''
 
 
@@ -89,6 +91,24 @@ class Store:
 
     def skill(self, name):
         return next((k for k in self.skills() if k['name'] == name), None)
+
+    def add_schedule(self, skill, urls, every, values, next_run):
+        with self.lock, self.db:
+            return self.db.execute('insert into schedules (skill, urls, every, vals, next_run) values (?, ?, ?, ?, ?)',
+                                   (skill, json.dumps(urls), every, json.dumps(values), next_run)).lastrowid
+
+    def schedules(self):
+        with self.lock:
+            return [{'id': i, 'skill': k, 'urls': json.loads(u), 'every': e, 'values': json.loads(v), 'next_run': n, 'last_run': lr}
+                    for i, k, u, e, v, n, lr in self.db.execute('select * from schedules order by next_run')]
+
+    def mark_run(self, sid, last_run, next_run):
+        with self.lock, self.db:
+            self.db.execute('update schedules set last_run=?, next_run=? where id=?', (last_run, next_run, sid))
+
+    def remove_schedule(self, sid):
+        with self.lock, self.db:
+            return self.db.execute('delete from schedules where id=?', (sid,)).rowcount > 0
 
     def cache_page(self, url, html):
         try:

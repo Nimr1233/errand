@@ -295,6 +295,29 @@ def run_skill(name: str, urls: list[str], values: dict[str, str] | None = None) 
 
 
 @tool
+def schedule_skill(skill: str, urls: list[str], every: str, values: dict[str, str] | None = None) -> str:
+    """Run a saved skill on these links on a schedule while Errand runs: `every` is "every 6 hours",
+    "hourly" or "daily 09:00". A run missed while the laptop was off happens once when Errand starts."""
+    r = _call('POST', '/api/schedules', json={'skill': skill, 'urls': urls, 'every': every, 'values': values or {}})
+    return f"Scheduled '{skill}' {every} as schedule #{r['id']}."
+
+
+@tool
+def list_schedules() -> str:
+    """Every schedule: which skill, how often, how many links, and when it runs next."""
+    ss = _call('GET', '/api/schedules')
+    return '\n'.join(f"#{s['id']} '{s['skill']}' {s['every']} · {len(s['urls'])} links · next {s['next_run']}"
+                     + (f" · last {s['last_run']}" if s['last_run'] else '') for s in ss) or 'No schedules.'
+
+
+@tool
+def remove_schedule(schedule: int) -> str:
+    """Stop a schedule by its number."""
+    _call('DELETE', f'/api/schedules/{schedule}')
+    return f'Schedule #{schedule} removed.'
+
+
+@tool
 def get_updates(since: int | None = None) -> str:
     """Agent updates after update number `since` (the newest 50 if left out), oldest first."""
     ups = _call('GET', '/api/updates', params={'since': since} if since is not None else None)

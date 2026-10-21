@@ -331,6 +331,10 @@ From `reports/Full feature free Errand plan.md`:
   - **Pace:** one message a second, status only.
   - **Tests:** 3, against a stand-in Bot API.
   - **Not live yet:** the user hasn't made a bot.
+- **Piece 8, schedules** (`errand/schedule.py`):
+  - **What runs:** saved skills run on their links "every N hours", "hourly" or "daily HH:MM", checked every 30 s while Errand runs. A missed run happens once on start, and a due run waits while a job runs.
+  - **Where:** stored in SQLite; API `/api/schedules`; connector `schedule_skill`, `list_schedules`, `remove_schedule` (18 tools).
+  - **Windows start-up:** `python -m errand autostart` prints the `schtasks` command for the user to run; Errand changes no Windows setting.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
@@ -339,7 +343,7 @@ From `reports/Full feature free Errand plan.md`:
   5. checker (measured, dropped), fixer and huddles (done)
   6. safe clicking, record and replay (done)
   7. Telegram (done; needs the user's bot token)
-  8. schedules
+  8. schedules (done)
   9. phone over Tailscale
   10. Cloudflare inbox and website helper
   11. Sheets, Slack and Notion

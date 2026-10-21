@@ -17,6 +17,7 @@ from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket
 from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 
 from . import demo, engine as real
+from .schedule import Scheduler
 from .telegram import Telegram
 
 PORT = 8765
@@ -28,6 +29,7 @@ ROOM = pathlib.Path(__file__).with_name('static') / 'room.html'
 TOKEN = secrets.token_urlsafe(32)
 DEMO = os.environ.get('ERRAND_DEMO') == '1'
 engine = demo.DemoEngine() if DEMO else real.Engine(server_log=pathlib.Path.home() / '.errand' / 'llama-server.log')
+scheduler = None if DEMO else Scheduler(engine, engine.store)
 clients = set()
 
 
@@ -62,6 +64,8 @@ async def lifespan(app):
         engine.fast_forward(612, problems=2, huddles=1)  # demo: open mid-job with problems, like the mockup
     task = asyncio.create_task(clock())
     bot = Telegram(engine).start()  # does nothing until you give it a bot token (errand/telegram.py)
+    if scheduler:
+        scheduler.start()
     yield
     bot.stop.set()
     task.cancel()
@@ -177,6 +181,28 @@ def start_job(body: dict = Body(...)):
                                 bool(body.get('private')), body.get('steps'))
     except ValueError as e:
         raise HTTPException(400, str(e))
+
+
+@app.get('/api/schedules', dependencies=[api])
+def schedules():
+    return [] if DEMO else engine.store.schedules()
+
+
+@app.post('/api/schedules', dependencies=[api])
+def add_schedule(body: dict = Body(...)):
+    if DEMO:
+        raise HTTPException(400, 'schedules need the real engine')
+    try:
+        return {'id': scheduler.add(str(body.get('skill') or ''), body.get('urls'), str(body.get('every') or ''), body.get('values'))}
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.delete('/api/schedules/{sid}', dependencies=[api])
+def remove_schedule(sid: int):
+    if DEMO or not engine.store.remove_schedule(sid):
+        raise HTTPException(404, f'no schedule #{sid}')
+    return {'ok': True}
 
 
 @app.get('/api/skills', dependencies=[api])

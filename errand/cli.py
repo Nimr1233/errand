@@ -1,11 +1,11 @@
-"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram."""
+"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram | autostart."""
 import argparse
 import asyncio
 import pathlib
 import sys
 
 LOOK_ONLY = ('job_status', 'list_agents', 'agent_detail', 'get_updates', 'list_problems', 'problem_detail', 'past_jobs',
-             'list_skills')
+             'list_skills', 'list_schedules')
 
 
 def start(demo=False):
@@ -58,10 +58,10 @@ def login():
 
 def main(argv=None):
     p = argparse.ArgumentParser(prog='errand', description='Errand: 53 free browser agents on this laptop.')
-    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram'],
+    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram', 'autostart'],
                    help='start: run mission control · mcp: the Claude Code connector · setup: how to connect it'
                         ' · login: log in to Claude Code here · gemini: check your Gemini key'
-                        ' · telegram: pair your Telegram bot')
+                        ' · telegram: pair your Telegram bot · autostart: how to start Errand with Windows')
     p.add_argument('--demo', action='store_true', help='start: fake agents instead of the real engine')
     a = p.parse_args(argv)
     cmd = a.command
@@ -71,6 +71,9 @@ def main(argv=None):
         setup()
     elif cmd == 'login':
         login()
+    elif cmd == 'autostart':
+        from .schedule import autostart_commands
+        print(autostart_commands())
     elif cmd == 'telegram':
         from .telegram import pairing_code
         print(pairing_code())
