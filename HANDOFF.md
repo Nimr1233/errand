@@ -346,6 +346,11 @@ From `reports/Full feature free Errand plan.md`:
   - **Helper Worker:** a chat box for the user's site via Gemini 3.5 Flash-Lite with the key as a Worker secret. It is hidden in the EU/EEA, UK and Switzerland, carries an 18+ and Google-reviewers notice, only answers the user's own site, and has a daily cap.
   - **Setup:** `python -m errand inbox` makes the secret and prints the wrangler steps.
   - **Tests:** `tests/test_cloud.py` runs both Workers under Node with stand-ins.
+- **Piece 11, exports** (`errand/exports.py`):
+  - **What is sent:** when a job finishes, a Slack summary (incoming webhook) and a Notion page with the first 100 rows as a table. Private jobs send only the summary.
+  - **Settings:** `~/.errand/exports.json`; `python -m errand exports` says how to get them.
+  - **Not built:** Google Sheets (it needs the user's own OAuth client; the CSV opens in Sheets).
+  - **Tests:** 3, with stand-ins.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
@@ -357,7 +362,7 @@ From `reports/Full feature free Errand plan.md`:
   8. schedules (done)
   9. phone over Tailscale (done; needs Tailscale installed)
   10. Cloudflare inbox and website helper (done; needs the user's Cloudflare account to deploy)
-  11. Sheets, Slack and Notion
+  11. Slack and Notion (done; Sheets left out)
   12. "For You"
 - **Next (needs the user's go-ahead):**
   - the stealth and JavaScript browser steps, and the windows

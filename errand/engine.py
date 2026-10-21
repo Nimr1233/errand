@@ -29,7 +29,7 @@ No checker brain: measured, it broke more answers than it fixed (bench/results.m
 import csv, pathlib, re, threading, time, urllib.parse
 from collections import deque
 
-from . import clicks, extract as x, memory
+from . import clicks, exports, extract as x, memory
 from .gemini import Gemini
 from .store import Store
 from .brains import URL as BRAIN_URL, BrainServer
@@ -595,6 +595,8 @@ class Engine:
                                     f'{self.by_code} read by code · results: {self.out}')
             self.store.finish_job(self.job_id, self.rows, done=self.done, blocked=self.blocked, by_code=self.by_code,
                                   brain_calls=self.brain_calls, gemini_calls=self.gemini_calls, results=self.out)
+            exports.send_later(self, self.job, {'done': self.done, 'blocked': self.blocked, 'by_code': self.by_code,
+                                                'results': self.out}, list(self.fields), dict(self.rows), self.private)
             if self.remember:  # the chief's memory (gbrain): what ran, which sites blocked, where results are
                 memory.save_job(self.job, time.strftime('%Y-%m-%d %H:%M'), self.done, list(self.fields),
                                 self.by_code, self.brain_calls, self.out, dict(self.rows))

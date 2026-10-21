@@ -16,6 +16,8 @@ def no_real_memory_or_gemini(monkeypatch, tmp_path):
     monkeypatch.setattr(phone, 'FILE', tmp_path / 'phone.json')  # never touches your real phone PIN
     from errand import inbox
     monkeypatch.setattr(inbox, 'CONFIG', tmp_path / 'inbox.json')  # or your inbox secret
+    from errand import exports
+    monkeypatch.setattr(exports, 'CONFIG', tmp_path / 'exports.json')  # or posts to your Slack and Notion
     for name in ('TOKEN_FILE', 'CHAT_FILE', 'PAIR_FILE'):  # and never messages you through your real bot
         monkeypatch.setattr(telegram, name, tmp_path / name.lower())
     monkeypatch.setattr(memory, 'CMD', [])
