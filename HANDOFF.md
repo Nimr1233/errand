@@ -352,6 +352,11 @@ From `reports/Full feature free Errand plan.md`:
   - **Not built:** Google Sheets (it needs the user's own OAuth client; the CSV opens in Sheets).
   - **Tests:** 3, with stand-ins.
 - **Piece 12, For You** (`errand/foryou.py`): plain rules on this laptop's own history (no AI, nothing leaves the laptop). It suggests scheduling a skill run by hand 3+ times, re-running a repeated job unseen for a week, saving a repeated job as a skill, and dropping links that keep getting blocked. It shows in `/api/foryou`, the `for_you` tool (19 tools) and the phone list view.
+- **Hidden product data** (`extract.structured`, reader `data`, `bench/results.md` section 13):
+  - **What it reads:** JSON-LD (labelled by type), Open Graph and product meta tags, and Next.js data.
+  - **How it is chosen:** the vote picks it when it agrees with the brains, and it wins ties over page spots.
+  - **Speed:** JavaScript pages whose hidden data covers every field skip the browser window.
+  - **Checks:** the bench is unchanged (0 of 600), live web-scraping.dev gave 12/12, and there are 3 new tests (98 in all).
 - **All 12 pieces are built; 95 tests pass.** What waits on the user:
   - a Gemini key in `~/.errand/gemini_key`
   - a Telegram bot token, then `errand telegram` to pair

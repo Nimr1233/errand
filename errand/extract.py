@@ -209,10 +209,78 @@ def same(kind, a, b):
     return re.sub(r'\s+', ' ', str(a)).strip().casefold() == re.sub(r'\s+', ' ', str(b)).strip().casefold()
 
 
+def structured(page):
+    """The data many sites keep in their page code for search engines: JSON-LD (schema.org), Open Graph
+    and product meta tags, and Next.js page data. Flattened to {label: value}. JSON-LD items are
+    labelled by their type, not their place, so a reordered @graph keeps its labels:
+    {'ld.Product.name': 'Box of Chocolate Candy', 'ld.Product.offers.lowPrice': '9.99', ...}."""
+    s, out, types = as_page(page), {}, {}
+    for raw in s.css('script[type="application/ld+json"]::text').getall():
+        try:
+            block = json.loads(raw)
+        except ValueError:
+            continue
+        nodes = block.get('@graph', [block]) if isinstance(block, dict) else block if isinstance(block, list) else []
+        for node in nodes:
+            if isinstance(node, dict):
+                t = node.get('@type')
+                t = t[0] if isinstance(t, list) and t else t if isinstance(t, str) else 'Thing'
+                types[t] = types.get(t, 0) + 1  # a second Product on the page is ld.Product#2
+                _flatten(node, f'ld.{t}' + ('' if types[t] == 1 else f'#{types[t]}'), out)
+    for m in s.css('meta[property], meta[name]'):
+        k, v = m.attrib.get('property') or m.attrib.get('name') or '', m.attrib.get('content')
+        if v and k.startswith(('og:', 'product:', 'twitter:', 'article:', 'book:')):
+            out.setdefault(f'meta.{k}', v)
+    nd = s.css('script#__NEXT_DATA__::text').get()
+    if nd:
+        try:
+            _flatten(json.loads(nd).get('props', {}), 'next', out)
+        except (ValueError, AttributeError):
+            pass
+    return out
+
+
+def _flatten(x, path, out, cap=3000):
+    if len(out) >= cap:  # shortcut: a huge Next.js blob is cut at 3,000 values; raise it if a field sits past that
+        return
+    if isinstance(x, dict):
+        for k, v in x.items():
+            if not k.startswith('@'):
+                _flatten(v, f'{path}.{k}', out, cap)
+    elif isinstance(x, list):
+        seen = {}
+        for i, v in enumerate(x[:20]):
+            t = v.get('@type') if isinstance(v, dict) else None
+            if isinstance(t, str):  # typed items by type (and 2nd, 3rd of a type), others by place
+                seen[t] = seen.get(t, 0) + 1
+                _flatten(v, f'{path}[{t}{"" if seen[t] == 1 else "#" + str(seen[t])}]', out, cap)
+            else:
+                _flatten(v, f'{path}[{i}]', out, cap)
+    elif x is not None and not isinstance(x, bool) and str(x).strip() and len(str(x)) <= 2000:
+        out.setdefault(path, x)
+
+
+def coerce(v, kind):
+    """A data value in a field's kind: numbers whole (4.7 stars is not a whole number: none), dates one date."""
+    if v in (None, ''):
+        return None
+    if kind == 'number':
+        try:
+            f = float(str(v).replace(',', ''))
+        except ValueError:
+            return None
+        return int(f) if f.is_integer() else None
+    return first_date(str(v)) if kind == 'date' else str(v).strip()
+
+
 def replay(page, recipe, fields):
     """Read every field a recipe covers off one page, with no brain."""
     page, out = as_page(page), {}
+    data = structured(page) if any(r == 'data' for r, _ in recipe.values()) else {}
     for f, (reader, selector) in recipe.items():
+        if reader == 'data':
+            out[f] = coerce(data.get(selector), fields[f][1])
+            continue
         el = page.css(selector)
         out[f] = read(el[0], reader, fields[f][1]) if el else None
     return out
@@ -228,11 +296,12 @@ def learn_recipe(pages, fields, share=VOTE_SHARE, **view):
     `view`: numbered_view options."""
     parsed = [(as_page(h), a) for h, a in pages]
     pieces = [numbered_view(p, **view)[1] for p, _ in parsed]
+    data = [structured(p) for p, _ in parsed]
     recipe = {}
     for f, (_, kind) in fields.items():
         readers = ('number', 'word', 'count') if kind == 'number' else ('text',)
-        votes = {}
-        for (_, answers), els in zip(parsed, pieces):
+        votes, data_votes = {}, {}
+        for (_, answers), els, d in zip(parsed, pieces, data):
             want = answers.get(f)
             if want in (None, ''):
                 continue
@@ -242,10 +311,14 @@ def learn_recipe(pages, fields, share=VOTE_SHARE, **view):
                     if got not in (None, '') and same(kind, got, want):
                         key = (name, el.generate_css_selector)
                         votes[key] = votes.get(key, 0) + 1
-        for key in sorted(votes, key=votes.get, reverse=True)[:10]:
-            if holds(parsed, fields, f, key, share):
-                recipe[f] = key
-                break
+            for label, v in d.items():  # the page's hidden data holds the brains' answer too
+                if same(kind, coerce(v, kind), want):
+                    data_votes[('data', label)] = data_votes.get(('data', label), 0) + 1
+        chosen = [next((k for k in sorted(v, key=v.get, reverse=True)[:10] if holds(parsed, fields, f, k, share)), None)
+                  for v in (data_votes, votes)]
+        chosen = [k for k in chosen if k]
+        if chosen:  # the one that agrees with the brains on more pages; hidden data wins a tie (it survives redesigns)
+            recipe[f] = max(chosen, key=lambda k: agreement(parsed, fields, f, k)[0])
     return recipe
 
 
@@ -253,12 +326,16 @@ def holds(pages, fields, f, key, share=VOTE_SHARE):
     """Does one field's (reader, selector) give back the brains' answers on these pages? It must agree
     on `share` of them and read a real value right on at least MIN_HITS, and on `share` of the pages
     where the brains saw one. pages: [(page, answers)]. Also used to check a saved recipe on a new job."""
+    agree, hits, shown = agreement(pages, fields, f, key)
+    return agree >= share * len(pages) and hits >= max(MIN_HITS, share * shown)
+
+
+def agreement(pages, fields, f, key):
+    """(pages agreeing with the brains, of those with a real value, pages where the brains saw one)."""
     kind = fields[f][1]
     got = [(replay(as_page(p), {f: key}, fields)[f], a.get(f)) for p, a in pages]
-    agree = sum(same(kind, g, w) for g, w in got)
-    hits = sum(w not in (None, '') and same(kind, g, w) for g, w in got)
-    shown = sum(w not in (None, '') for _, w in got)
-    return agree >= share * len(pages) and hits >= max(MIN_HITS, share * shown)
+    return (sum(same(kind, g, w) for g, w in got), sum(w not in (None, '') and same(kind, g, w) for g, w in got),
+            sum(w not in (None, '') for _, w in got))
 
 
 def read_pages(htmls, fields, brain, samples=10, recipe=None, workers=53, **view):

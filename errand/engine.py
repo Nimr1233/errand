@@ -405,6 +405,10 @@ class Engine:
             if (t[0] == 'read' and self._needs_brain(t[1]) or t[0] == 'hread' or
                     t[0] == 'act' and set(self.steps) - set(self.groups[kind_of_page(t[1])]['clicks'])) and self.brains != 'ready':
                 continue
+            if t[0] == 'render' and t[1] in self.html and self._data_only(kind_of_page(t[1])):
+                del self.tasks[i]  # queued for a window before the recipe existed; its hidden data is enough now
+                self._page(a, t[1], self.html[t[1]], 'ok')
+                return self._take(a)
             if t[0] in WINDOW and no_window:
                 continue  # every window is busy: browser pages wait on the shelf, the agent takes other work
             if t[0] == 'fetch' or t[0] in WINDOW:
@@ -426,6 +430,9 @@ class Engine:
         kind, key = t
         if kind == 'fetch':
             return self.fetcher.fetch(key)
+        if kind == 'render' and key in self.html and self._data_only(kind_of_page(key)):
+            self.fetcher.release(key)  # handed a window before the recipe existed: the hidden data is enough
+            return {'status': 'ok', 'code': 200, 'html': self.html[key]}
         if kind in WINDOW:
             try:
                 r = self.pool.render(key, UA) if kind == 'render' else self.pool.stealth(key) if kind == 'stealth' else \
@@ -473,6 +480,8 @@ class Engine:
             if self.steps and r['status'] in ('ok', 'needs browser'):  # clicking needs the page in a window
                 self.tasks.append(('act', key))
                 return
+            if r['status'] == 'needs browser' and self._data_only(kind_of_page(key)):
+                r = {'status': 'ok', 'html': r['html']}  # its hidden data holds every field: no window needed
             if r['status'] == 'needs browser' and self.pool:  # a JavaScript page: up the ladder to a window
                 self.html[key] = r['html']  # the plain page, in case the window can't load it
                 self.tasks.append(('render', key))
@@ -627,6 +636,11 @@ class Engine:
         if self.huddle and self.huddle['wanting'] and self.huddle['p']['site'] == kind_of_page(key):
             self._round()  # a waiting round starts once the pages it needs arrived, or no more can come
         self._maybe_learn(g, kind_of_page(key))
+
+    def _data_only(self, kind):
+        """This kind's recipe reads every field from the page's hidden data (JSON-LD and the like)."""
+        rec = self.groups[kind]['recipe'] or {}
+        return set(rec) == set(self.fields) and all(reader == 'data' for reader, _ in rec.values())
 
     def _broken(self, g, url):
         """Fields the recipe should read but gave nothing for, where 4 in 5 samples had a value."""

@@ -436,6 +436,27 @@ The whole suite: 77 tests.
 
 **Not built:** clicks on logged-in pages (Errand never logs in), and typing into search boxes (a form). Both were left out on purpose by the council's navigation-only rule.
 
+## 13. Hidden product data (2026-10-21, `extract.structured`, the `data` reader)
+
+Many shops keep their product data in the page code for search engines: JSON-LD (schema.org), Open Graph and product meta tags, and Next.js page data. Errand now reads it as well as the visible page.
+
+**How it works:**
+- **Labels:** the hidden data is flattened to labels like `ld.Product.offers.price`. JSON-LD items are labelled by their type, not their place, so a site that reorders its `@graph` keeps its labels.
+- **Choosing:** the vote treats each label as one more candidate, held to the same rules: it must agree with the brains on 8 of 10 samples, with at least 3 real values. When a page spot and a hidden label both hold, the one that agrees on more samples wins, and hidden data wins a tie, because it survives redesigns.
+- **No window needed:** once hidden data covers every field of a kind of page, its JavaScript pages are read straight from the download, with no browser window, after the 10 samples.
+
+**Checks:**
+
+| Check | Result |
+|---|---|
+| The 3-set bench, engine flow (section 8) | **0 of 600 answers changed**, same scores. Wikipedia's hidden data (its article title) never agreed with the brains often enough, so it was never chosen. |
+| Live: 12 pages of web-scraping.dev, a scraping practice shop (robots.txt allows product pages, with a 2 s Crawl-delay Errand honours) | **12 / 12 right.** The saved recipe reads `ld.Product.name` and `ld.Product.description`: page spots would also have worked, and hidden data won the tie. |
+| Tests (`tests/test_hidden_data.py`) | Labels by type inside a `@graph` or not, meta tags, Next.js data, bad JSON skipped. Hidden data wins where the price moves around the page, and wins a tie. 14 JavaScript pages: only the 10 samples used a window. |
+
+The whole suite: 98 tests.
+
+**Not used:** a hidden price without its currency sign ("9.99") doesn't match a field asking for "the price with currency symbol" ("$9.99"), so for that field the page spot is used. A field asking for "number: the price" would match.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:
