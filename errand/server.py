@@ -14,7 +14,7 @@ import secrets
 from contextlib import asynccontextmanager
 
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 
 from . import demo, engine as real
 
@@ -123,6 +123,15 @@ def agent(n: int):
     if d is None:
         raise HTTPException(404, f'no agent #{n}')
     return d
+
+
+@app.get('/api/agents/{n}/shot', dependencies=[api])
+def agent_shot(n: int):
+    """The last picture of the agent's browser window (JPEG), for its tile in the room."""
+    a = None if DEMO else engine._agent(n)
+    if a is None or a.shot is None:
+        raise HTTPException(404, f'no window picture for agent #{n}')
+    return Response(a.shot, media_type='image/jpeg', headers={'Cache-Control': 'no-store'})
 
 
 @app.get('/api/board', dependencies=[api])

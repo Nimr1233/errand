@@ -208,8 +208,14 @@ const s={n:i+1,a,off,c:s0.c,t:s0.t,mesh:m,halo:hl,d:null,sig:''};m.userData=s;S.
 function halo(s){const al=!!s.d&&s.d.state==='needs_you';s.halo.visible=al||s===sel;s.halo.material.color.set(al?0xD32F2F:0x4FD8E0)}
 function draw(s){halo(s);const d=s.d||{state:'idle'},st=d.state;
 const h=st==='huddle'&&ST&&ST.huddle;
-const sig=[st,d.pages,d.passes,d.used_window,d.reason,d.task,d.site,d.log,Math.floor((d.prog||0)*12),d.huddle,d.fix_ok,d.fix_tried,h&&h.round+'.'+h.size].join('|');if(s.sig===sig)return;s.sig=sig;
+const sig=[st,d.pages,d.passes,d.used_window,d.reason,d.task,d.site,d.log,Math.floor((d.prog||0)*12),d.huddle,d.fix_ok,d.fix_tried,h&&h.round+'.'+h.size,d.window,d.shot,!!s.img].join('|');if(s.sig===sig)return;s.sig=sig;
 const c=s.c;c.textAlign='left';c.shadowBlur=0;
+// the real engine's window pictures: fetched when the agent's picture counter moves, drawn while it works in a window
+if(d.shot&&d.shot!==s.shotN){s.shotN=d.shot;api('/api/agents/'+s.n+'/shot').then(r=>r.ok?r.blob():null).then(b=>b&&createImageBitmap(b)).then(im=>{if(im){s.img=im;s.sig='';draw(s)}}).catch(()=>{})}
+if(st==='working'&&d.window&&s.img){c.fillStyle='#021316';c.fillRect(0,0,512,320);c.drawImage(s.img,0,64,512,256);c.fillStyle='#06262B';c.fillRect(0,0,512,64);
+c.fillStyle='#7FF0F5';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText('WINDOW',492,46);c.textAlign='left';
+c.fillStyle='rgba(2,19,22,0.85)';c.fillRect(0,272,512,48);c.fillStyle='#9FE3E8';c.font=mono(26);c.fillText(fit(c,(d.task||'')+' · '+(d.site||''),464),20,305);
+c.strokeStyle='#1F5F66';c.lineWidth=4;c.strokeRect(2,2,508,316);s.t.needsUpdate=true;return}
 // a huddle is steady amber: red stays only for problems that need you
 if(st==='huddle'){c.fillStyle='#140F05';c.fillRect(0,0,512,320);c.fillStyle='#E39B2D';c.fillRect(0,0,512,64);c.fillStyle='#140F05';c.font=mono(38);c.fillText('#'+s.n,20,46);c.textAlign='right';c.fillText('HUDDLE '+(d.huddle||''),492,46);c.textAlign='left';
 c.fillStyle='#F2C77A';c.font=mono(30);wrap(c,h?h.kind:'',464).slice(0,2).forEach((l,i)=>c.fillText(fit(c,l,464),24,110+i*36));

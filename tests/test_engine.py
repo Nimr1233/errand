@@ -65,7 +65,7 @@ def site():
 def make(tmp_path, calls=None, **kw):
     said = {f'Book {k}': truth(f'Book {k}', k) for k in range(100)}
     return real.Engine(brain=fake_brain(said, calls if calls is not None else []), results=tmp_path,
-                       fetcher=Polite(delay=(0.05, 0.08), backoff=(0.3,), allow_local=True), **kw)
+                       fetcher=Polite(delay=(0.05, 0.08), backoff=(0.3,), allow_local=True), pool=kw.pop('pool', None), **kw)
 
 
 def wait(eng, secs=30):
@@ -124,7 +124,7 @@ def test_no_brains_ends_the_job_with_a_reason(site, tmp_path):
 
         def stop(self):
             pass
-    eng = real.Engine(results=tmp_path, fetcher=Polite(delay=(0.05, 0.08), allow_local=True))
+    eng = real.Engine(results=tmp_path, fetcher=Polite(delay=(0.05, 0.08), allow_local=True), pool=None)
     eng.server = Broken()
     eng.start_job('No brains', [f'{site}/p/{k}.html' for k in range(3)], FIELD_WORDS)
     s = wait(eng)

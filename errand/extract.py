@@ -136,12 +136,18 @@ def snap_text(value, els):
     """Copy a whole page piece only when the brain's answer is how that piece starts (a cut-short
     title comes back whole). Otherwise keep the brain's words: on a "Born: <date> in <place>" line,
     copying the line would spoil both answers."""
-    v = re.sub(r'\s+', ' ', str(value)).strip().casefold()
+    v = core(value)
     for el in els:
         t = clean_piece(el)
-        if v and t.casefold().startswith(v):
+        if v and core(t).startswith(v):
             return t
     return value
+
+
+def core(text):
+    """For matching only: spacing, case and the quote marks around a quotation don't count
+    ("This life is..." is how “This life is...” starts)."""
+    return re.sub(r'\s+', ' ', str(text)).strip().strip('"“”„\'‘’«» ').casefold()
 
 
 def on_page(n, view):
@@ -151,7 +157,9 @@ def on_page(n, view):
         return True
     text = re.sub(r'^\[\d+\] ', '', view, flags=re.M)
     words = [w for w, v in NUMBER_WORDS.items() if v == n]
-    return bool(re.search(rf'(?<![\d.,]){n}(?!\d|[.,]\d)', text) or any(re.search(rf'\b{w}\b', text) for w in words))
+    written = {str(n), f'{n:,}', f'{n:,}'.replace(',', '.'), f'{n:,}'.replace(',', ' ')}  # 1036, 1,036, 1.036, 1 036
+    return any(re.search(rf'(?<![\d.,]){re.escape(w)}(?!\d|[.,]\d)', text) for w in written) or \
+        any(re.search(rf'\b{w}\b', text) for w in words)
 
 
 def first_date(text):

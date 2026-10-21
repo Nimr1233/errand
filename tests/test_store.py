@@ -16,7 +16,7 @@ def shop(eng, base, notes=0, private=False, name='Shop'):
 
 def engine(tmp_path, calls):
     said = {f'Book {k}': truth(f'Book {k}', k) for k in range(14)}
-    return real.Engine(brain=fake_brain(said, calls), results=tmp_path, remember=False,
+    return real.Engine(brain=fake_brain(said, calls), results=tmp_path, remember=False, pool=None,
                        fetcher=Polite(delay=(0.02, 0.04), allow_local=True))
 
 

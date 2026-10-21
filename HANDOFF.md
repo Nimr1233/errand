@@ -308,11 +308,17 @@ From `reports/Full feature free Errand plan.md`:
   - **Reuse:** a later job on the same kind of page checks the saved recipe on 3 pages (`engine.CHECK`) instead of learning from 10. If the site changed, the check fails and a new recipe is learned.
   - **Past jobs:** `GET /api/history`, and the `past_jobs` connector tool (now 12 tools).
   - **Tests:** a temporary database (conftest).
+- **Browser windows** (`errand/browser.py`, `bench/results.md` section 10):
+  - 25 shared headless Chromium windows, wiped after every page, with a memory guard at 2 GB free and a 30 s load limit.
+  - JavaScript step for app shells; stealth step (Scrapling, CAPTCHA solving off) for refused downloads.
+  - The shelf and hand-offs; window pictures on room tiles (`/api/agents/{n}/shot`).
+  - Live on quotes.toscrape.com/js: quotes 6/6, authors 4/6. The two misses are brain slips, for the checker in piece 5.
+  - Fixed on the way: the app-shell rule, quote marks in snapping, and numbers with a thousands comma. Fresh pages now score 98.3%.
 - **Build order the user approved ("execution time"), each piece tested and committed:**
   1. gbrain (done)
   2. Gemini helper for public pages (done; waiting for the user's key)
   3. saved data (done)
-  4. browser windows with the stealth and JavaScript steps
+  4. browser windows with the stealth and JavaScript steps (done)
   5. checker, fixer and huddles
   6. safe clicking, record and replay
   7. Telegram

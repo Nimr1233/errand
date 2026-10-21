@@ -51,7 +51,7 @@ def run(site, tmp_path, private):  # noqa: F811
     said = {f'Book {k}': truth(f'Book {k}', k) for k in range(14)}
     said['Book 12'] = {**said['Book 12'], 'price': None}  # the 2B missed the price on one page
     google = Google()
-    eng = real.Engine(brain=fake_brain(said, []), results=tmp_path, remember=False,
+    eng = real.Engine(brain=fake_brain(said, []), results=tmp_path, remember=False, pool=None,
                       fetcher=Polite(delay=(0.05, 0.08), allow_local=True),
                       gemini=gm.Gemini(key='test-key', send=google, usage_file=tmp_path / 'u.json'))
     # prices move down the page (notes=k), so no recipe can read them: the brains read every price

@@ -346,6 +346,32 @@ The whole suite: 56 tests.
 
 Idle agents show "picking up the next task" while a site pauses.
 
+## 10. Browser windows and the fetch ladder (2026-10-21, `errand/browser.py`)
+
+**What was built:**
+- **Windows:** one headless Chromium holds up to 25 private windows, shared by the 53 agents. Every page gets a fresh window that is closed (wiped) afterwards. No new window opens while free RAM is under 2 GB. A page that hasn't loaded in 30 s is given up.
+- **JavaScript step:** a plain download that is only an app shell goes to a window. "App shell" means under 100 visible characters, an app root with little text, or far more text inside the page's scripts than on the page.
+- **Stealth step:** a download that was refused (403 or a bot-check page) gets one try in Scrapling's stealth browser, with CAPTCHA solving off. A bot check that is still there ends as `blocked: bot check`.
+- **Shelf and hand-offs:** with every window busy, browser pages wait while agents take other work. An agent finishing in a window hands it straight to the next waiting page whose site is free.
+- **In the room:** the desks show windows in use and pages waiting, and an agent working in a window shows the window's latest picture (640×400 JPEG).
+
+**Live check:** 6 pages of quotes.toscrape.com/js, a practice site that builds its quotes with JavaScript. Fields: the first quote and its author.
+
+| Run | Quotes right | Authors right | What was wrong |
+|---|---|---|---|
+| First | 1 / 6 | 1 / 6 | Only page 1 went to a window. Page 3's links gave it 104 visible characters, just over the old 100-character rule, so its empty shell went to the brains. The vote then learned the page header as "the quote". |
+| Second | 4 / 6, two cut short | 4 / 6 | The view shortens long lines, and snapping didn't copy them back whole, because the page wraps quotes in “ ” and the brain's answer had no quote marks. |
+| **Third** | **6 / 6, whole** | **4 / 6** | Two brain slips: page 3's author is from another quote, and page 5's is "Jojen", a name inside the quote. |
+
+**Fixes, each with a test:**
+- **App shell rule:** the scripts-hold-more-text-than-the-page test catches every one of the 6 pages. It flags 0 of 141 real saved pages from the bench.
+- **Snapping:** it ignores the quote marks around a quotation.
+- **The number check:** it accepts numbers written with separators ("1,036", "1.036", "1 036"). The perfect-brain check found this on the fresh set: two correct page counts were being thrown away. With it fixed, the engine flow on fresh pages (section 8) goes from 97.3% to **98.3%**, with test set and held-out unchanged. This uses the answer key only to find code that spoils correct answers.
+
+**Tests:** `tests/test_browser.py` runs real Chromium on two fake sites, with one window between them: never more than 1 open, at least one hand-off, a JPEG picture taken. The stealth step is stood in for, so no stealth browser starts. The whole suite: 69 tests.
+
+**Not done yet:** a checker for brain slips like the two authors above, which is piece 5.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:

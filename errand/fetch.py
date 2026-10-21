@@ -5,7 +5,9 @@
 - a site that answers 429 or 503 is left alone for 60 s, then 120 s, then 240 s, then given up
 - a bot check, CAPTCHA or login page stops that page: Errand never solves or logs in. Its status
   says why, in the results.
-The stealth-browser and JavaScript-browser steps are not built yet; such pages end as blocked.
+Pages a plain download can't read go up the ladder (errand/browser.py): a JavaScript page ("needs
+browser") is loaded in a browser window; a page that refused the download ("needs stealth") gets
+one try in the stealth browser, CAPTCHA solving off.
 """
 import ipaddress, random, socket, threading, time, urllib.parse, urllib.robotparser
 
@@ -29,6 +31,23 @@ def challenged(status, html):
 
 def login_wall(html):
     return 'type="password"' in html.lower() or "type='password'" in html.lower()
+
+
+def thin(html):
+    """An app shell that JavaScript fills in later: almost no visible text, or far more text inside
+    the page's own scripts than on the page (quotes.toscrape.com/js keeps its quotes in a script)."""
+    import re
+    from scrapling.parser import Selector
+    s = Selector(html)
+    body = s.css('body')
+    if not body:
+        return False
+    seen = re.sub(r'\s+', ' ', ' '.join(body[0].xpath(
+        './/text()[not(ancestor::script) and not(ancestor::style) and not(ancestor::noscript) and '
+        'not(ancestor::template)]').getall())).strip()
+    inline = sum(len(t) for t in s.xpath('//script[not(@src)]/text()').getall())
+    shell = bool(s.css('#root, #app, #__next, [data-reactroot], [ng-app]'))
+    return len(seen) < 100 or (shell and len(seen) < 400) or (len(seen) < 1000 and inline > 3 * len(seen))
 
 
 def site(url):
@@ -111,20 +130,27 @@ class Polite:
                     return {'status': 'blocked: the site kept refusing'}
                 pause = max(pause, self.backoff[n - 1])
                 return {'status': 'retry', 'pause': self.backoff[n - 1]}
-            if challenged(code, html):
-                return {'status': 'blocked: bot check' if code == 200 or any(m in html.lower() for m in CHALLENGE_MARKERS)
-                        else f'blocked: HTTP {code}'}
+            if challenged(code, html):  # the why is the status if the stealth step can't read it either
+                return {'status': 'needs stealth', 'why': 'blocked: bot check' if code == 200 or
+                        any(m in html.lower() for m in CHALLENGE_MARKERS) else f'blocked: HTTP {code}'}
             if code != 200:
                 return {'status': f'error: HTTP {code}'}
             if login_wall(html):
                 return {'status': 'blocked: login page'}
+            if thin(html):  # the page builds itself with JavaScript: read it in a browser window
+                return {'status': 'needs browser', 'html': html}
             return {'status': 'ok', 'html': html}
         except Exception as e:  # a network error ends this page, not the job
             return {'status': f'error: {type(e).__name__}'}
         finally:
-            with self.lock:
-                self.busy.discard(s)
-                self.next_ok[s] = max(self.next_ok.get(s, 0), time.monotonic() + pause)
+            self.release(url, pause)
+
+    def release(self, url, pause=None):
+        """The site's request is over: it pauses before the next one."""
+        with self.lock:
+            s = site(url)
+            self.busy.discard(s)
+            self.next_ok[s] = max(self.next_ok.get(s, 0), time.monotonic() + (random.uniform(*self.delay) if pause is None else pause))
 
     def _robots_known(self, url):
         hit = self.robots.get(site(url))

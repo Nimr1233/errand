@@ -239,25 +239,25 @@
      ]
     },
     "wikipedia": {
-     "accuracy": 0.967,
+     "accuracy": 1.0,
      "ci95": [
-      0.917,
+      1.0,
       1.0
      ],
      "runs_min_max": [
-      0.967,
-      0.967
+      1.0,
+      1.0
      ]
     },
     "all": {
-     "accuracy": 0.973,
+     "accuracy": 0.983,
      "ci95": [
-      0.949,
-      0.992
+      0.963,
+      0.998
      ],
      "unstable_items": 2,
      "none_items_wrong": 0,
-     "false_none": 10
+     "false_none": 0
     }
    },
    "wrong_most_runs": [
@@ -295,30 +295,6 @@
       "Paris, France",
       "Paris",
       "Paris"
-     ]
-    },
-    {
-     "item": "wikipedia/00 pages",
-     "truth": 1036,
-     "right_runs": "0/5",
-     "brain": [
-      null,
-      null,
-      null,
-      null,
-      null
-     ]
-    },
-    {
-     "item": "wikipedia/09 pages",
-     "truth": 1037,
-     "right_runs": "0/5",
-     "brain": [
-      null,
-      null,
-      null,
-      null,
-      null
      ]
     }
    ]
@@ -1623,7 +1599,7 @@
     "author": "Jane Austen",
     "publisher": "John Murray",
     "published": "1816",
-    "pages": null,
+    "pages": 1036,
     "oclc": null
    }
   },
@@ -1740,7 +1716,7 @@
     "author": "Margaret Mitchell",
     "publisher": "Macmillan",
     "published": "June 30, 1936",
-    "pages": null,
+    "pages": 1037,
     "oclc": "28491920"
    }
   },
@@ -3033,7 +3009,7 @@
     "author": "Jane Austen",
     "publisher": "John Murray",
     "published": "1816",
-    "pages": null,
+    "pages": 1036,
     "oclc": null
    }
   },
@@ -3150,7 +3126,7 @@
     "author": "Margaret Mitchell",
     "publisher": "Macmillan",
     "published": "June 30, 1936",
-    "pages": null,
+    "pages": 1037,
     "oclc": "28491920"
    }
   },
@@ -4443,7 +4419,7 @@
     "author": "Jane Austen",
     "publisher": "John Murray",
     "published": "1816",
-    "pages": null,
+    "pages": 1036,
     "oclc": null
    }
   },
@@ -4560,7 +4536,7 @@
     "author": "Margaret Mitchell",
     "publisher": "Macmillan",
     "published": "June 30, 1936",
-    "pages": null,
+    "pages": 1037,
     "oclc": "28491920"
    }
   },
@@ -5853,7 +5829,7 @@
     "author": "Jane Austen",
     "publisher": "John Murray",
     "published": "1816",
-    "pages": null,
+    "pages": 1036,
     "oclc": null
    }
   },
@@ -5970,7 +5946,7 @@
     "author": "Margaret Mitchell",
     "publisher": "Macmillan",
     "published": "June 30, 1936",
-    "pages": null,
+    "pages": 1037,
     "oclc": "28491920"
    }
   },
@@ -7263,7 +7239,7 @@
     "author": "Jane Austen",
     "publisher": "John Murray",
     "published": "1816",
-    "pages": null,
+    "pages": 1036,
     "oclc": null
    }
   },
@@ -7380,7 +7356,7 @@
     "author": "Margaret Mitchell",
     "publisher": "Macmillan",
     "published": "June 30, 1936",
-    "pages": null,
+    "pages": 1037,
     "oclc": "28491920"
    }
   }

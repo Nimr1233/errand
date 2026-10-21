@@ -64,6 +64,8 @@ def test_finish_keeps_one_date_and_numbers_shown_on_the_page():
     assert (got['stock'], got['rating'], got['reviews']) == (7, 3, 12)  # digits, a class word ("Three")
     assert got['pages'] is None  # a 2B brain writes 0 for "no page count"; 0 isn't on the page
     assert got['price'] is None  # not written at all: none, not a crash
+    big = x.numbered_view('<table><tr><td>1,036, in three volumes</td></tr></table>')
+    assert x.finish({'pages': ('page count', 'number')}, {'pages': 1036}, *big)['pages'] == 1036  # found on fresh pages
     lines = len(view.splitlines())
     assert x.finish({'n': ('a count', 'number')}, {'n': lines}, view, els)['n'] is None  # line numbers don't count
     assert x.finish({'n': ('a count', 'number')}, {'n': '7'}, view, els)['n'] is None  # the form asks for an integer
