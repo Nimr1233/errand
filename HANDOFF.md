@@ -357,6 +357,9 @@ From `reports/Full feature free Errand plan.md`:
   - **How it is chosen:** the vote picks it when it agrees with the brains, and it wins ties over page spots.
   - **Speed:** JavaScript pages whose hidden data covers every field skip the browser window.
   - **Checks:** the bench is unchanged (0 of 600), live web-scraping.dev gave 12/12, and there are 3 new tests (98 in all).
+- **The speed drop, explained** (`bench/results.md` section 14):
+  - **Cause:** the 4 pages/s readings came from the bench asking the same pages again (prompt cache hits). A real job reads each page once, at about 2.2–2.5 pages/s.
+  - **Settings tried:** closer checkpoints (`-cms 64`, `-ctxcp 8`) and smaller chunks (`-ub 128`) can't make pages share their common start on this hybrid model. Smaller chunks are slower, so today's flags stay.
 - **All 12 pieces are built; 95 tests pass.** What waits on the user:
   - a Gemini key in `~/.errand/gemini_key`
   - a Telegram bot token, then `errand telegram` to pair

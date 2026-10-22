@@ -212,7 +212,7 @@ On held-out Wikipedia alone: 83% → 98%. The held-out gain's error bar stays ab
 
 **The next fix is a vote across pages, not a better single page.** On most pages of a site, the brain takes the name from the heading and the stars from the right spot. A recipe built from that majority (section 4: 100% on books) reads the minority pages correctly too. It can be checked the same way: built on test set pages, replayed on held-out pages.
 
-**Speed:** 3.95–4.16 pages/s in these 400-question runs (more questions keep all 53 brains busy). The fixes change it by no more than the wobble.
+**Speed:** 3.95–4.16 pages/s in these 400-question runs. The fixes change it by no more than the wobble. *(Corrected in section 14: these speeds were flattered by the bench asking the same pages again, not by the extra questions. A real job, which reads each page once, runs at about 2.2–2.5 pages/s.)*
 
 ## 7. Harness tuner, phase 3 round 2: a vote across pages (2026-10-21, `vote` in `bench/score.py`)
 
@@ -299,7 +299,7 @@ These 80 pages come from 4 sites with fixed layouts, and the recipes are positio
 - The same recipes came out of all 5 brain runs.
 - The fresh result equals round 2's vote, which used the 5-run majority: one run per page is enough.
 
-**Seen but not looked into:** this 600-question run reused far fewer cached prompt tokens than the 400-question runs (62 vs 482 a question) and ran at 2.38 pages/s instead of about 4. Accuracy is not affected.
+**Seen:** this 600-question run reused far fewer cached prompt tokens than the 400-question runs (62 vs 482 a question) and ran at 2.38 pages/s instead of about 4. Accuracy is not affected. Explained in section 14.
 
 ## 9. The real job loop (2026-10-21, `errand/engine.py`, `errand/fetch.py`, `errand/brains.py`)
 
@@ -456,6 +456,33 @@ Many shops keep their product data in the page code for search engines: JSON-LD 
 The whole suite: 98 tests.
 
 **Not used:** a hidden price without its currency sign ("9.99") doesn't match a field asking for "the price with currency symbol" ("$9.99"), so for that field the page spot is used. A field asking for "number: the price" would match.
+
+## 14. Why the big run looked slower: the cache (2026-10-22)
+
+**The cause:** the bench asks every page 5 times, and the faster runs were reusing those repeats.
+
+Prompt tokens per question, by round, from the saved runs:
+
+| Run | Pages per round | Round 1 (each page new) | Rounds 2–5 (the same pages again) | Pages/s |
+|---|---|---|---|---|
+| `p3-nostyle` (400 questions) | 80 | 11 reused / 640 new | 525–628 reused / 23–125 new | 3.95 |
+| `p3-base` (400 questions) | 80 | 14 / 647 | 462–639 / 22–199 | 4.16 |
+| `p3-engine-run` (600 questions) | 120 | 26 / 623 | 63–93 / 555–585 | 2.38 |
+
+- The first time any page is read, almost nothing is reused. With 80 pages a round, the cache still held most pages when they came back. With 120 pages a round, they were pushed out first.
+- **A real job reads each page once, like round 1.** So about 2.2–2.5 pages/s is the honest brain speed for ~650-token pages, and the 4 pages/s readings were flattered. Section 6's speed note is corrected.
+
+**Can a setting let pages share their common start?** Every prompt begins with the same instructions, about 150 tokens. Qwen3.5 is a hybrid model, so llama.cpp can only resume it from saved checkpoints. Measured with each of the 120 bench pages asked once by 53 brains, two tries per setting:
+
+| Setting | Pages/s | Tokens reused | Right (of 570) |
+|---|---|---|---|
+| **Today** (`-ctxcp 2`) | 2.52, 2.21, 2.44, 2.21 | 25–26 | 546–549 |
+| Checkpoints allowed every 64 tokens (`-cms 64`; the default is 8192) | 2.56, 2.17 | 27–28 | 548 |
+| Same, with 8 checkpoints a slot (`-ctxcp 8 -cms 64`) | 2.23, 2.23 | 32–33 | 546–548 |
+| Same, with 128-token chunks (`-ub 128`) | 1.95, 2.00 | 34–35 | 548–550 |
+
+- **No setting helps,** so today's settings stay. Checkpoints are only saved after a whole chunk of the prompt is read. Smaller chunks put one inside the shared start, but they slow reading more than the few reused tokens save.
+- **It matters less in real jobs:** after 10 sample pages, recipes read most pages with no brain at all. Brain speed counts mostly for samples and for fields no recipe covers.
 
 ## Against rtrvr's demo
 
