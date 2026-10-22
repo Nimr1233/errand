@@ -16,8 +16,9 @@ room and the Errand connector work with either.
   are read by code, with a brain only for the fields no recipe covers (bench/results.md sections 7-8).
 - reuse: a recipe saved by an earlier job for this kind of page (errand/store.py) is checked on 3
   pages instead of learned from 10; if the site changed and it no longer holds, it is learned afresh.
-- fix: a page left without a field that most pages of its kind have (4 in 5 samples) is read again
-  by Gemini (errand/gemini.py), only for public jobs and only within the daily budget.
+- fix: a page left without a field that most pages of its kind have (4 in 5 samples) is read again by
+  a second brain: free Gemini (errand/gemini.py) for a public job within its daily budget, else the
+  local 4B "senior" on the CPU (errand/brains.py) - for every private job, and public when Gemini is spent.
 - huddle: when a recipe stops working (3 pages of its kind come back empty where the samples weren't),
   its new pages wait while agents gather: 3 re-read 3 pages with their brains and a new recipe is
   learned from them, then 9, then everyone. If no round fixes it, it goes to you: the brains read those
@@ -32,7 +33,7 @@ from collections import deque
 from . import clicks, exports, extract as x, memory
 from .gemini import Gemini
 from .store import Store
-from .brains import URL as BRAIN_URL, BrainServer
+from .brains import URL as BRAIN_URL, SENIOR, SENIOR_URL, SENIOR_SLOTS, SENIOR_CTX, SENIOR_FLAGS, BrainServer
 from .demo import N, STEP, slug
 from .browser import Pool
 from .fetch import UA, Polite, challenged, login_wall, site
@@ -94,7 +95,7 @@ class Agent:
 
 class Engine:
     def __init__(self, brain=None, fetcher=None, results=RESULTS, samples=SAMPLES, log_path=None, server_log=None,
-                 remember=True, gemini=None, store=None, pool=..., chooser=None):
+                 remember=True, gemini=None, store=None, pool=..., chooser=None, senior=None, senior_log=None):
         self.lock = threading.Condition()
         self.agents = [Agent(i + 1) for i in range(N)]
         self.updates = UpdateLog(log_path)
@@ -103,6 +104,10 @@ class Engine:
         self.chooser = chooser  # chooser(step, offered) -> name to click; made with the brains when None
         self.server = None if brain else BrainServer(server_log)
         self.brains = 'ready' if brain else 'off'  # off | starting | ready | failed: why
+        self.senior = senior  # the 4B senior brain; None: start its own CPU llama-server when a hard call needs it
+        self.senior_server = None if senior else BrainServer(senior_log, model=SENIOR, url=SENIOR_URL,
+                                                             slots=SENIOR_SLOTS, ctx=SENIOR_CTX, flags=SENIOR_FLAGS)
+        self.senior_state = 'ready' if senior else 'off'  # off | absent | starting | ready | failed: why
         self.results, self.samples, self.remember = results, samples, remember
         self.gemini = gemini or Gemini()
         self.store = store or Store()
@@ -111,6 +116,7 @@ class Engine:
         self.job_id, self.reused = None, 0
         self.board, self.huddle, self.problems, self.pid, self.raised, self.fixed = deque(), None, {}, 0, 0, 0
         self.private, self.gemini_calls, self.gemini_fixed = False, 0, 0
+        self.senior_calls, self.senior_fixed, self.senior_clicks = 0, 0, 0
         self.steps, self.spec, self.clicks_by_brain, self.clicks_replayed = [], {}, 0, 0
         self.threads, self.closed, self.paused = [], False, False
         self.job, self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = None, 0, 0, 0, 0, 0, 0
@@ -134,6 +140,7 @@ class Engine:
                 raise ValueError(f"job '{self.job}' is still running")
             self.job, self.fields, self.focus = prompt.strip()[:60] or 'Untitled job', fields, focus or None
             self.private, self.gemini_calls, self.gemini_fixed = bool(private), 0, 0  # private: Gemini never sees it
+            self.senior_calls, self.senior_fixed, self.senior_clicks = 0, 0, 0
             self.spec, self.steps, self.clicks_by_brain, self.clicks_replayed = spec, spec['steps'], 0, 0
             self.total, self.done, self.inflight, self.blocked, self.brain_calls, self.by_code = len(urls), 0, 0, 0, 0, 0
             self.tasks = deque(('fetch', u) for u in urls)
@@ -241,6 +248,8 @@ class Engine:
                 'brain_calls': calls, 'by_code': by_code, 'private': self.private, 'recipes_reused': self.reused,
                 'gemini': 'off: private job' if self.private else self.gemini.state(),
                 'gemini_calls': self.gemini_calls, 'gemini_fixed': self.gemini_fixed, 'steps': self.steps,
+                'senior': self.senior_state, 'senior_calls': self.senior_calls, 'senior_fixed': self.senior_fixed,
+                'senior_clicks': self.senior_clicks,
                 'clicks_by_brain': self.clicks_by_brain, 'clicks_replayed': self.clicks_replayed,
                 # the room's middle TV and desk monitors
                 'tv_hand': {'label': '// PAGES READ BY CODE', 'val': by_code, 'of': f'/{self.done}',
@@ -250,7 +259,8 @@ class Engine:
                            f'{fetched}/{self.total} pages fetched'],
                           ['PAGES WAITING FOR A WINDOW', str(len(shelf)), 'none waiting' if not shelf else
                            'next: ' + ' '.join(u.rstrip('/').rsplit('/', 1)[-1][:12] for u in shelf[:3])],
-                          ['BRAIN CALLS', str(calls), f'{by_code} by code · {len(recipes)} recipes · Gemini {self.gemini_calls}'],
+                          ['BRAIN CALLS', str(calls), f'{by_code} by code · {len(recipes)} recipes · '
+                           f'Gemini {self.gemini_calls} · senior {self.senior_calls}'],
                           ['SPEED', f'{self.rate:.1f} p/s' if self.rate else '...', 'pages per second']]}
 
     def agents_view(self, state=None):
@@ -329,7 +339,9 @@ class Engine:
             try:
                 self.server.start()
                 self.brain, state = x.llama_brain(BRAIN_URL), 'ready'
-                self.chooser = self.chooser or clicks.llama_chooser(BRAIN_URL)
+                senior_pick = self._count_senior_clicks(clicks.llama_chooser(SENIOR_URL))
+                self.chooser = self.chooser or clicks.escalating_chooser(
+                    clicks.llama_chooser(BRAIN_URL), senior_pick, ready=self._ensure_senior_for_click)
                 self.updates.add('job', f'Brains ready · {N} slots')
             except Exception as e:
                 state = f'failed: {e}'
@@ -346,6 +358,66 @@ class Engine:
                     self._finish_check()
                 self.lock.notify_all()
         threading.Thread(target=run, daemon=True, name='brains').start()
+
+    def _start_senior(self):
+        """Wake the 4B senior on its own CPU llama-server. Non-blocking, like the brains; idempotent."""
+        if self.senior_state in ('ready', 'starting'):
+            return
+        if not SENIOR.exists():
+            self.senior_state = 'absent'
+            return
+        self.senior_state = 'starting'
+        self.updates.add('job', 'Waking the 4B senior brain (CPU, about 30 s) for the hard calls')
+
+        def run():
+            try:
+                self.senior_server.start()
+                self.senior, state = x.llama_brain(SENIOR_URL), 'ready'
+                self.updates.add('job', 'The 4B senior is ready')
+            except Exception as e:
+                state = f'failed: {e}'
+                self.updates.add('problem', f'The 4B senior could not start: {e}')
+            with self.lock:
+                self.senior_state = state
+                self.lock.notify_all()
+        threading.Thread(target=run, daemon=True, name='senior').start()
+
+    def _senior_possible(self):
+        return self.senior_state in ('ready', 'starting') or (self.senior_state == 'off' and SENIOR.exists())
+
+    def _fix_wants_senior(self):
+        """The local senior answers a fix whenever Gemini can't: every private job, and any public job
+        whose free Gemini has no key or is out of its daily budget."""
+        return self.private or self.gemini.state() != 'ready'
+
+    def _fix_available(self):
+        """Is any second-opinion brain available for a fix right now (or startable)?"""
+        return (not self.private and self.gemini.state() == 'ready') or self._senior_possible()
+
+    def _fix_brain(self):
+        """The brain and label for a 'fix' call, or (None, None) if none is available."""
+        if not self.private and self.gemini.state() == 'ready':
+            return self.gemini.brain, 'gemini'
+        return (self.senior, 'senior') if self.senior_state == 'ready' else (None, None)
+
+    def _ensure_senior_for_click(self):
+        """Make the 4B senior ready for a hard click choice: start it and wait once for it to load.
+        True if it can answer. Runs off the engine lock, so it may block just this one agent briefly."""
+        with self.lock:
+            if self.senior_state != 'ready':
+                if not self._senior_possible():
+                    return False
+                self._start_senior()
+                self.lock.wait_for(lambda: self.senior_state in ('ready', 'failed', 'absent'), timeout=120)
+            return self.senior_state == 'ready'
+
+    def _count_senior_clicks(self, pick):
+        """Wrap the senior's click chooser so the room can see how often the big brain settled a click."""
+        def choose(step, offered):
+            with self.lock:
+                self.senior_clicks += 1
+            return pick(step, offered)
+        return choose
 
     def _needs_brain(self, url):
         g = self.groups[kind_of_page(url)]
@@ -405,6 +477,12 @@ class Engine:
             if (t[0] == 'read' and self._needs_brain(t[1]) or t[0] == 'hread' or
                     t[0] == 'act' and set(self.steps) - set(self.groups[kind_of_page(t[1])]['clicks'])) and self.brains != 'ready':
                 continue
+            if t[0] == 'fix' and self._fix_wants_senior() and self.senior_state != 'ready':
+                if self.senior_state in ('failed', 'absent'):
+                    del self.tasks[i]  # the senior can't answer: leave the field as the 2B read it
+                    return self._take(a)
+                self._start_senior()
+                continue  # wait until the senior has loaded
             if t[0] == 'render' and t[1] in self.html and self._data_only(kind_of_page(t[1])):
                 del self.tasks[i]  # queued for a window before the recipe existed; its hidden data is enough now
                 self._page(a, t[1], self.html[t[1]], 'ok')
@@ -456,16 +534,21 @@ class Engine:
                 ok = all(x.holds(pages, self.fields, f, k) for f, k in g['saved'].items())
                 return {'recipe': g['saved'], 'reused': True} if ok else {'changed': True}
             return {'recipe': x.learn_recipe(pages, self.fields, focus=self.focus)}
-        g, used = self.groups[kind_of_page(key)], []
-        helper = self.gemini.brain if kind == 'fix' else self.brain
+        g, used, who = self.groups[kind_of_page(key)], [], None
+        if kind == 'fix':
+            helper, who = self._fix_brain()
+            if helper is None:  # no second-opinion brain available: leave the row as it was
+                return {'answers': {}, 'brain': False, 'by': None}
+        else:
+            helper = self.brain
 
         def brain(view, fields):  # counts brain calls and keeps what the agent is reading, for the room
             a.excerpt = view
             used.append(1)
             return helper(view, fields)
-        recipe = None if kind in ('fix', 'hread') else g['recipe']  # Gemini and huddles read the whole page afresh
+        recipe = None if kind in ('fix', 'hread') else g['recipe']  # a fix and huddles read the whole page afresh
         return {'answers': x.read_page(self.html[key], self.fields, brain, recipe, focus=self.focus),
-                'brain': bool(used)}
+                'brain': bool(used), 'by': who}
 
     def _record(self, a, t, r):
         kind, key = t
@@ -564,15 +647,21 @@ class Engine:
             self._save()
         else:
             g = self.groups[kind_of_page(key)]
-            if kind == 'fix':  # Gemini only fills what was missing; a failed fix changes nothing
+            if kind == 'fix':  # a fix only fills what was missing; a failed fix changes nothing
                 filled = {f: v for f, v in r.get('answers', {}).items()
                           if v not in (None, '') and self.rows[key].get(f) in (None, '')}
                 self.rows[key].update(filled)
-                self.gemini_calls += r.get('brain', False)
-                self.gemini_fixed += len(filled)
+                if r.get('by') == 'senior':
+                    self.senior_calls += r.get('brain', False)
+                    self.senior_fixed += len(filled)
+                    label = 'the 4B senior'
+                else:
+                    self.gemini_calls += r.get('brain', False)
+                    self.gemini_fixed += len(filled)
+                    label = 'Gemini'
                 self.html.pop(key, None)
                 if filled:
-                    self.updates.add('fixed', f"#{a.n} Gemini filled {', '.join(filled)} on {key[-70:]}", a.n)
+                    self.updates.add('fixed', f"#{a.n} {label} filled {', '.join(filled)} on {key[-70:]}", a.n)
             elif 'answers' not in r:
                 self._row(key, {'status': r['status']}, by_brain=False)
                 g['sampling'].discard(key)
@@ -719,10 +808,13 @@ class Engine:
         self._next_huddle()
 
     def _maybe_fix(self, g, url):
-        """Queue a Gemini fix when a field most pages of this kind have came back empty here."""
-        if self.private or 'filled' not in g or self.gemini.state() != 'ready':
+        """Queue a second opinion when a field most pages of this kind have came back empty here: free
+        Gemini for a public job, else the local 4B senior (every private job, and public when Gemini is spent)."""
+        if 'filled' not in g or not self._fix_available():
             return False
         if any(self.rows[url].get(f) in (None, '') and share >= 0.8 for f, share in g['filled'].items()):
+            if self._fix_wants_senior():
+                self._start_senior()
             self.tasks.appendleft(('fix', url))
             return True
         return False

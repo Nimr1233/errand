@@ -25,3 +25,5 @@ def no_real_memory_or_gemini(monkeypatch, tmp_path):
     monkeypatch.setattr(store, 'CACHE', tmp_path / 'cache')
     monkeypatch.setattr(gemini, 'load_key', lambda: None)
     monkeypatch.setattr(gemini, 'USAGE_FILE', tmp_path / 'gemini_usage.json')
+    from errand import engine
+    monkeypatch.setattr(engine, 'SENIOR', tmp_path / 'no-senior.gguf')  # never finds the real 4B or starts a CPU server

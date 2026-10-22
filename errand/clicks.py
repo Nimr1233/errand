@@ -4,6 +4,8 @@ ask for steps before the fields are read, like "click the 256 GB option".
   checkboxes. Never buy, sign up, log in, send a form, leave the site, or anything disabled.
 - The brain writes the name of the thing to click, and code finds the one element with that name
   ("point, don't write": a small brain copies well and counts badly).
+- When the 2B's name matches nothing on the page (or is ambiguous), the bigger 4B "senior" (errand/brains.py,
+  on the CPU) is asked instead: the hard "which option do I click?" calls get the big brain.
 - After a click something on the page must change (its text or address), or the step failed.
 - A click that worked is recorded for that kind of page (errand/store.py) and replayed on later pages
   with no brain at all, by the same name; when that name isn't on a page, the brain is asked again
@@ -75,6 +77,23 @@ def llama_chooser(url='http://127.0.0.1:8080'):
         data, _ = x.chat(url, 'You pick one thing to click. Answer with JSON only.', choose_prompt(step, offered), 60,
                          response_format={'type': 'json_schema', 'json_schema': {'schema': form}})
         return (x.last_json(data['choices'][0]['message'].get('content')) or {}).get('click')
+    return choose
+
+
+def escalating_chooser(base, senior, ready=None):
+    """Pick what to click with the 2B (base); when its pick doesn't resolve to exactly one safe element,
+    ask the bigger 4B senior instead. base and senior are choosers (step, offered) -> name. ready() says
+    whether the senior may be used now (e.g. it has finished loading on the CPU); without it the senior
+    is always tried. Returns a name for do_steps - the 2B's pick when the senior can't do better."""
+    def choose(step, offered):
+        pick = base(step, offered)
+        if find(offered, pick)[0] is not None:
+            return pick
+        if senior is not None and (ready is None or ready()):
+            better = senior(step, offered)
+            if find(offered, better)[0] is not None:
+                return better
+        return pick
     return choose
 
 

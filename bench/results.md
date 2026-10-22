@@ -484,6 +484,24 @@ Prompt tokens per question, by round, from the saved runs:
 - **No setting helps,** so today's settings stay. Checkpoints are only saved after a whole chunk of the prompt is read. Smaller chunks put one inside the shared start, but they slow reading more than the few reused tokens save.
 - **It matters less in real jobs:** after 10 sample pages, recipes read most pages with no brain at all. Brain speed counts mostly for samples and for fields no recipe covers.
 
+## 15. Sharper eyes: Q8_0 vs Q4_K_M for the 2B (2026-10-22, 53 slots, point mode, 105 Set A pages)
+
+The same Qwen3.5-2B in a sharper quant. Q8_0 (Unsloth GGUF, 1.92 GB) was benched against the Q4_K_M in use, paired per page (`scratchpad/eyes_ab.py`, kept in the session scratchpad).
+
+| | Q4_K_M | Q8_0 |
+|---|---|---|
+| Field accuracy (5 fields) | 96.95% | **98.67%** |
+| 95% bootstrap CI on the gap | — | **+0.4% to +3.1%** |
+| McNemar (q8-right/q4-wrong vs the reverse) | — | **11 vs 2, p = 0.022** |
+| Text fields only (title, price, upc, availability) | 99.52% | 99.29% (tie) |
+| rating (points at the star-rating class) | 86.7% | **96.2%** |
+| Max VRAM, 53 slots | 4,402 MiB | 5,121 MiB (fits, no spill) |
+| Pages/second | 1.91 | 1.78 (~7% slower) |
+
+- **Adopted as the default** (`errand/brains.py` `MODEL`). The gain is significant overall and the model fits the 6 GB card with ~1 GB to spare.
+- **The win is in pointing, not text reading.** Every field read from page text was already ~99-100% on Q4; Q8 moves only `rating`, which the brain finds by pointing at the element whose class names the star count. So Q8 mainly helps where the 2B has to pick the right page piece.
+- **Cost:** ~7% slower per brain-read and +0.7 GB VRAM. Softened in real jobs (recipes read most pages with no brain). Q4_K_M stays on disk; set `ERRAND_MODEL` back to it to revert.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:

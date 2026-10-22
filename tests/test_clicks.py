@@ -117,6 +117,42 @@ def test_a_buy_click_never_happens_and_nothing_changing_is_a_failure(shop, tmp_p
     assert '/bought' not in Shop.seen
 
 
+def test_escalating_chooser_only_asks_the_senior_when_the_2b_misses():
+    c = lambda t, href='': {'tag': 'button', 'type': 'button', 'text': t, 'title': '', 'aria': '', 'value': '',
+                            'href': href, 'role': '', 'disabled': False, 'form': False, 'cls': '', 'css': 'x'}
+    offered = [c('128'), c('256')]
+    asked = []
+    senior = lambda step, off: (asked.append(step), '256')[1]
+    # the 2B names a real thing: the senior is never asked
+    ch = clicks.escalating_chooser(lambda s, o: '128', senior, ready=lambda: True)
+    assert ch('click 128', offered) == '128' and not asked
+    # the 2B misses: the senior is asked and its valid pick is used
+    ch = clicks.escalating_chooser(lambda s, o: 'nope', senior, ready=lambda: True)
+    assert ch('click 256', offered) == '256' and asked == ['click 256']
+    # the senior isn't ready yet: only the 2B is used (its pick stands, do_steps then reports the miss)
+    asked.clear()
+    ch = clicks.escalating_chooser(lambda s, o: 'nope', senior, ready=lambda: False)
+    assert ch('click 256', offered) == 'nope' and not asked
+    # both miss: the 2B's pick is returned
+    ch = clicks.escalating_chooser(lambda s, o: 'nope', lambda s, o: 'also nope', ready=lambda: True)
+    assert ch('click 256', offered) == 'nope'
+
+
+def test_a_hard_click_choice_falls_to_the_senior(shop, tmp_path):
+    picks = {'2b': [], 'senior': []}
+    dumb = lambda step, off: (picks['2b'].append(step), 'the 256 GB variant')[1]  # names something not on the page
+    senior = lambda step, off: (picks['senior'].append(step), '256')[1]  # the 4B names it right
+    chooser = clicks.escalating_chooser(dumb, senior, ready=lambda: True)
+    eng = real.Engine(brain=reader, results=tmp_path, remember=False, pool=Pool(size=2), chooser=chooser,
+                      fetcher=Polite(delay=(0.03, 0.05), allow_local=True))
+    u = f'{shop}/laptop/1.html'
+    eng.start_job('Laptops 256', [u], FIELDS, steps=['click the 256 option'])
+    wait(eng, 90)
+    eng.close()
+    assert eng.rows[u] == {'status': 'ok', 'title': 'Laptop 1', 'price': '$321'}  # 256 clicked (+$20) via the senior
+    assert picks['2b'] and picks['senior'] == ['click the 256 option']  # 2B missed, senior settled it
+
+
 def test_a_skill_fills_its_blanks(shop, tmp_path):
     picks = []
     eng = make(tmp_path, picks)
