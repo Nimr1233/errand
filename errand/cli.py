@@ -1,4 +1,4 @@
-"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram | autostart | phone | inbox | exports."""
+"""Errand's command line: python -m errand start | mcp | setup | login | gemini | telegram | autostart | phone | inbox | exports | apply."""
 import argparse
 import asyncio
 import pathlib
@@ -74,14 +74,18 @@ def login():
 
 def main(argv=None):
     p = argparse.ArgumentParser(prog='errand', description='Errand: 53 free browser agents on this laptop.')
-    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram', 'autostart', 'phone', 'inbox', 'exports'],
+    p.add_argument('command', choices=['start', 'mcp', 'setup', 'login', 'gemini', 'telegram', 'autostart', 'phone', 'inbox', 'exports', 'apply'],
                    help='start: run mission control · mcp: the Claude Code connector · setup: how to connect it'
                         ' · login: log in to Claude Code here · gemini: check your Gemini key'
                         ' · telegram: pair your Telegram bot · autostart: how to start Errand with Windows'
                         ' · phone: make a new phone PIN · inbox: set up the webhook inbox'
-                        ' · exports: send results to Slack or Notion')
+                        ' · exports: send results to Slack or Notion'
+                        ' · apply: fill your details into job pages (you do logins, CAPTCHAs and Submit)')
+    p.add_argument('links', nargs='*', help='apply: the job page links to fill')
     p.add_argument('--demo', action='store_true', help='start: fake agents instead of the real engine')
     p.add_argument('--phone', action='store_true', help='start: also reachable from your phone over Tailscale, with a PIN')
+    p.add_argument('--login', action='store_true', help='apply: open the saved browser so you can log in once, by hand')
+    p.add_argument('--file', help='apply: a text file of job links, one a line')
     a = p.parse_args(argv)
     cmd = a.command
     if cmd == 'start':
@@ -108,6 +112,9 @@ def main(argv=None):
     elif cmd == 'gemini':
         from .gemini import check
         print(check())
+    elif cmd == 'apply':
+        from .apply import run
+        run(a.login, a.links, a.file)
     else:
         from .mcp_server import mcp
         mcp.run('stdio')
