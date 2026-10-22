@@ -1,6 +1,11 @@
-bench/cache/
+﻿bench/cache/
 bench/server-*.log
 __pycache__/
 tests/out/
 .pytest_cache/
 jobs/
+.venv/
+.env
+.browser_profile/
+.credentials_vault.json
+.steel-cache/
