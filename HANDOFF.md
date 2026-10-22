@@ -388,6 +388,14 @@ From `reports/Full feature free Errand plan.md`:
   - recipes keyed by row label, for sites like Wikipedia
   - or phase 2, clicking
 
+**Session 5 (2026-10-22): assisted apply** (`errand/apply.py`, `tests/test_apply.py`):
+- **What it is:** fills the user's own details into job application pages, in a visible browser with a saved profile, so applying to many jobs takes less typing.
+- **The user's part:** they log in or sign up once, by hand (`python -m errand apply --login`), then solve CAPTCHAs, answer open questions and click Submit. Errand never types a password, makes an account, solves a CAPTCHA or clicks Submit (hard rule 13), and never overwrites a filled field.
+- **Use:** fill `~/.errand/apply.json` (made empty on first run; `resume` is the CV's full path), then `python -m errand apply --file jobs.txt` (or links). Per job: Enter = next, r = fill again after the form changes, s = skip.
+- **Where:** the saved logins live in `~/.errand/apply_profile`, apart from the 25 wiped windows. Not in the room or the connector.
+- **Tests:** field matching plus a real fill on a local page; 132 tests pass. Not tried on a real job site yet; dropdowns and unknown questions are left to the user.
+- **Declined:** a pasted "autonomous" agent spec (auto sign-ups, CAPTCHA and bot-check dodging, stealth). Tools that solve or dodge CAPTCHAs, create accounts or enter logins stay off-limits.
+
 **Known limits (marked `shortcut:` in the code where it applies):**
 - With two pages open at once, both answer the terminal's live queries (Claude Code would get each answer twice). One room tab is fine.
 - The TV digits reach 2/3 of the screen height only for short numbers; `23/53` is width-limited to about half the height. Readable at 700 px (checked).
