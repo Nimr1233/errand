@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Errand",
+  "version": "0.1.0",
+  "description": "Free AI browser agent: give it a task, it acts in your current tab. You approve anything irreversible.",
+  "permissions": ["sidePanel", "storage", "scripting"],
+  "optional_host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "sw.js", "type": "module" },
+  "side_panel": { "default_path": "index.html" },
+  "action": { "default_title": "Errand (Alt+R)" },
+  "commands": {
+    "_execute_action": { "suggested_key": { "default": "Alt+R" } }
+  }
+}

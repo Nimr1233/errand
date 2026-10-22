@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Errand</title>
+  <style>
+    :root { color-scheme: light dark; font: 14px/1.45 system-ui, sans-serif }
+    body { margin: 0; padding: 10px }
+    nav { display: flex; gap: 4px; margin-bottom: 10px }
+    nav button { flex: 1; padding: 6px }
+    nav button.on { font-weight: 700; outline: 2px solid #4a90d9 }
+    textarea { width: 100%; box-sizing: border-box; min-height: 56px }
+    button { cursor: pointer }
+    .step { border-bottom: 1px solid #8884; padding: 3px 0; font-family: ui-monospace, monospace; font-size: 12px }
+    .card { border: 2px solid #c93; border-radius: 6px; padding: 8px; margin: 8px 0; background: #c9330018 }
+    table { border-collapse: collapse; width: 100% } th, td { border: 1px solid #8886; padding: 3px 6px; text-align: left }
+    label { display: block; margin: 6px 0 2px } input { width: 100%; box-sizing: border-box }
+    .row { display: flex; gap: 6px; align-items: center } .muted { color: #8889; font-size: 12px }
+  </style>
+</head>
+<body>
+  <nav>
+    <button data-screen="run" class="on">Run</button>
+    <button data-screen="results">Results</button>
+    <button data-screen="history">History</button>
+    <button data-screen="settings">Settings</button>
+  </nav>
+
+  <section id="run">
+    <div id="resume" class="card" hidden>
+      An unfinished run was found. <button id="resume-btn">Resume</button> <button id="resume-skip">Dismiss</button>
+    </div>
+    <textarea id="task" placeholder="What should Errand do in this tab?"></textarea>
+    <div class="row">
+      <button id="run-btn">Run (Alt+R)</button>
+      <button id="stop-btn" hidden>Stop</button>
+      <span id="status" class="muted"></span>
+    </div>
+    <div id="confirm" class="card" hidden>
+      Confirm this action? <span class="what"></span>
+      <div class="row"><button id="confirm-yes">Confirm</button><button id="confirm-no">Skip</button></div>
+    </div>
+    <div id="ask" class="card" hidden>
+      <div class="q"></div>
+      <div class="row"><input id="ask-input"><button id="ask-send">Send</button></div>
+    </div>
+    <div id="answer"></div>
+    <div id="feed"></div>
+  </section>
+
+  <section id="results" hidden>
+    <div class="row"><button id="copy">Copy</button><button id="csv">Download CSV</button></div>
+    <div id="table"></div>
+  </section>
+
+  <section id="history" hidden></section>
+
+  <section id="settings" hidden>
+    <label>Model server (OpenAI-compatible)</label><input id="set-baseUrl">
+    <label>API key (optional)</label><input id="set-key" type="password">
+    <label>Model name</label><input id="set-model">
+    <label>Max steps</label><input id="set-maxSteps" type="number">
+    <label class="row"><input id="set-confirm" type="checkbox" style="width:auto"> Confirm before irreversible actions</label>
+    <div class="row"><button id="set-save">Save</button><button id="set-test">Test</button><span id="set-status" class="muted"></span></div>
+  </section>
+
+  <script type="module" src="panel.js"></script>
+</body>
+</html>

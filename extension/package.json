@@ -1,0 +1,24 @@
+{
+  "name": "errand-extension",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Errand phase 2: a Chrome side-panel agent that acts in your current tab (master spec sections 3-10).",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "vitest run",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.46.1",
+    "@types/chrome": "0.0.270",
+    "@types/node": "22.5.0",
+    "esbuild": "0.23.1",
+    "happy-dom": "14.12.3",
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
+  }
+}

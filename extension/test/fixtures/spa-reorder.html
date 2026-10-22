@@ -1,0 +1,17 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SPA reorder</title></head>
+<body>
+  <ul id="list">
+    <li>Red mug <button>Add</button></li>
+    <li>Blue mug <button>Add</button></li>
+  </ul>
+  <div id="cart"></div>
+  <script>
+    // Clicking Add moves its row to the top, so element ids from an earlier snapshot go stale.
+    document.querySelectorAll('button').forEach(b => b.onclick = () => {
+      const row = b.parentElement
+      document.getElementById('cart').textContent = 'Cart: ' + row.firstChild.textContent.trim()
+      document.getElementById('list').prepend(row)
+    })
+  </script>
+</body></html>
