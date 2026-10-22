@@ -22,6 +22,10 @@ const onscreen = (el: Element): boolean => {
 }
 
 const text = (el: Element): string => (el.textContent || '').replace(/\s+/g, ' ').trim()
+// This element's own text only (its direct text nodes), so "Blue mug" in <li>Blue mug <button>…</button></li>
+// is kept without repeating the button's label.
+const ownText = (el: Element): string =>
+  Array.from(el.childNodes).filter(n => n.nodeType === 3).map(n => n.textContent || '').join(' ').replace(/\s+/g, ' ').trim()
 const esc = (s: string): string => (typeof CSS !== 'undefined' && CSS.escape) ? CSS.escape(s) : s.replace(/["\\]/g, '\\$&')
 
 const role = (el: Element): string => {
@@ -99,7 +103,7 @@ function collect(root: ParentNode, out: Element[]) {
     if (!vis(el)) continue
     const r = role(el)
     if (ROLE_WIDGETS.has(r) || r === 'heading' || (el as HTMLElement).isContentEditable || clickable(el)) out.push(el)
-    else if (!r && text(el) && text(el).length <= 200 && !el.children.length) out.push(el) // short text block
+    else if (!r && ownText(el) && ownText(el).length <= 200) out.push(el) // this element's own short text
     if ((el as HTMLElement).shadowRoot) collect((el as HTMLElement).shadowRoot!, out)
     collect(el, out)
   }
@@ -121,7 +125,7 @@ export function buildSnapshot(doc: Document, map: Map<number, Entry>, v: number)
       const val = value(e)
       line = `[${n}] ${r || 'button'} "${name(e)}"${state(e)}${val !== null ? ` value="${val}"` : ''}`
     } else {
-      line = r === 'heading' ? `heading: "${name(e)}"` : `text: "${text(e)}"`
+      line = r === 'heading' ? `heading: "${name(e)}"` : `text: "${ownText(e)}"`
     }
     if (used + line.length > LIMIT) { cut++; continue }
     used += line.length + 1
