@@ -30,7 +30,7 @@ Measured, Obscura vs headless Chrome:
 
 ## Known limits (tested)
 
-- Playwright `click()` on an element below the first screen times out: Obscura's element positions are off after scrolling. Click with page JavaScript (`el.click()`) or MCP `browser_click` instead; both work.
+- Obscura's page layout can differ from Chrome's, so one element may cover another (on quotes.toscrape.com the footer sits 114 px higher and covers "Next"). Playwright then won't click the covered element and times out. Other clicks, including below the first screen, work. If a click times out, click with page JavaScript (`el.click()`) or MCP `browser_click`; both work.
 - No WebGL: `getContext('webgl')` returns null, and bot checkers flag that.
 - Use `--stealth` on real sites. Without it the TLS fingerprint is not Chrome's, although the user agent says Chrome.
 - Puppeteer is not installed here; Playwright (`connect_over_cdp`) is.
