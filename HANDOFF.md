@@ -26,6 +26,7 @@ The user wants to **reverse engineer rtrvr.ai** (an AI browser agent: a Chrome e
   - "agent reach"
   - "humanizer"
   - "scrapling"
+  - "obscura" (light headless browser for quick command-line screenshots/PDFs; NOT for blocked sites or Errand's pages; measured numbers in its skill)
 - **When stuck,** use brainstorming. Their standing instruction: "if something is stopping from reaching our final goal then use the brainstorming skill".
 - **They like to see things.** Visual mockups (3D, inline widgets) worked well for design decisions.
 - **They often ask for the current status** ("what were we doing?", "where is the mission control panel?"). Answer plainly.
