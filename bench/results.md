@@ -502,6 +502,53 @@ The same Qwen3.5-2B in a sharper quant. Q8_0 (Unsloth GGUF, 1.92 GB) was benched
 - **The win is in pointing, not text reading.** Every field read from page text was already ~99-100% on Q4; Q8 moves only `rating`, which the brain finds by pointing at the element whose class names the star count. So Q8 mainly helps where the 2B has to pick the right page piece.
 - **Cost:** ~7% slower per brain-read and +0.7 GB VRAM. Softened in real jobs (recipes read most pages with no brain). Q4_K_M stays on disk; set `ERRAND_MODEL` back to it to revert.
 
+## 16. The 4B senior's hard calls (2026-10-30, `bench/senior.py`)
+
+The question: before trying a bigger senior (a 125B on Kaggle was suggested), how often is the 4B wrong? Both brains got the same 120 saved pages (testset, holdout, fresh) and 362 click steps written with their right answers. Each was asked the way the engine asks: `extract.read_page` for a fix, and `clicks.llama_chooser` for a click. The 4B ran on the GPU for speed. 16 calls repeated on the CPU gave the same answer 15 times. 0 errors.
+
+**Fix calls (fill a field the 2B left empty): fine.**
+
+| | 2B | 4B |
+|---|---|---|
+| All 570 fields, read fresh | **97.9%** (96.7–99.1) | 96.3% (94.9–97.7) |
+| Right only for this brain | 17 | 8 (McNemar p = 0.11: no clear winner) |
+
+- The engine asked the senior only **7 times in 570 fields**: it filled 2 right, left 4 "none" items empty (right), and left 1 empty. **It made up 0 values.**
+- 14 of the 4B's 17 misses are one habit: it leaves the Wikipedia OCLC number empty. In the senior's job that is harmless, because a fix only fills empty fields.
+- 6 wrong values from the 2B never reach the senior (a fix only runs on empty fields).
+
+**Click calls: this is where the mistakes are.**
+
+| | Steps | 2B alone | 4B alone | Engine today (2B, senior when unmatched) |
+|---|---|---|---|---|
+| Real steps (an answer exists) | 197 | 150 (76%) | **175 (89%)** | 167 (85%) |
+| Nothing fits (e.g. 1 TB on a laptop where it's disabled) | 135 | 30 (22%) | 34 (25%) | **20 (15%)** |
+| "This book's category" (debatable: both pick "Books" over "Poetry") | 30 | 1 | 0 | 1 |
+
+- **When the senior is asked about a click, it is wrong 27 of 64 times** (real steps 15/32, nothing fits 10/30, debatable 2/2). For example, it picks "Jump to content" for "see the edit history", and "128" for "select 1 TB" on a laptop without it, so the wrong price would be read.
+- **The rule, more than the brain, loses clicks.** The senior sees a step only when the 2B's pick matches nothing. So 147 wrong clicks by the 2B, which do match something, never reach it. On real steps, the 4B alone beats the 2B 30 to 5 (p < 0.001).
+- **Nothing-fits steps:** both brains click *something* about 75% of the time. A 2B "null" counts as unmatched, so the senior is asked and often clicks anyway. That is why the engine does worse than either brain alone.
+- **CPU speed** (the engine's 2 senior slots): 10–24 s per fix read, 2–6 s per click choice.
+
+**Verdict:** a bigger fix brain has nothing to fix. For clicks, the cheap wins are in the rule: ask the 4B every brain click (it decides once per kind of page, then replays with no brain), and keep a "nothing fits" answer. A bigger click brain is worth measuring only after that.
+
+## 17. The senior makes every click choice (2026-10-30, `clicks.senior_chooser`)
+
+Section 16's fix to the rule. The 4B picks whenever it can run, and the 2B only when it can't (not installed, or failed to load). Nothing is handed on: a "nothing fits", or a name that isn't on the page, fails the step safely. Letting the 2B back up an unmatched 4B pick was checked on the saved picks: it would have saved 1 click and caused 12 wrong ones.
+
+The rule is code, so it was scored on section 16's saved picks through the real function (`bench/senior.py --rescore`, no brain noise):
+
+| | Steps | Old rule: right / wrong clicks | **New rule: right / wrong clicks** | Fixed / broken |
+|---|---|---|---|---|
+| Real steps | 197 | 167 (85%) / 30 | **175 (89%) / 21** | 13 / 5 (p = 0.10) |
+| Nothing fits | 135 | 20 (15%) / 115 | **34 (25%) / 101** | 14 / 0 (p = 0.0001) |
+| "This book's category" (debatable) | 30 | 1 / 29 | 0 / 30 | 0 / 1 |
+| All | 362 | 188 / 174 | **209 / 152** | **27 / 6 (p = 0.0003)** |
+
+- **Still weak:** when nothing fits, the 4B clicks something 3 times in 4. On Wikipedia it picks "Jump to content" for "see the edit history" 19 times in 30. These are the brain's limits, not the rule's, so they are what a bigger click brain would be measured on next.
+- **Cost:** the first brain click of a job waits for the senior to load (about 30 s on the CPU), then 2–6 s per choice, once per kind of page and step. Replays still use no brain.
+- Tests: `tests/test_clicks.py` checks that the 2B's real-but-wrong pick is never used once the senior can answer.
+
 ## Against rtrvr's demo
 
 rtrvr's "53 agents" demo extracted 8 fields from 105 Product Hunt pages in 184 s on 53 cloud browsers. Here:
@@ -536,6 +583,8 @@ python -X utf8 bench/testset.py --set fresh --fetch
 python -X utf8 bench/score.py --variant p3-engine-run --runs 5
 python -X utf8 -c "import sys; sys.path.insert(0, 'bench'); import score; score.engine('p3-engine-run', 'engine-learn10', samples=10, learn_on='testset')"
 python -X utf8 bench/score.py --compare p3-engine-run engine-learn10
+python -X utf8 bench/senior.py
+python -X utf8 bench/senior.py --rescore
 ```
 
 The server command is recorded in each `bench/brains-*.json` (`server_cmd`).

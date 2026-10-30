@@ -117,32 +117,25 @@ def test_a_buy_click_never_happens_and_nothing_changing_is_a_failure(shop, tmp_p
     assert '/bought' not in Shop.seen
 
 
-def test_escalating_chooser_only_asks_the_senior_when_the_2b_misses():
-    c = lambda t, href='': {'tag': 'button', 'type': 'button', 'text': t, 'title': '', 'aria': '', 'value': '',
-                            'href': href, 'role': '', 'disabled': False, 'form': False, 'cls': '', 'css': 'x'}
-    offered = [c('128'), c('256')]
+def test_the_senior_chooses_whenever_it_can():
     asked = []
-    senior = lambda step, off: (asked.append(step), '256')[1]
-    # the 2B names a real thing: the senior is never asked
-    ch = clicks.escalating_chooser(lambda s, o: '128', senior, ready=lambda: True)
-    assert ch('click 128', offered) == '128' and not asked
-    # the 2B misses: the senior is asked and its valid pick is used
-    ch = clicks.escalating_chooser(lambda s, o: 'nope', senior, ready=lambda: True)
-    assert ch('click 256', offered) == '256' and asked == ['click 256']
-    # the senior isn't ready yet: only the 2B is used (its pick stands, do_steps then reports the miss)
-    asked.clear()
-    ch = clicks.escalating_chooser(lambda s, o: 'nope', senior, ready=lambda: False)
-    assert ch('click 256', offered) == 'nope' and not asked
-    # both miss: the 2B's pick is returned
-    ch = clicks.escalating_chooser(lambda s, o: 'nope', lambda s, o: 'also nope', ready=lambda: True)
-    assert ch('click 256', offered) == 'nope'
+    two = lambda s, o: (asked.append('2b'), '128')[1]
+    # the senior is ready: its pick is used, even over a 2B that names a real (wrong) thing
+    assert clicks.senior_chooser(two, lambda s, o: '256', ready=lambda: True)('click 256', []) == '256'
+    # its "nothing fits" stands: never handed to the 2B to click something anyway
+    assert clicks.senior_chooser(two, lambda s, o: None, ready=lambda: True)('choose 2 TB', []) is None
+    assert clicks.senior_chooser(two, lambda s, o: '2 TB', ready=lambda: True)('choose 2 TB', []) == '2 TB'
+    assert not asked
+    # the senior can't run (not installed, or it failed to load): the 2B chooses
+    assert clicks.senior_chooser(two, lambda s, o: '256', ready=lambda: False)('click 256', []) == '128'
+    assert clicks.senior_chooser(two, None)('click 256', []) == '128' and asked == ['2b', '2b']
 
 
-def test_a_hard_click_choice_falls_to_the_senior(shop, tmp_path):
+def test_the_senior_makes_the_click_choice(shop, tmp_path):
     picks = {'2b': [], 'senior': []}
-    dumb = lambda step, off: (picks['2b'].append(step), 'the 256 GB variant')[1]  # names something not on the page
+    dumb = lambda step, off: (picks['2b'].append(step), '128')[1]  # a real thing, but the wrong one
     senior = lambda step, off: (picks['senior'].append(step), '256')[1]  # the 4B names it right
-    chooser = clicks.escalating_chooser(dumb, senior, ready=lambda: True)
+    chooser = clicks.senior_chooser(dumb, senior, ready=lambda: True)
     eng = real.Engine(brain=reader, results=tmp_path, remember=False, pool=Pool(size=2), chooser=chooser,
                       fetcher=Polite(delay=(0.03, 0.05), allow_local=True))
     u = f'{shop}/laptop/1.html'
@@ -150,7 +143,7 @@ def test_a_hard_click_choice_falls_to_the_senior(shop, tmp_path):
     wait(eng, 90)
     eng.close()
     assert eng.rows[u] == {'status': 'ok', 'title': 'Laptop 1', 'price': '$321'}  # 256 clicked (+$20) via the senior
-    assert picks['2b'] and picks['senior'] == ['click the 256 option']  # 2B missed, senior settled it
+    assert not picks['2b'] and picks['senior'] == ['click the 256 option']  # the 2B's wrong 128 was never used
 
 
 def test_a_skill_fills_its_blanks(shop, tmp_path):

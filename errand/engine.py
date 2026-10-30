@@ -340,7 +340,7 @@ class Engine:
                 self.server.start()
                 self.brain, state = x.llama_brain(BRAIN_URL), 'ready'
                 senior_pick = self._count_senior_clicks(clicks.llama_chooser(SENIOR_URL))
-                self.chooser = self.chooser or clicks.escalating_chooser(
+                self.chooser = self.chooser or clicks.senior_chooser(
                     clicks.llama_chooser(BRAIN_URL), senior_pick, ready=self._ensure_senior_for_click)
                 self.updates.add('job', f'Brains ready · {N} slots')
             except Exception as e:
@@ -401,7 +401,7 @@ class Engine:
         return (self.senior, 'senior') if self.senior_state == 'ready' else (None, None)
 
     def _ensure_senior_for_click(self):
-        """Make the 4B senior ready for a hard click choice: start it and wait once for it to load.
+        """Make the 4B senior ready for a click choice: start it and wait once for it to load.
         True if it can answer. Runs off the engine lock, so it may block just this one agent briefly."""
         with self.lock:
             if self.senior_state != 'ready':
@@ -412,7 +412,7 @@ class Engine:
             return self.senior_state == 'ready'
 
     def _count_senior_clicks(self, pick):
-        """Wrap the senior's click chooser so the room can see how often the big brain settled a click."""
+        """Wrap the senior's click chooser so the room can see how often the big brain chose a click."""
         def choose(step, offered):
             with self.lock:
                 self.senior_clicks += 1
