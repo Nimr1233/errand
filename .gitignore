@@ -9,3 +9,12 @@ jobs/
 .browser_profile/
 .credentials_vault.json
 .steel-cache/
+
+# Kept on this laptop only, not part of Errand: private notes and a separate toolkit
+HANDOFF.md
+autonomous_agent/
+verify_autonomy.py
+.env.example
+docker-compose.yml
+pyproject.toml
+uv.lock

@@ -1,0 +1,10 @@
+# Errand's Python packages (tested with Python 3.11 on Windows 11)
+scrapling[fetchers]>=0.4.12
+playwright>=1.60
+httpx>=0.28.1
+fastapi>=0.148.0
+uvicorn>=0.54.0
+websockets>=16.0
+mcp>=2.3.0
+pywinpty>=3.1.0; sys_platform == "win32"
+pytest>=9.1
